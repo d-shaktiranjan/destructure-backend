@@ -3,7 +3,7 @@ import express, { Request, Response } from "express";
 import { PORT } from "./config/constants";
 
 // connect to DB
-import connectToDB from "./db";
+import connectToDB from "./config/db";
 connectToDB();
 
 const app = express();

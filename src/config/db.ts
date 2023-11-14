@@ -1,6 +1,5 @@
 import { connect } from "mongoose";
-
-const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017";
+import { MONGO_URI } from "./constants";
 
 const connectToDB = () => {
     connect(MONGO_URI)
