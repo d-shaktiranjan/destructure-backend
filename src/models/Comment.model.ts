@@ -2,10 +2,6 @@ import { Schema, model } from "mongoose";
 
 const commentSchema = new Schema(
     {
-        blogSlug: {
-            type: String,
-            required: true,
-        },
         content: {
             type: String,
             minLength: 3,
@@ -14,6 +10,11 @@ const commentSchema = new Schema(
         parent: {
             type: Schema.Types.ObjectId,
             ref: "Comment",
+        },
+        blog: {
+            type: Schema.Types.ObjectId,
+            ref: "Blog",
+            required: true,
         },
         givenBy: {
             type: Schema.Types.ObjectId,
