@@ -3,7 +3,7 @@ import { Response } from "express";
 const apiResponse = (
     res: Response,
     message: string,
-    statusCode: number = 200,
+    statusCode: number,
     data: object | null = null,
     metaData: object | null = null,
     isSuccess: boolean = true
@@ -20,10 +20,10 @@ const apiResponse = (
 export const successResponse = (
     res: Response,
     message: string,
-    statusCode: number,
+    statusCode: number = 200,
     data: object | null = null,
     metaData: object | null = null
-) => apiResponse(res, message, statusCode, data, metaData, true);
+): Response => apiResponse(res, message, statusCode, data, metaData, true);
 
 export const errorResponse = (
     res: Response,
