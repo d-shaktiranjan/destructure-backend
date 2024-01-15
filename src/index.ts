@@ -1,19 +1,43 @@
 import "dotenv/config";
-import express, { Request, Response } from "express";
+import express, { Response, Request } from "express";
 import { PORT, APP_MESSAGE } from "./config/constants";
+import session from "express-session";
+import cookieParser from "cookie-parser";
 
 // connect to DB
 import connectToDB from "./config/db";
 connectToDB();
 
+// route imports
+import authRouter from "./routes/auth.routes";
+
 const app = express();
+
+declare module "express-session" {
+    interface SessionData {
+        user: object;
+    }
+}
+
+app.use(cookieParser());
+app.use(
+    session({
+        secret: "keyboard cat",
+        resave: false,
+        saveUninitialized: true,
+        cookie: { secure: false },
+    })
+);
 
 // ejs config
 app.set("views", "src/views");
 app.set("view engine", "ejs");
 
+// route usages
+app.use("/auth", authRouter);
+
 app.get("/", (req: Request, res: Response) => {
-    res.render("index", { user: "shakti" });
+    res.render("index", { user: req.session.user });
 });
 
 app.listen(PORT, () => {

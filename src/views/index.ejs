@@ -3,9 +3,17 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Google OAuth Example</title>
+        <title>Shakti's Blog</title>
     </head>
     <body>
-        <h1>Hello from EJS</h1>
+        <h1>Hey admin please login</h1>
+
+        <% if (user) { %>
+        <p>Hello, <%= user.name %></p>
+        <a href="/auth/logout">Logout</a>
+        <% } else { %>
+        <p>Please log in with Google:</p>
+        <a href="/auth/google">Login with Google</a>
+        <% } %>
     </body>
 </html>

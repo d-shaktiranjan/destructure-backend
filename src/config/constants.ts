@@ -2,6 +2,11 @@
 export const PORT = process.env.PORT || 8000;
 export const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017";
 
+// google oAuth constants
+export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+export const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+export const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI;
+
 export const APP_MESSAGE = {
     HELLO: "Hello from Express",
     RUNNING: `App is running on ${PORT}`,
