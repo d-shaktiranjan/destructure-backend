@@ -8,8 +8,12 @@ connectToDB();
 
 const app = express();
 
+// ejs config
+app.set("views", "src/views");
+app.set("view engine", "ejs");
+
 app.get("/", (req: Request, res: Response) => {
-    res.send(APP_MESSAGE.HELLO);
+    res.render("index", { user: "shakti" });
 });
 
 app.listen(PORT, () => {
