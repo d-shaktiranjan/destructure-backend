@@ -14,17 +14,10 @@ Now, install the packages
 pnpm install
 ```
 
-then make .env file
+Then create .env file by running following command & add values
 
 ```
-touch .env
-```
-
-Then add variables
-
-```
-PORT=
-MONGO_URI=
+cp .env.sample .env
 ```
 
 And
