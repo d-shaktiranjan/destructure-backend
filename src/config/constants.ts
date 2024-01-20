@@ -10,6 +10,7 @@ export const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI;
 export const APP_MESSAGE = {
     HELLO: "Hello from Express",
     RUNNING: `App is running on ${PORT}`,
+    ERROR: "Some error occurred",
 };
 
 export const DB_MESSAGES = {
