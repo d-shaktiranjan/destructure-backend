@@ -1,6 +1,6 @@
 import "dotenv/config";
 import express, { Response, Request } from "express";
-import { PORT, APP_MESSAGE } from "./config/constants";
+import { PORT, APP_MESSAGES } from "./config/constants";
 import session from "express-session";
 import cookieParser from "cookie-parser";
 
@@ -41,5 +41,5 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.listen(PORT, () => {
-    console.log(APP_MESSAGE.RUNNING);
+    console.log(APP_MESSAGES.RUNNING);
 });
