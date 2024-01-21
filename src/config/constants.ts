@@ -11,9 +11,14 @@ export const APP_MESSAGE = {
     HELLO: "Hello from Express",
     RUNNING: `App is running on ${PORT}`,
     ERROR: "Some error occurred",
+    MISSING: " is missing",
 };
 
 export const DB_MESSAGES = {
     CONNECTED: "DB Connected",
     FAILED: "Unable to connect to DB",
+};
+
+export const BLOG_MESSAGES = {
+    CREATED: "Blog Created",
 };
