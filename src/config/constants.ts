@@ -21,4 +21,5 @@ export const DB_MESSAGES = {
 
 export const BLOG_MESSAGES = {
     CREATED: "Blog Created",
+    ALREADY_EXITS: "Blog already exits.",
 };

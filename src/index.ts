@@ -1,5 +1,5 @@
 import "dotenv/config";
-import express, { Response, Request } from "express";
+import express, { Response, Request, json } from "express";
 import { PORT, APP_MESSAGES } from "./config/constants";
 import session from "express-session";
 import cookieParser from "cookie-parser";
@@ -20,6 +20,8 @@ declare module "express-session" {
     }
 }
 
+// middlewares
+app.use(json());
 app.use(cookieParser());
 app.use(
     session({
@@ -36,7 +38,7 @@ app.set("view engine", "ejs");
 
 // route usages
 app.use("/auth", authRouter);
-app.use("/blog", blogRouter);
+app.use("/api/blog", blogRouter);
 
 app.get("/", (req: Request, res: Response) => {
     res.render("index", { user: req.session.user });
