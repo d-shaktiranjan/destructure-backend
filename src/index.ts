@@ -10,6 +10,7 @@ connectToDB();
 
 // route imports
 import authRouter from "./routes/auth.routes";
+import blogRouter from "./routes/blog.routes";
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.set("view engine", "ejs");
 
 // route usages
 app.use("/auth", authRouter);
+app.use("/blog", blogRouter);
 
 app.get("/", (req: Request, res: Response) => {
     res.render("index", { user: req.session.user });
