@@ -12,14 +12,14 @@ export const APP_MESSAGES = {
     RUNNING: `App is running on ${PORT}`,
     ERROR: "Some error occurred",
     MISSING: " is missing",
-};
+} as const;
 
-export const DB_MESSAGES = {
-    CONNECTED: "DB Connected",
-    FAILED: "Unable to connect to DB",
-};
+export enum DB_MESSAGES {
+    CONNECTED = "DB Connected",
+    FAILED = "Unable to connect to DB",
+}
 
-export const BLOG_MESSAGES = {
-    CREATED: "Blog Created",
-    ALREADY_EXITS: "Blog already exits.",
-};
+export enum BLOG_MESSAGES {
+    CREATED = "Blog Created",
+    ALREADY_EXITS = "Blog already exits.",
+}
