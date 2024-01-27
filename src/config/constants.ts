@@ -1,6 +1,7 @@
 // environment variables
 export const PORT = process.env.PORT || 8000;
 export const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017";
+export const DEBUG: boolean = process.env.DEBUG === "true";
 
 // google oAuth constants
 export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
