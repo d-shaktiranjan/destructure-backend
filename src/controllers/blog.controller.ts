@@ -38,3 +38,26 @@ export const createBlog = asyncWrapper(async (req: Request, res: Response) => {
 
     return successResponse(res, BLOG_MESSAGES.CREATED, 201, newBlog);
 });
+
+export const getBlogList = asyncWrapper(async (req: Request, res: Response) => {
+    // pagination calculations
+    const page = parseInt(req.query.page as string) || 1;
+    const count = parseInt(req.query.count as string) || 10;
+    const skip = (page - 1) * count;
+
+    // meta data calculation
+    const totalBlogs = await Blog.countDocuments({ isPublic: true });
+    const isNextNull = skip + count >= totalBlogs;
+
+    // fetch all blog objects from DB
+    const allBlogs = await Blog.find(
+        { isPublic: true },
+        { title: 1, description: 1, blogSlug: 1, author: 1, content: 1, _id: 0 }
+    )
+        .skip(skip)
+        .limit(count);
+
+    return successResponse(res, BLOG_MESSAGES.ALL_FETCHED, 200, allBlogs, {
+        isNextNull,
+    });
+});

@@ -23,4 +23,5 @@ export enum DB_MESSAGES {
 export enum BLOG_MESSAGES {
     CREATED = "Blog Created",
     ALREADY_EXITS = "Blog already exits.",
+    ALL_FETCHED = "All Blog fetched.",
 }
