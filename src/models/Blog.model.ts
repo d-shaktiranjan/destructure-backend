@@ -12,7 +12,7 @@ const blogSchema = new Schema(
             required: true,
             unique: true,
         },
-        blogSlug: {
+        slug: {
             type: String,
             required: true,
             unique: true,

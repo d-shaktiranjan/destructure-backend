@@ -16,13 +16,13 @@ import Blog from "../models/Blog.model";
 
 export const createBlog = asyncWrapper(async (req: Request, res: Response) => {
     // get values from request body & null check
-    const { title, description, blogSlug, content } = req.body;
-    const status = nullChecker(res, { title, description, blogSlug, content });
+    const { title, description, slug, content } = req.body;
+    const status = nullChecker(res, { title, description, slug, content });
     if (status !== null) return status;
 
     // check existing blogObject
     const existingBlog = await Blog.findOne({
-        $or: [{ title }, { blogSlug }, { description }],
+        $or: [{ title }, { slug }, { description }],
     });
     if (existingBlog) return errorResponse(res, BLOG_MESSAGES.ALREADY_EXITS);
 
@@ -30,7 +30,7 @@ export const createBlog = asyncWrapper(async (req: Request, res: Response) => {
     const newBlog = new Blog({
         title,
         description,
-        blogSlug,
+        slug,
         content,
         author: req.session.user,
     });
@@ -52,7 +52,7 @@ export const getBlogList = asyncWrapper(async (req: Request, res: Response) => {
     // fetch all blog objects from DB
     const allBlogs = await Blog.find(
         { isPublic: true },
-        { title: 1, description: 1, blogSlug: 1, author: 1, content: 1, _id: 0 }
+        { title: 1, description: 1, slug: 1, author: 1, content: 1, _id: 0 }
     )
         .skip(skip)
         .limit(count);
