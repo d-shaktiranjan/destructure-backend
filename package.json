@@ -7,7 +7,8 @@
         "start": "npx tsc && node dist/index.js",
         "dev": "npx tsc -w & nodemon dist/index.js",
         "lint": "eslint ./src/",
-        "format": "prettier ./src --write"
+        "format": "prettier ./src --write",
+        "spell": "cspell lint ./src/"
     },
     "keywords": [],
     "author": "",
@@ -28,6 +29,7 @@
         "@types/express-session": "^1.17.10",
         "@typescript-eslint/eslint-plugin": "^6.19.0",
         "@typescript-eslint/parser": "^6.19.0",
+        "cspell": "^8.3.2",
         "eslint": "^8.53.0",
         "nodemon": "^3.0.1",
         "prettier": "^3.2.4",
