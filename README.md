@@ -1,6 +1,11 @@
 # Setup
 
-Install the latest version of [Node JS](https://nodejs.org/en/)
+Install [NVM]()  
+Then install Node JS by running following command
+
+```bash
+nvm use
+```
 
 Enable [pnpm](https://pnpm.io/)
 
