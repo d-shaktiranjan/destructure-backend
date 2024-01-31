@@ -6,7 +6,7 @@ const apiResponse = (
     statusCode: number,
     data: object | null = null,
     metaData: object | null = null,
-    isSuccess: boolean = true
+    isSuccess: boolean = true,
 ): Response => {
     const responseObject = {
         isSuccess,
@@ -22,11 +22,11 @@ export const successResponse = (
     message: string,
     statusCode: number = 200,
     data: object | null = null,
-    metaData: object | null = null
+    metaData: object | null = null,
 ): Response => apiResponse(res, message, statusCode, data, metaData, true);
 
 export const errorResponse = (
     res: Response,
     message: string,
-    statusCode: number = 400
+    statusCode: number = 400,
 ): Response => apiResponse(res, message, statusCode, null, null, false);

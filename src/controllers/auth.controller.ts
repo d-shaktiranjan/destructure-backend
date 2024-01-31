@@ -19,7 +19,7 @@ export const googleLogin = asyncWrapper(
             scope: ["profile", "email"],
         });
         res.redirect(redirectUrl);
-    }
+    },
 );
 
 export const googleCallback = asyncWrapper(
@@ -35,7 +35,7 @@ export const googleCallback = asyncWrapper(
         });
         req.session.user = user.getPayload();
         res.redirect("/");
-    }
+    },
 );
 
 export const logout = (req: Request, res: Response): void => {

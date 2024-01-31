@@ -52,7 +52,7 @@ export const getBlogList = asyncWrapper(async (req: Request, res: Response) => {
     // fetch all blog objects from DB
     const allBlogs = await Blog.find(
         { isPublic: true },
-        { title: 1, description: 1, slug: 1, author: 1, content: 1, _id: 0 }
+        { title: 1, description: 1, slug: 1, author: 1, content: 1, _id: 0 },
     )
         .skip(skip)
         .limit(count);

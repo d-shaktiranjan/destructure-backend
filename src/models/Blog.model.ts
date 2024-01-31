@@ -32,7 +32,7 @@ const blogSchema = new Schema(
             default: false,
         },
     },
-    { timestamps: true }
+    { timestamps: true },
 );
 
 export default model("Blog", blogSchema);
