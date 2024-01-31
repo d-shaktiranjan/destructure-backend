@@ -1,0 +1,11 @@
+pre-commit:
+    commands:
+        format:
+            run: pnpm format
+        lint:
+            run: pnpm lint
+
+commit-msg:
+    commands:
+        validate:
+            run: npx ts-node ./.git_hooks/commitMessage.ts

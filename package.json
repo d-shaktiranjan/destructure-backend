@@ -31,8 +31,10 @@
         "@typescript-eslint/parser": "^6.19.0",
         "cspell": "^8.3.2",
         "eslint": "^8.53.0",
+        "lefthook": "^1.6.1",
         "nodemon": "^3.0.1",
         "prettier": "^3.2.4",
+        "ts-node": "^10.9.2",
         "typescript": "^5.2.2"
     }
 }
