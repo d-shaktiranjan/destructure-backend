@@ -32,7 +32,7 @@ export const createBlog = asyncWrapper(async (req: Request, res: Response) => {
         description,
         slug,
         content,
-        author: req.session.user,
+        author: null, //TODO
     });
     await newBlog.save();
 

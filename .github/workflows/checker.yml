@@ -38,6 +38,10 @@ jobs:
         run: |
           pnpm install && echo "All dependency installed successfully ✅"
 
+      - name: Spell Checking
+        run: |
+          pnpm spell && echo "Congrats no spelling mistake in your code 😊"
+
       - name: ESLint Checking
         run: |
           pnpm lint && echo "Congrats your code passes the ESLint check 👍"
