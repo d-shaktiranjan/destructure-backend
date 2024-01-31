@@ -1,5 +1,7 @@
 pre-commit:
   commands:
+    spell:
+      ren: pnpm spell
     format:
       run: pnpm format
     lint:
