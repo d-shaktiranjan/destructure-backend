@@ -9,6 +9,7 @@ connectToDB();
 
 // route imports
 import blogRouter from "./routes/blog.routes";
+import authRouter from "./routes/auth.routes";
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(cookieParser());
 
 // route usages
 app.use("/api/blog", blogRouter);
+app.use("/api/auth", authRouter);
 
 app.get("/", (req: Request, res: Response) => {
     res.send("Hello World");

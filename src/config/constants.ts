@@ -15,6 +15,12 @@ export const APP_MESSAGES = {
     MISSING: " is missing",
 } as const;
 
+export enum AUTH_MESSAGES {
+    LOGIN = "Login success",
+    LOGOUT = "Logout success",
+    FAILED = "Login failed",
+}
+
 export enum DB_MESSAGES {
     CONNECTED = "DB Connected",
     FAILED = "Unable to connect to DB",
