@@ -1,6 +1,15 @@
 import { Schema, model } from "mongoose";
+import jwt from "jsonwebtoken";
+import { JWT_SECRET, AUTH_TOKEN_EXPIRY } from "../config/constants";
 
-const userSchema = new Schema(
+interface UserDocument extends Document {
+    name: string;
+    email: string;
+    picture?: string;
+    generateAuthToken: () => string;
+}
+
+const userSchema = new Schema<UserDocument>(
     {
         name: {
             type: String,
@@ -11,9 +20,27 @@ const userSchema = new Schema(
             type: String,
             minLength: 5,
             required: true,
+            unique: true,
+        },
+        picture: {
+            type: String,
         },
     },
     { timestamps: true },
 );
 
-export default model("User", userSchema);
+userSchema.methods.generateAuthToken = function () {
+    return jwt.sign(
+        {
+            _id: this._id,
+            email: this.email,
+            name: this.name,
+        },
+        JWT_SECRET,
+        {
+            expiresIn: AUTH_TOKEN_EXPIRY,
+        },
+    );
+};
+
+export default model<UserDocument>("User", userSchema);

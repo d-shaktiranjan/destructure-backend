@@ -5,9 +5,11 @@ import {
     GOOGLE_CLIENT_SECRET,
     GOOGLE_REDIRECT_URI,
     AUTH_MESSAGES,
+    COOKIES_OPTIONS,
 } from "../config/constants";
 import asyncWrapper from "../middlewares/asyncWrap.middleware";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
+import User from "../models/User.model";
 
 const oAuth2Client = new OAuth2Client({
     clientId: GOOGLE_CLIENT_ID,
@@ -34,16 +36,29 @@ export const googleCallback = asyncWrapper(
             audience: GOOGLE_CLIENT_ID,
         });
         if (!user) return errorResponse(res, AUTH_MESSAGES.FAILED);
+        const userPayload = user.getPayload();
 
-        console.log(user);
+        // store user in DB
+        let userObject = await User.findOne({ email: userPayload?.email });
+        if (userObject) {
+            userObject.name = userPayload?.name || "";
+            userObject.picture = userPayload?.picture;
+        } else {
+            userObject = new User({
+                name: userPayload?.name,
+                email: userPayload?.email,
+                picture: userPayload?.picture,
+            });
+        }
+        await userObject.save();
+        const jwt = userObject.generateAuthToken();
+        res.cookie("authToken", jwt, COOKIES_OPTIONS);
 
-        // TODO set cookies
-        return successResponse(res, AUTH_MESSAGES.LOGIN, 200, user);
+        return successResponse(res, AUTH_MESSAGES.LOGIN, 200, userObject);
     },
 );
 
 export const logout = (req: Request, res: Response) => {
-    console.log(req, res);
-    // TODO clear the cookies
+    res.clearCookie("authToken", COOKIES_OPTIONS);
     return successResponse(res, AUTH_MESSAGES.LOGOUT);
 };
