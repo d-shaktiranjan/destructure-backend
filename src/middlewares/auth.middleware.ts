@@ -6,7 +6,7 @@ import User from "../models/User.model";
 import asyncWrapper from "./asyncWrap.middleware";
 
 import { errorResponse } from "../utils/apiResponse.util";
-import { JWT_SECRET } from "../config/constants";
+import { JWT_SECRET, AUTH_MESSAGES } from "../config/constants";
 import { AuthRequest } from "../lib/AuthRequest";
 
 export const isAuthenticated = asyncWrapper(
@@ -16,7 +16,7 @@ export const isAuthenticated = asyncWrapper(
             req.cookies?.authToken ||
             req.header("Authorization")?.replace("Bearer ", "");
 
-        if (!authToken) return errorResponse(res, "");
+        if (!authToken) return errorResponse(res, AUTH_MESSAGES.MISSING_TOKEN);
 
         try {
             // decode JWT
@@ -25,13 +25,16 @@ export const isAuthenticated = asyncWrapper(
             };
 
             // fetch user from DB
-            const user = await User.findById(decodedValue?._id);
-            if (!user) return errorResponse(res, "Invalid token", 401);
+            const user = await User.findById(decodedValue?._id).select(
+                "-_id -__v",
+            );
+            if (!user)
+                return errorResponse(res, AUTH_MESSAGES.INVALID_TOKEN, 401);
 
             req.user = user;
             next();
         } catch (error) {
-            return errorResponse(res, "");
+            return errorResponse(res, AUTH_MESSAGES.INVALID_TOKEN);
         }
     },
 );

@@ -10,6 +10,7 @@ import {
 import asyncWrapper from "../middlewares/asyncWrap.middleware";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
 import User from "../models/User.model";
+import { AuthRequest } from "../lib/AuthRequest";
 
 const oAuth2Client = new OAuth2Client({
     clientId: GOOGLE_CLIENT_ID,
@@ -62,3 +63,7 @@ export const logout = (req: Request, res: Response) => {
     res.clearCookie("authToken", COOKIES_OPTIONS);
     return successResponse(res, AUTH_MESSAGES.LOGOUT);
 };
+
+export const profile = asyncWrapper(async (req: AuthRequest, res: Response) => {
+    return successResponse(res, AUTH_MESSAGES.PROFILE, 200, req.user);
+});
