@@ -5,6 +5,7 @@ import {
     getBlogDetails,
     getBlogDetailsAdmin,
     getBlogList,
+    getBlogListAdmin,
 } from "../controllers/blog.controller";
 import { isAdmin, isAuthenticated } from "../middlewares/auth.middleware";
 
@@ -18,6 +19,7 @@ router.get(
     isAdmin,
     getBlogDetailsAdmin,
 );
+router.get("/get-all-blogs-admin", isAuthenticated, isAdmin, getBlogListAdmin);
 
 // user routes
 router.get("/get-all-blogs", getBlogList);

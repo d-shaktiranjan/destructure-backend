@@ -14,7 +14,10 @@ import { BLOG_MESSAGES } from "../config/constants";
 // model
 import Blog from "../models/Blog.model";
 import { AuthRequest } from "../lib/AuthRequest";
-import { getBlogDetailsService } from "../services/blog.service";
+import {
+    getBlogDetailsService,
+    getBlogListService,
+} from "../services/blog.service";
 
 export const createBlog = asyncWrapper(async (req: Request, res: Response) => {
     // get values from request body & null check
@@ -41,37 +44,20 @@ export const createBlog = asyncWrapper(async (req: Request, res: Response) => {
     return successResponse(res, BLOG_MESSAGES.CREATED, 201, newBlog);
 });
 
-export const getBlogList = asyncWrapper(async (req: Request, res: Response) => {
-    // pagination calculations
-    const page = parseInt(req.query.page as string) || 1;
-    const count = parseInt(req.query.count as string) || 10;
-    const skip = (page - 1) * count;
+export const getBlogList = asyncWrapper(async (req: Request, res: Response) =>
+    getBlogListService(req, res, false),
+);
 
-    // meta data calculation
-    const totalBlogs = await Blog.countDocuments({ isPublic: true });
-    const isNextNull = skip + count >= totalBlogs;
-
-    // fetch all blog objects from DB
-    const allBlogs = await Blog.find(
-        { isPublic: true },
-        { title: 1, description: 1, slug: 1, author: 1, content: 1, _id: 0 },
-    )
-        .skip(skip)
-        .limit(count);
-
-    return successResponse(res, BLOG_MESSAGES.ALL_FETCHED, 200, allBlogs, {
-        isNextNull,
-    });
-});
+export const getBlogListAdmin = asyncWrapper(
+    async (req: Request, res: Response) => getBlogListService(req, res, true),
+);
 
 export const getBlogDetails = asyncWrapper(
-    async (req: Request, res: Response) => {
-        return getBlogDetailsService(req, res, false);
-    },
+    async (req: Request, res: Response) =>
+        getBlogDetailsService(req, res, false),
 );
 
 export const getBlogDetailsAdmin = asyncWrapper(
-    async (req: AuthRequest, res: Response) => {
-        return getBlogDetailsService(req, res, true);
-    },
+    async (req: AuthRequest, res: Response) =>
+        getBlogDetailsService(req, res, true),
 );
