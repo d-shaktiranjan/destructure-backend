@@ -61,3 +61,19 @@ export const getBlogList = asyncWrapper(async (req: Request, res: Response) => {
         isNextNull,
     });
 });
+
+export const getBlogDetails = asyncWrapper(
+    async (req: Request, res: Response) => {
+        // collect slug from query
+        const { slug } = req.query;
+        if (!slug) return errorResponse(res, BLOG_MESSAGES.SLUG_MISSING);
+
+        // fetch from DB
+        const blog = await Blog.findOne({ slug, isPublic: true }).select(
+            "-_id -__v",
+        );
+        if (!blog) return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND);
+
+        return successResponse(res, BLOG_MESSAGES.BLOG_FETCHED, 200, blog);
+    },
+);
