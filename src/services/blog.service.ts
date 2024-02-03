@@ -49,7 +49,7 @@ export const getBlogDetailsService = async (
 ) => {
     try {
         // collect slug from query
-        const { slug } = req.query;
+        const { slug } = req.params;
         if (!slug || typeof slug != "string")
             return errorResponse(res, BLOG_MESSAGES.SLUG_MISSING);
 
