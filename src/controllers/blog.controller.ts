@@ -13,6 +13,8 @@ import { BLOG_MESSAGES } from "../config/constants";
 
 // model
 import Blog from "../models/Blog.model";
+import { AuthRequest } from "../lib/AuthRequest";
+import { getBlogDetailsService } from "../services/blog.service";
 
 export const createBlog = asyncWrapper(async (req: Request, res: Response) => {
     // get values from request body & null check
@@ -64,16 +66,12 @@ export const getBlogList = asyncWrapper(async (req: Request, res: Response) => {
 
 export const getBlogDetails = asyncWrapper(
     async (req: Request, res: Response) => {
-        // collect slug from query
-        const { slug } = req.query;
-        if (!slug) return errorResponse(res, BLOG_MESSAGES.SLUG_MISSING);
+        return getBlogDetailsService(req, res, false);
+    },
+);
 
-        // fetch from DB
-        const blog = await Blog.findOne({ slug, isPublic: true }).select(
-            "-_id -__v",
-        );
-        if (!blog) return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND);
-
-        return successResponse(res, BLOG_MESSAGES.BLOG_FETCHED, 200, blog);
+export const getBlogDetailsAdmin = asyncWrapper(
+    async (req: AuthRequest, res: Response) => {
+        return getBlogDetailsService(req, res, true);
     },
 );
