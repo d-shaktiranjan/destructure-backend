@@ -6,6 +6,7 @@ export interface UserDocument extends Document {
     name: string;
     email: string;
     picture?: string;
+    isAdmin: boolean;
     generateAuthToken: () => string;
 }
 
@@ -24,6 +25,10 @@ const userSchema = new Schema<UserDocument>(
         },
         picture: {
             type: String,
+        },
+        isAdmin: {
+            type: Boolean,
+            default: false,
         },
     },
     { timestamps: true },

@@ -26,6 +26,8 @@ export enum AUTH_MESSAGES {
     PROFILE = "Profile details fetched",
     MISSING_TOKEN = "Auth token is missing",
     INVALID_TOKEN = "Invalid auth token provided",
+    NOT_AUTHENTICATED = "Login to continue",
+    NOT_ADMIN = "You are not allowed to do this",
 }
 
 export enum DB_MESSAGES {

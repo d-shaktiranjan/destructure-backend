@@ -28,8 +28,7 @@ export const isAuthenticated = asyncWrapper(
             const user = await User.findById(decodedValue?._id).select(
                 "-_id -__v",
             );
-            if (!user)
-                return errorResponse(res, AUTH_MESSAGES.INVALID_TOKEN, 401);
+            if (!user) return errorResponse(res, AUTH_MESSAGES.INVALID_TOKEN);
 
             req.user = user;
             next();
@@ -38,3 +37,18 @@ export const isAuthenticated = asyncWrapper(
         }
     },
 );
+
+export const isAdmin = (
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+) => {
+    const user = req.user;
+    // check login status
+    if (!user) return errorResponse(res, AUTH_MESSAGES.NOT_AUTHENTICATED, 401);
+
+    // check admin status
+    if (!user.isAdmin) return errorResponse(res, AUTH_MESSAGES.NOT_ADMIN, 401);
+
+    next();
+};
