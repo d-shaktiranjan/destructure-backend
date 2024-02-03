@@ -1,8 +1,8 @@
 import { Schema, model } from "mongoose";
-import jwt from "jsonwebtoken";
+import { sign } from "jsonwebtoken";
 import { JWT_SECRET, AUTH_TOKEN_EXPIRY } from "../config/constants";
 
-interface UserDocument extends Document {
+export interface UserDocument extends Document {
     name: string;
     email: string;
     picture?: string;
@@ -30,7 +30,7 @@ const userSchema = new Schema<UserDocument>(
 );
 
 userSchema.methods.generateAuthToken = function () {
-    return jwt.sign(
+    return sign(
         {
             _id: this._id,
             email: this.email,
