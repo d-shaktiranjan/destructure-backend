@@ -7,9 +7,15 @@ import {
 import { isAdmin, isAuthenticated } from "../middlewares/auth.middleware";
 
 const router = Router();
+router.use(isAuthenticated, isAdmin);
 
-router.post("/blogs/create", isAuthenticated, isAdmin, createBlog);
-router.get("/blogs", isAuthenticated, isAdmin, getBlogListAdmin);
-router.get("/blogs/:slug", isAuthenticated, isAdmin, getBlogDetailsAdmin);
+// blog routes
+const blogRouter = Router();
+blogRouter.post("/create", createBlog);
+blogRouter.get("/", getBlogListAdmin);
+blogRouter.get("/:slug", getBlogDetailsAdmin);
+
+// route usages
+router.use("/blogs", blogRouter);
 
 export default router;
