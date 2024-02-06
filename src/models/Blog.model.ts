@@ -1,6 +1,7 @@
+import { BlogDocument } from "@/libs/BlogDocument.lib";
 import { Schema, model } from "mongoose";
 
-const blogSchema = new Schema(
+const blogSchema = new Schema<BlogDocument>(
     {
         title: {
             type: String,
@@ -10,7 +11,6 @@ const blogSchema = new Schema(
         description: {
             type: String,
             required: true,
-            unique: true,
         },
         slug: {
             type: String,
@@ -35,4 +35,4 @@ const blogSchema = new Schema(
     { timestamps: true },
 );
 
-export default model("Blog", blogSchema);
+export default model<BlogDocument>("Blog", blogSchema);

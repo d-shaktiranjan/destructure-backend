@@ -3,6 +3,7 @@ import {
     createBlog,
     getBlogDetailsAdmin,
     getBlogListAdmin,
+    updateBlog,
 } from "../controllers/blog.controller";
 import { isAdmin, isAuthenticated } from "../middlewares/auth.middleware";
 
@@ -13,6 +14,7 @@ router.use(isAuthenticated, isAdmin);
 const blogRouter = Router();
 blogRouter.post("/create", createBlog);
 blogRouter.get("/", getBlogListAdmin);
+blogRouter.put("/update", updateBlog);
 blogRouter.get("/:slug", getBlogDetailsAdmin);
 
 // route usages

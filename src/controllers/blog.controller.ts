@@ -13,7 +13,7 @@ import { BLOG_MESSAGES } from "../config/constants";
 
 // model
 import Blog from "../models/Blog.model";
-import { AuthRequest } from "../lib/AuthRequest";
+import { AuthRequest } from "../libs/AuthRequest.lib";
 import {
     getBlogDetailsService,
     getBlogListService,
@@ -61,3 +61,41 @@ export const getBlogDetailsAdmin = asyncWrapper(
     async (req: AuthRequest, res: Response) =>
         getBlogDetailsService(req, res, true),
 );
+
+export const updateBlog = asyncWrapper(async (req: Request, res: Response) => {
+    const { slug } = req.body;
+
+    // fetch blog in DB
+    const blog = await Blog.findOne({ slug });
+    if (!blog) return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND);
+
+    // validate request body data
+    const allowedKeys = ["title", "description", "content", "isPublic", "slug"];
+    for (const keyName in req.body) {
+        if (!allowedKeys.includes(keyName))
+            return errorResponse(res, keyName + " is not allowed to update");
+    }
+
+    // update fields
+    for (const keyName of allowedKeys) {
+        const value = req.body[keyName];
+        if (value == null) continue;
+
+        // isPublic type check
+        if (keyName == "isPublic" && typeof value != "boolean")
+            return errorResponse(res, "");
+
+        // title
+        if (keyName == "title") {
+            const existingBlog = await Blog.findOne({ title: value });
+            if (existingBlog && existingBlog._id !== blog._id)
+                return errorResponse(res, "Chose new title");
+        }
+
+        // update fields
+        // blog[keyName] = value; TODO
+    }
+    await blog.save();
+
+    return successResponse(res, "Updated", 202, blog);
+});
