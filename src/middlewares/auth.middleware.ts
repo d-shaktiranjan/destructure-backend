@@ -25,9 +25,7 @@ export const isAuthenticated = asyncWrapper(
             };
 
             // fetch user from DB
-            const user = await User.findById(decodedValue?._id).select(
-                "-_id -__v",
-            );
+            const user = await User.findById(decodedValue?._id).select("-__v");
             if (!user) return errorResponse(res, AUTH_MESSAGES.INVALID_TOKEN);
 
             req.user = user;

@@ -19,30 +19,33 @@ import {
     getBlogListService,
 } from "../services/blog.service";
 
-export const createBlog = asyncWrapper(async (req: Request, res: Response) => {
-    // get values from request body & null check
-    const { title, description, slug, content } = req.body;
-    const status = nullChecker(res, { title, description, slug, content });
-    if (status !== null) return status;
+export const createBlog = asyncWrapper(
+    async (req: AuthRequest, res: Response) => {
+        // get values from request body & null check
+        const { title, description, slug, content } = req.body;
+        const status = nullChecker(res, { title, description, slug, content });
+        if (status !== null) return status;
 
-    // check existing blogObject
-    const existingBlog = await Blog.findOne({
-        $or: [{ title }, { slug }, { description }],
-    });
-    if (existingBlog) return errorResponse(res, BLOG_MESSAGES.ALREADY_EXITS);
+        // check existing blogObject
+        const existingBlog = await Blog.findOne({
+            $or: [{ title }, { slug }, { description }],
+        });
+        if (existingBlog)
+            return errorResponse(res, BLOG_MESSAGES.ALREADY_EXITS);
 
-    // create new blogObject
-    const newBlog = new Blog({
-        title,
-        description,
-        slug,
-        content,
-        author: null, //TODO
-    });
-    await newBlog.save();
+        // create new blogObject
+        const newBlog = new Blog({
+            title,
+            description,
+            slug,
+            content,
+            author: req?.user?._id,
+        });
+        await newBlog.save();
 
-    return successResponse(res, BLOG_MESSAGES.CREATED, 201, newBlog);
-});
+        return successResponse(res, BLOG_MESSAGES.CREATED, 201, newBlog);
+    },
+);
 
 export const getBlogList = asyncWrapper(async (req: Request, res: Response) =>
     getBlogListService(req, res, false),
