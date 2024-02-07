@@ -7,7 +7,7 @@ import asyncWrapper from "./asyncWrap.middleware";
 
 import { errorResponse } from "../utils/apiResponse.util";
 import { JWT_SECRET, AUTH_MESSAGES } from "../config/constants";
-import { AuthRequest } from "../lib/AuthRequest";
+import { AuthRequest } from "../libs/AuthRequest.lib";
 
 export const isAuthenticated = asyncWrapper(
     async (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -25,9 +25,7 @@ export const isAuthenticated = asyncWrapper(
             };
 
             // fetch user from DB
-            const user = await User.findById(decodedValue?._id).select(
-                "-_id -__v",
-            );
+            const user = await User.findById(decodedValue?._id).select("-__v");
             if (!user) return errorResponse(res, AUTH_MESSAGES.INVALID_TOKEN);
 
             req.user = user;

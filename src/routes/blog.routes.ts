@@ -1,11 +1,10 @@
 import { Router } from "express";
 
-import { createBlog, getBlogList } from "../controllers/blog.controller";
-import { isAdmin, isAuthenticated } from "../middlewares/auth.middleware";
+import { getBlogDetails, getBlogList } from "../controllers/blog.controller";
 
 const router = Router();
 
-router.post("/create", isAuthenticated, isAdmin, createBlog);
-router.get("/get-all-blogs", getBlogList);
+router.get("/", getBlogList);
+router.get("/:slug", getBlogDetails);
 
 export default router;

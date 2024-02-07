@@ -10,7 +10,7 @@ export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 export const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 export const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI;
 
-export const COOKIES_OPTIONS = { secure: true, httpOnly: true };
+export const COOKIES_OPTIONS = { secure: true, httpOnly: true } as const;
 
 export const APP_MESSAGES = {
     HELLO: "Hello from Express",
@@ -39,4 +39,11 @@ export enum BLOG_MESSAGES {
     CREATED = "Blog Created",
     ALREADY_EXITS = "Blog already exits.",
     ALL_FETCHED = "All Blog fetched.",
+    BLOG_FETCHED = "Blog details fetched",
+    SLUG_MISSING = "Blog slug missing",
+    BLOG_NOT_FOUND = "Blog not found",
+    KEY_NOT_ALLOWED = " key is not allowed to update.",
+    IS_PUBLIC_TYPE = "isPublic must be a bool value",
+    UNIQUE_TITLE = "Title must be unique",
+    UPDATED = "Blog updated successfully",
 }

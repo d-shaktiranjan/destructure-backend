@@ -10,7 +10,7 @@ import {
 import asyncWrapper from "../middlewares/asyncWrap.middleware";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
 import User from "../models/User.model";
-import { AuthRequest } from "../lib/AuthRequest";
+import { AuthRequest } from "../libs/AuthRequest.lib";
 
 const oAuth2Client = new OAuth2Client({
     clientId: GOOGLE_CLIENT_ID,

@@ -13,51 +13,92 @@ import { BLOG_MESSAGES } from "../config/constants";
 
 // model
 import Blog from "../models/Blog.model";
+import { AuthRequest } from "../libs/AuthRequest.lib";
+import {
+    getBlogDetailsService,
+    getBlogListService,
+} from "../services/blog.service";
 
-export const createBlog = asyncWrapper(async (req: Request, res: Response) => {
-    // get values from request body & null check
-    const { title, description, slug, content } = req.body;
-    const status = nullChecker(res, { title, description, slug, content });
-    if (status !== null) return status;
+export const createBlog = asyncWrapper(
+    async (req: AuthRequest, res: Response) => {
+        // get values from request body & null check
+        const { title, description, slug, content } = req.body;
+        const status = nullChecker(res, { title, description, slug, content });
+        if (status !== null) return status;
 
-    // check existing blogObject
-    const existingBlog = await Blog.findOne({
-        $or: [{ title }, { slug }, { description }],
-    });
-    if (existingBlog) return errorResponse(res, BLOG_MESSAGES.ALREADY_EXITS);
+        // check existing blogObject
+        const existingBlog = await Blog.findOne({
+            $or: [{ title }, { slug }, { description }],
+        });
+        if (existingBlog)
+            return errorResponse(res, BLOG_MESSAGES.ALREADY_EXITS);
 
-    // create new blogObject
-    const newBlog = new Blog({
-        title,
-        description,
-        slug,
-        content,
-        author: null, //TODO
-    });
-    await newBlog.save();
+        // create new blogObject
+        const newBlog = new Blog({
+            title,
+            description,
+            slug,
+            content,
+            author: req?.user?._id,
+        });
+        await newBlog.save();
 
-    return successResponse(res, BLOG_MESSAGES.CREATED, 201, newBlog);
-});
+        return successResponse(res, BLOG_MESSAGES.CREATED, 201, newBlog);
+    },
+);
 
-export const getBlogList = asyncWrapper(async (req: Request, res: Response) => {
-    // pagination calculations
-    const page = parseInt(req.query.page as string) || 1;
-    const count = parseInt(req.query.count as string) || 10;
-    const skip = (page - 1) * count;
+export const getBlogList = asyncWrapper(async (req: Request, res: Response) =>
+    getBlogListService(req, res, false),
+);
 
-    // meta data calculation
-    const totalBlogs = await Blog.countDocuments({ isPublic: true });
-    const isNextNull = skip + count >= totalBlogs;
+export const getBlogListAdmin = asyncWrapper(
+    async (req: Request, res: Response) => getBlogListService(req, res, true),
+);
 
-    // fetch all blog objects from DB
-    const allBlogs = await Blog.find(
-        { isPublic: true },
-        { title: 1, description: 1, slug: 1, author: 1, content: 1, _id: 0 },
-    )
-        .skip(skip)
-        .limit(count);
+export const getBlogDetails = asyncWrapper(
+    async (req: Request, res: Response) =>
+        getBlogDetailsService(req, res, false),
+);
 
-    return successResponse(res, BLOG_MESSAGES.ALL_FETCHED, 200, allBlogs, {
-        isNextNull,
-    });
+export const getBlogDetailsAdmin = asyncWrapper(
+    async (req: AuthRequest, res: Response) =>
+        getBlogDetailsService(req, res, true),
+);
+
+export const updateBlog = asyncWrapper(async (req: Request, res: Response) => {
+    const { slug } = req.body;
+
+    // fetch blog in DB
+    const blog = await Blog.findOne({ slug });
+    if (!blog) return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND);
+
+    // validate request body data
+    const allowedKeys = ["title", "description", "content", "isPublic", "slug"];
+    for (const keyName in req.body) {
+        if (!allowedKeys.includes(keyName))
+            return errorResponse(res, keyName + BLOG_MESSAGES.KEY_NOT_ALLOWED);
+    }
+
+    // update fields
+    for (const keyName of allowedKeys) {
+        const value = req.body[keyName];
+        if (value == null) continue;
+
+        // isPublic type check
+        if (keyName == "isPublic" && typeof value != "boolean")
+            return errorResponse(res, BLOG_MESSAGES.IS_PUBLIC_TYPE);
+
+        // title unique checking
+        if (keyName == "title") {
+            const existingBlog = await Blog.findOne({ title: value });
+            if (existingBlog && existingBlog._id !== blog._id)
+                return errorResponse(res, BLOG_MESSAGES.UNIQUE_TITLE);
+        }
+
+        // update fields
+        // blog[keyName] = value; TODO
+    }
+    await blog.save();
+
+    return successResponse(res, BLOG_MESSAGES.UPDATED, 202, blog);
 });
