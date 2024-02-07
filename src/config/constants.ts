@@ -42,4 +42,8 @@ export enum BLOG_MESSAGES {
     BLOG_FETCHED = "Blog details fetched",
     SLUG_MISSING = "Blog slug missing",
     BLOG_NOT_FOUND = "Blog not found",
+    KEY_NOT_ALLOWED = " key is not allowed to update.",
+    IS_PUBLIC_TYPE = "isPublic must be a bool value",
+    UNIQUE_TITLE = "Title must be unique",
+    UPDATED = "Blog updated successfully",
 }

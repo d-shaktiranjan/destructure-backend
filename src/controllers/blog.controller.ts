@@ -76,7 +76,7 @@ export const updateBlog = asyncWrapper(async (req: Request, res: Response) => {
     const allowedKeys = ["title", "description", "content", "isPublic", "slug"];
     for (const keyName in req.body) {
         if (!allowedKeys.includes(keyName))
-            return errorResponse(res, keyName + " is not allowed to update");
+            return errorResponse(res, keyName + BLOG_MESSAGES.KEY_NOT_ALLOWED);
     }
 
     // update fields
@@ -86,13 +86,13 @@ export const updateBlog = asyncWrapper(async (req: Request, res: Response) => {
 
         // isPublic type check
         if (keyName == "isPublic" && typeof value != "boolean")
-            return errorResponse(res, "");
+            return errorResponse(res, BLOG_MESSAGES.IS_PUBLIC_TYPE);
 
-        // title
+        // title unique checking
         if (keyName == "title") {
             const existingBlog = await Blog.findOne({ title: value });
             if (existingBlog && existingBlog._id !== blog._id)
-                return errorResponse(res, "Chose new title");
+                return errorResponse(res, BLOG_MESSAGES.UNIQUE_TITLE);
         }
 
         // update fields
@@ -100,5 +100,5 @@ export const updateBlog = asyncWrapper(async (req: Request, res: Response) => {
     }
     await blog.save();
 
-    return successResponse(res, "Updated", 202, blog);
+    return successResponse(res, BLOG_MESSAGES.UPDATED, 202, blog);
 });
