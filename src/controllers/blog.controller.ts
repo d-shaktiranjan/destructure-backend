@@ -102,3 +102,12 @@ export const updateBlog = asyncWrapper(async (req: Request, res: Response) => {
 
     return successResponse(res, BLOG_MESSAGES.UPDATED, 202, blog);
 });
+
+export const imageUpload = asyncWrapper(async (req: Request, res: Response) => {
+    const file = req.file;
+    if (!file) return errorResponse(res, BLOG_MESSAGES.IMAGE_REQUIRED);
+
+    return successResponse(res, BLOG_MESSAGES.IMAGE_UPLOADED, 201, {
+        url: file.path,
+    });
+});

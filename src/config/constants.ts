@@ -46,4 +46,6 @@ export enum BLOG_MESSAGES {
     IS_PUBLIC_TYPE = "isPublic must be a bool value",
     UNIQUE_TITLE = "Title must be unique",
     UPDATED = "Blog updated successfully",
+    IMAGE_REQUIRED = "Image required",
+    IMAGE_UPLOADED = "Image upload successfully",
 }

@@ -1,6 +1,6 @@
 {
     "name": "destructure-backend",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Destructure app backend",
     "main": "src/index.ts",
     "scripts": {
@@ -20,12 +20,14 @@
         "express": "^4.18.2",
         "google-auth-library": "^9.4.2",
         "jsonwebtoken": "^9.0.2",
-        "mongoose": "^7.6.2"
+        "mongoose": "^7.6.2",
+        "multer": "1.4.5-lts.1"
     },
     "devDependencies": {
         "@types/cookie-parser": "^1.4.6",
         "@types/express": "^4.17.19",
         "@types/jsonwebtoken": "^9.0.5",
+        "@types/multer": "^1.4.11",
         "@typescript-eslint/eslint-plugin": "^6.19.0",
         "@typescript-eslint/parser": "^6.19.0",
         "cspell": "^8.3.2",
