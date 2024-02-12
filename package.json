@@ -1,8 +1,8 @@
 {
     "name": "destructure-backend",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
+    "version": "0.0.1",
+    "description": "Destructure app backend",
+    "main": "src/index.ts",
     "scripts": {
         "build": "tsc",
         "start": "node dist/index.js",
