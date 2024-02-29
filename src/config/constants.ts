@@ -49,3 +49,8 @@ export enum BLOG_MESSAGES {
     IMAGE_REQUIRED = "Image required",
     IMAGE_UPLOADED = "Image upload successfully",
 }
+
+export enum REACTION_MESSAGES {
+    ADDED = "Reaction added",
+    REMOVED = "Reaction removed",
+}
