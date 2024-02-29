@@ -7,8 +7,9 @@ import Blog from "@/models/Blog.model";
 import Reaction from "@/models/Reaction.model";
 
 // util imports
-import { errorResponse, successResponse } from "@/utils/apiResponse.util";
 import nullChecker from "@/utils/nullChecker.util";
+import { getReactionCountOfBlog } from "@/utils/reaction.util";
+import { errorResponse, successResponse } from "@/utils/apiResponse.util";
 
 // config imports
 import { BLOG_MESSAGES, REACTION_MESSAGES } from "@/config/constants";
@@ -31,7 +32,9 @@ export const toggleReaction = asyncWrapper(
         // remove reaction
         if (reaction) {
             await reaction.deleteOne();
-            return successResponse(res, REACTION_MESSAGES.REMOVED);
+            return successResponse(res, REACTION_MESSAGES.REMOVED, 200, {
+                reaction: getReactionCountOfBlog(blog._id),
+            });
         }
 
         // add reaction
@@ -41,6 +44,8 @@ export const toggleReaction = asyncWrapper(
         });
         await newReaction.save();
 
-        return successResponse(res, REACTION_MESSAGES.ADDED, 201);
+        return successResponse(res, REACTION_MESSAGES.ADDED, 201, {
+            reaction: getReactionCountOfBlog(blog._id),
+        });
     },
 );
