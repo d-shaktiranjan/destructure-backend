@@ -1,5 +1,5 @@
 import { Schema } from "mongoose";
-import Reaction from "@/models/Reaction.model";
+import Reaction from "../models/Reaction.model";
 
 export const getReactionCountOfBlog = async (
     blog: Schema.Types.ObjectId,

@@ -12,6 +12,17 @@ export const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI;
 
 export const COOKIES_OPTIONS = { secure: true, httpOnly: true } as const;
 
+// reactions
+export enum REACTIONS {
+    LIKE = "LIKE",
+    FIRE = "FIRE",
+    SMILE = "SMILE",
+    LAUGHING = "LAUGHING",
+    HEART = "HEART",
+    THINKING = "THINKING",
+    DIS_LIKE = "DISLIKE",
+}
+
 export const APP_MESSAGES = {
     HELLO: "Hello from Express",
     RUNNING: `App is running on ${PORT}`,
