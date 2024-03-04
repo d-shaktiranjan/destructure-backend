@@ -10,12 +10,17 @@ import nullChecker from "../utils/nullChecker.util";
 import { getReactionCountOfBlog } from "../utils/reaction.util";
 
 // constant
-import { BLOG_MESSAGES, REACTION_MESSAGES } from "../config/constants";
+import {
+    BLOG_MESSAGES,
+    REACTIONS,
+    REACTION_MESSAGES,
+} from "../config/constants";
 
 // model & lib imports
 import Reaction from "../models/Reaction.model";
 import Blog from "../models/Blog.model";
 import { AuthRequest } from "../libs/AuthRequest.lib";
+import { ReactionDocument } from "../libs/ReactionDocument.lib";
 
 import {
     getBlogDetailsService,
@@ -108,35 +113,43 @@ export const updateBlog = asyncWrapper(async (req: Request, res: Response) => {
 
 export const reaction = asyncWrapper(
     async (req: AuthRequest, res: Response) => {
-        const { slug } = req.body;
+        const { slug, reaction } = req.body;
         nullChecker(res, { slug });
+
+        // validate reaction
+        if (reaction && !Object.values(REACTIONS).includes(reaction))
+            return errorResponse(res, REACTION_MESSAGES.INVALID);
 
         // fetch blog
         const blog = await Blog.findOne({ slug });
         if (!blog) return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND, 404);
 
         // check for existing reaction
-        const reaction = await Reaction.findOne({
+        const existingReaction = await Reaction.findOne({
             blog: blog._id,
             user: req.user?._id,
         });
 
-        // remove reaction
-        if (reaction) {
-            await reaction.deleteOne();
-            return successResponse(res, REACTION_MESSAGES.REMOVED, 200, {
+        // remove reaction object if user request the same reaction
+        if (existingReaction && existingReaction.reaction === reaction) {
+            await existingReaction.deleteOne();
+            return successResponse(res, REACTION_MESSAGES.REMOVED, 202, {
                 reaction: getReactionCountOfBlog(blog._id),
             });
         }
 
-        // add reaction
-        const newReaction = new Reaction({
-            user: req.user?._id,
-            blog: blog._id,
-        });
-        await newReaction.save();
+        // update or create reaction
+        const updatedReaction = existingReaction
+            ? ({ ...existingReaction, reaction } as ReactionDocument)
+            : new Reaction({ user: req.user?._id, blog: blog._id, reaction });
+        await updatedReaction.save();
 
-        return successResponse(res, "Reaction added");
+        const message = existingReaction
+            ? REACTION_MESSAGES.UPDATED
+            : REACTION_MESSAGES.ADDED;
+        const statusCode = existingReaction ? 202 : 201;
+
+        return successResponse(res, message, statusCode);
     },
 );
 

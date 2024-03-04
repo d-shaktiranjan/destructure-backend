@@ -20,7 +20,7 @@ export enum REACTIONS {
     LAUGHING = "LAUGHING",
     HEART = "HEART",
     THINKING = "THINKING",
-    DIS_LIKE = "DISLIKE",
+    DISLIKE = "DISLIKE",
 }
 
 export const APP_MESSAGES = {
@@ -64,4 +64,6 @@ export enum BLOG_MESSAGES {
 export enum REACTION_MESSAGES {
     ADDED = "Reaction added",
     REMOVED = "Reaction removed",
+    INVALID = "Invalid reaction",
+    UPDATED = "Reaction updated",
 }
