@@ -2,6 +2,7 @@ import "dotenv/config";
 import express, { Response, Request, json } from "express";
 import { PORT, APP_MESSAGES } from "./config/constants";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 // connect to DB
 import connectToDB from "./config/db";
@@ -18,6 +19,7 @@ import apiMetaData from "./utils/apiMetaData.util";
 const app = express();
 
 // middlewares
+app.use(cors());
 app.use(json());
 app.use(cookieParser());
 
