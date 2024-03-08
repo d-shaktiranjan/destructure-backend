@@ -30,3 +30,5 @@ And
 ```
 pnpm run dev
 ```
+
+**MUST** Follow [Code of conduct](./docs/COC.md).
