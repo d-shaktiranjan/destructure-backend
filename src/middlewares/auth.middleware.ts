@@ -8,31 +8,23 @@ import asyncWrapper from "./asyncWrap.middleware";
 import { errorResponse } from "../utils/apiResponse.util";
 import { JWT_SECRET, AUTH_MESSAGES } from "../config/constants";
 import { AuthRequest } from "../libs/AuthRequest.lib";
+import { UserDocument } from "../libs/UserDocument.lib";
 
 export const isAuthenticated = asyncWrapper(
     async (req: AuthRequest, res: Response, next: NextFunction) => {
-        // collect JWT from cookies or header
-        const authToken =
-            req.cookies?.authToken ||
-            req.header("Authorization")?.replace("Bearer ", "");
+        const user = (await decodeToken(req, res)) as UserDocument;
+        if (!user) return errorResponse(res, AUTH_MESSAGES.MISSING_TOKEN);
 
-        if (!authToken) return errorResponse(res, AUTH_MESSAGES.MISSING_TOKEN);
+        req.user = user;
+        next();
+    },
+);
 
-        try {
-            // decode JWT
-            const decodedValue = verify(authToken, JWT_SECRET) as {
-                _id: string;
-            };
-
-            // fetch user from DB
-            const user = await User.findById(decodedValue?._id).select("-__v");
-            if (!user) return errorResponse(res, AUTH_MESSAGES.INVALID_TOKEN);
-
-            req.user = user;
-            next();
-        } catch (error) {
-            return errorResponse(res, AUTH_MESSAGES.INVALID_TOKEN);
-        }
+export const allowBoth = asyncWrapper(
+    async (req: AuthRequest, res: Response, next: NextFunction) => {
+        const user = (await decodeToken(req, res)) as UserDocument;
+        if (user) req.user = user;
+        next();
     },
 );
 
@@ -50,3 +42,26 @@ export const isAdmin = (
 
     next();
 };
+
+async function decodeToken(req: AuthRequest, res: Response) {
+    // collect JWT from cookies or header
+    const authToken =
+        req.cookies?.authToken ||
+        req.header("Authorization")?.replace("Bearer ", "");
+
+    if (!authToken) return null;
+
+    try {
+        // decode JWT
+        const decodedValue = verify(authToken, JWT_SECRET) as {
+            _id: string;
+        };
+
+        // fetch user from DB
+        const user = await User.findById(decodedValue?._id).select("-__v");
+        if (!user) return errorResponse(res, AUTH_MESSAGES.INVALID_TOKEN);
+        return user;
+    } catch (error) {
+        return errorResponse(res, AUTH_MESSAGES.INVALID_TOKEN);
+    }
+}
