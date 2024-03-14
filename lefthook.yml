@@ -3,7 +3,7 @@ pre-commit:
     spell:
       ren: pnpm spell
     format:
-      run: pnpm format
+      run: pnpm format_check
     lint:
       run: pnpm lint
 
