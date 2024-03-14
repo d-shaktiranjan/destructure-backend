@@ -1,3 +1,5 @@
+name: ESLint, format & spell checker
+
 on:
   - push
   - pull_request
@@ -37,6 +39,10 @@ jobs:
       - name: Install dependencies
         run: |
           pnpm install && echo "All dependency installed successfully ✅"
+      
+      - name: Format Checking
+        run: |
+          pnpm format_check && echo "Congrats your code is well formatted 🌸"
 
       - name: Spell Checking
         run: |
