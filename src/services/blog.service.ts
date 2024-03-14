@@ -2,9 +2,10 @@ import { Request, Response } from "express";
 import Blog from "../models/Blog.model";
 import { BLOG_MESSAGES } from "../config/constants";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
+import { AuthRequest } from "@/libs/AuthRequest.lib";
 
 export const getBlogListService = async (
-    req: Request,
+    req: AuthRequest,
     res: Response,
     isAdmin: boolean,
 ) => {
@@ -68,6 +69,13 @@ export const getBlogListService = async (
                 author: { $first: "$author" },
                 comments: { $size: "$comments" },
                 reactions: { $size: "$reactions" },
+                reactionStatus: {
+                    $cond: {
+                        if: { $in: [req.user?._id, "$reactions.user"] },
+                        then: { $first: "$reactions.reaction" },
+                        else: null,
+                    },
+                },
             },
         },
         { $skip: skip },
