@@ -8,38 +8,57 @@ export const getBlogListService = async (
     res: Response,
     isAdmin: boolean,
 ) => {
-    try {
-        // pagination calculations
-        const page = parseInt(req.query.page as string) || 1;
-        const count = parseInt(req.query.count as string) || 10;
-        const skip = (page - 1) * count;
+    // pagination calculations
+    const page = parseInt(req.query.page as string) || 1;
+    const count = parseInt(req.query.count as string) || 10;
+    const skip = (page - 1) * count;
 
-        // meta data calculation
-        const totalBlogs = await Blog.countDocuments({ isPublic: true });
-        const isNextNull = skip + count >= totalBlogs;
+    // blog filter
+    let filter = {};
+    if (!isAdmin) filter = { isPublic: true };
 
-        // blog filter
-        let filter = {};
-        if (!isAdmin) filter = { isPublic: true };
+    // meta data calculation
+    const totalBlogs = await Blog.countDocuments(filter);
+    const isNextNull = skip + count >= totalBlogs;
 
-        // fetch all blog objects from DB
-        const allBlogs = await Blog.find(filter, {
-            title: 1,
-            description: 1,
-            slug: 1,
-            author: 1,
-            content: 1,
-            _id: 0,
-        })
-            .skip(skip)
-            .limit(count);
+    const allBlogs = await Blog.aggregate([
+        { $match: filter },
+        {
+            $lookup: {
+                from: "users",
+                localField: "author",
+                foreignField: "_id",
+                as: "author",
+                pipeline: [
+                    {
+                        $project: {
+                            email: 0,
+                            isAdmin: 0,
+                            createdAt: 0,
+                            updatedAt: 0,
+                            __v: 0,
+                        },
+                    },
+                ],
+            },
+        },
+        {
+            $project: {
+                __v: 0,
+            },
+        },
+        {
+            $addFields: {
+                author: { $first: "$author" },
+            },
+        },
+        { $skip: skip },
+        { $limit: count },
+    ]);
 
-        return successResponse(res, BLOG_MESSAGES.ALL_FETCHED, 200, allBlogs, {
-            isNextNull,
-        });
-    } catch (error) {
-        return errorResponse(res, "");
-    }
+    return successResponse(res, BLOG_MESSAGES.ALL_FETCHED, 200, allBlogs, {
+        isNextNull,
+    });
 };
 
 export const getBlogDetailsService = async (
