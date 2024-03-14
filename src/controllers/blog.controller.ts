@@ -26,6 +26,7 @@ import {
     getBlogDetailsService,
     getBlogListService,
 } from "../services/blog.service";
+import { BlogDocument } from "@/libs/BlogDocument.lib";
 
 export const createBlog = asyncWrapper(
     async (req: AuthRequest, res: Response) => {
@@ -89,22 +90,23 @@ export const updateBlog = asyncWrapper(async (req: Request, res: Response) => {
 
     // update fields
     for (const keyName of allowedKeys) {
-        const value = req.body[keyName];
+        const key = keyName as keyof BlogDocument;
+        const value = req.body[key];
         if (value == null) continue;
 
         // isPublic type check
-        if (keyName == "isPublic" && typeof value != "boolean")
+        if (key == "isPublic" && typeof value != "boolean")
             return errorResponse(res, BLOG_MESSAGES.IS_PUBLIC_TYPE);
 
         // title unique checking
-        if (keyName == "title") {
+        if (key == "title") {
             const existingBlog = await Blog.findOne({ title: value });
             if (existingBlog && existingBlog._id !== blog._id)
                 return errorResponse(res, BLOG_MESSAGES.UNIQUE_TITLE);
         }
 
         // update fields
-        // blog[keyName] = value; TODO
+        blog[key] = value as never;
     }
     await blog.save();
 
