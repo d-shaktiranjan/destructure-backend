@@ -43,6 +43,22 @@ export const getBlogListService = async (
             },
         },
         {
+            $lookup: {
+                from: "comments",
+                localField: "_id",
+                foreignField: "blog",
+                as: "comments",
+            },
+        },
+        {
+            $lookup: {
+                from: "reactions",
+                localField: "_id",
+                foreignField: "blog",
+                as: "reactions",
+            },
+        },
+        {
             $project: {
                 __v: 0,
             },
@@ -50,6 +66,8 @@ export const getBlogListService = async (
         {
             $addFields: {
                 author: { $first: "$author" },
+                comments: { $size: "$comments" },
+                reactions: { $size: "$reactions" },
             },
         },
         { $skip: skip },
