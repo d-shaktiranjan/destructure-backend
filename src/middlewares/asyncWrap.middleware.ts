@@ -6,7 +6,11 @@ const asyncWrapper = (requestHandler: RequestHandler) => {
     return (req: Request, res: Response, next: NextFunction) => {
         Promise.resolve(requestHandler(req, res, next)).catch((error) => {
             const message = DEBUG ? error.message : APP_MESSAGES.ERROR;
-            return errorResponse(res, message, 500);
+            try {
+                return errorResponse(res, message, 500);
+            } catch (error) {
+                console.log(error);
+            }
         });
     };
 };
