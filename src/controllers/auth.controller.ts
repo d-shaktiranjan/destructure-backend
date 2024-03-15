@@ -55,7 +55,10 @@ export const googleCallback = asyncWrapper(
         const jwt = userObject.generateAuthToken();
         res.cookie("authToken", jwt, COOKIES_OPTIONS);
 
-        return successResponse(res, AUTH_MESSAGES.LOGIN, 200, userObject);
+        return successResponse(res, AUTH_MESSAGES.LOGIN, 200, {
+            jwt,
+            user: userObject,
+        });
     },
 );
 
