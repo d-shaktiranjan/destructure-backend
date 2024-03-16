@@ -6,6 +6,7 @@ import {
     GOOGLE_REDIRECT_URI,
     AUTH_MESSAGES,
     COOKIES_OPTIONS,
+    CLIENT_URL,
 } from "../config/constants";
 import asyncWrapper from "../middlewares/asyncWrap.middleware";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
@@ -19,15 +20,17 @@ const oAuth2Client = new OAuth2Client({
 });
 
 export const googleLogin = asyncWrapper(async (req: Request, res: Response) => {
+    const slug = req.query.slug as string;
     const redirectUrl = oAuth2Client.generateAuthUrl({
         scope: ["profile", "email"],
+        state: slug || "",
     });
     res.redirect(redirectUrl);
 });
 
 export const googleCallback = asyncWrapper(
     async (req: Request, res: Response) => {
-        const { code } = req.query;
+        const { code, state } = req.query;
 
         const { tokens } = await oAuth2Client.getToken(code as string);
         oAuth2Client.setCredentials(tokens);
@@ -55,10 +58,9 @@ export const googleCallback = asyncWrapper(
         const jwt = userObject.generateAuthToken();
         res.cookie("authToken", jwt, COOKIES_OPTIONS);
 
-        return successResponse(res, AUTH_MESSAGES.LOGIN, 200, {
-            jwt,
-            user: userObject,
-        });
+        res.redirect(
+            (req.headers.referer || CLIENT_URL) + (state ? state : ""),
+        );
     },
 );
 
