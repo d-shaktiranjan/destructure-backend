@@ -6,9 +6,13 @@ const getMetaDataFromPackage = () => {
     return { name, description, version };
 };
 
-const getRunningBranch = () => {
-    const file = readFileSync(".git/HEAD", "utf8");
-    return file.replace("ref: refs/heads/", "").replaceAll("\n", "");
+const getRunningBranch = (): string => {
+    try {
+        const file = readFileSync(".git/HEAD", "utf8");
+        return file.replace("ref: refs/heads/", "").replaceAll("\n", "");
+    } catch (error) {
+        return "unknown";
+    }
 };
 
 const apiMetaData = {
