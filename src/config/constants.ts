@@ -67,3 +67,13 @@ export enum REACTION_MESSAGES {
     INVALID = "Invalid reaction",
     UPDATED = "Reaction updated",
 }
+
+export enum COMMENT_MESSAGES {
+    ADDED = "Comment added",
+    NOT_FOUND = "Comment not found",
+    DELETED = "Comment deleted",
+}
+
+export enum GENERIC_MESSAGE {
+    NOT_ALLOWED = "You are not allowed to perform this action",
+}
