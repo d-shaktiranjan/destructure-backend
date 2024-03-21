@@ -12,6 +12,7 @@ connectToDB();
 import blogRouter from "./routes/blog.routes";
 import authRouter from "./routes/auth.routes";
 import adminRouter from "./routes/admin.routes";
+import commentRouter from "./routes/comment.routes";
 
 // util imports
 import apiMetaData from "./utils/apiMetaData.util";
@@ -27,6 +28,7 @@ app.use(cookieParser());
 app.use("/api/blogs", blogRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/comment", commentRouter);
 
 app.get("/", (req: Request, res: Response) => {
     const host = req.protocol + "://" + req.get("host") + req.originalUrl;

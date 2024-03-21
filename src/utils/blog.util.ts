@@ -1,10 +1,10 @@
 import { Response } from "express";
 import { Schema } from "mongoose";
 
-import Blog from "@/models/Blog.model";
+import Blog from "../models/Blog.model";
 import { errorResponse } from "./apiResponse.util";
-import { BlogDocument } from "@/libs/BlogDocument.lib";
-import { BLOG_MESSAGES } from "@/config/constants";
+import { BlogDocument } from "../libs/BlogDocument.lib";
+import { BLOG_MESSAGES } from "../config/constants";
 
 export const getBlogById = async (
     res: Response,

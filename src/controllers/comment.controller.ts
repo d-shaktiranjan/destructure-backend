@@ -1,16 +1,16 @@
 import { Response } from "express";
 
 // lib, model & lib
-import asyncWrapper from "@/middlewares/asyncWrap.middleware";
-import Comment from "@/models/Comment.model";
-import { AuthRequest } from "@/libs/AuthRequest.lib";
-import { BlogDocument } from "@/libs/BlogDocument.lib";
+import asyncWrapper from "../middlewares/asyncWrap.middleware";
+import Comment from "../models/Comment.model";
+import { AuthRequest } from "../libs/AuthRequest.lib";
+import { BlogDocument } from "../libs/BlogDocument.lib";
 
 // utils & config
-import { errorResponse, successResponse } from "@/utils/apiResponse.util";
-import nullChecker from "@/utils/nullChecker.util";
-import { getBlogById } from "@/utils/blog.util";
-import { COMMENT_MESSAGES, GENERIC_MESSAGE } from "@/config/constants";
+import { errorResponse, successResponse } from "../utils/apiResponse.util";
+import nullChecker from "../utils/nullChecker.util";
+import { getBlogById } from "../utils/blog.util";
+import { COMMENT_MESSAGES, GENERIC_MESSAGE } from "../config/constants";
 
 export const addComment = asyncWrapper(
     async (req: AuthRequest, res: Response) => {
