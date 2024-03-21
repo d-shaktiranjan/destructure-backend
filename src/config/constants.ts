@@ -67,3 +67,7 @@ export enum REACTION_MESSAGES {
     INVALID = "Invalid reaction",
     UPDATED = "Reaction updated",
 }
+
+export enum COMMENT_MESSAGES {
+    ADDED = "Comment added",
+}

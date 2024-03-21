@@ -1,7 +1,18 @@
+import { CommentDocument } from "@/libs/Comment.lib";
 import { Schema, model } from "mongoose";
 
-const commentSchema = new Schema(
+const commentSchema = new Schema<CommentDocument>(
     {
+        user: {
+            type: Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+        },
+        blog: {
+            type: Schema.Types.ObjectId,
+            ref: "Blog",
+            required: true,
+        },
         content: {
             type: String,
             minLength: 3,
@@ -11,18 +22,8 @@ const commentSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: "Comment",
         },
-        blog: {
-            type: Schema.Types.ObjectId,
-            ref: "Blog",
-            required: true,
-        },
-        givenBy: {
-            type: Schema.Types.ObjectId,
-            ref: "User",
-            required: true,
-        },
     },
     { timestamps: true },
 );
 
-export default model("Comment", commentSchema);
+export default model<CommentDocument>("Comment", commentSchema);
