@@ -1,6 +1,6 @@
 import "dotenv/config";
 import express, { Response, Request, json } from "express";
-import { PORT, APP_MESSAGES } from "./config/constants";
+import { PORT, APP_MESSAGES, CLIENT_URL } from "./config/constants";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
@@ -20,7 +20,7 @@ import apiMetaData from "./utils/apiMetaData.util";
 const app = express();
 
 // middlewares
-app.use(cors());
+app.use(cors({ origin: CLIENT_URL, credentials: true }));
 app.use(json());
 app.use(cookieParser());
 
