@@ -10,6 +10,8 @@ export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 export const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 export const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI;
 
+export const CORS_ORIGINS: string[] = eval(process.env.CORS_ORIGINS || "");
+
 export const COOKIES_OPTIONS = { secure: true, httpOnly: true } as const;
 
 // reactions
