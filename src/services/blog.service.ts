@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import Blog from "../models/Blog.model";
 import { BLOG_MESSAGES } from "../config/messages";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
-import { AuthRequest } from "@/libs/AuthRequest.lib";
+import { AuthRequest } from "../libs/AuthRequest.lib";
 
 export const getBlogListService = async (
     req: AuthRequest,

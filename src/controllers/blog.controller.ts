@@ -23,7 +23,7 @@ import {
     getBlogDetailsService,
     getBlogListService,
 } from "../services/blog.service";
-import { BlogDocument } from "@/libs/BlogDocument.lib";
+import { BlogDocument } from "../libs/BlogDocument.lib";
 
 export const createBlog = asyncWrapper(
     async (req: AuthRequest, res: Response) => {

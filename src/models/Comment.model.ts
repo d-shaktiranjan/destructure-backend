@@ -1,4 +1,4 @@
-import { CommentDocument } from "@/libs/Comment.lib";
+import { CommentDocument } from "../libs/Comment.lib";
 import { Schema, model } from "mongoose";
 
 const commentSchema = new Schema<CommentDocument>(
