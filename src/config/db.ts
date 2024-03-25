@@ -1,5 +1,6 @@
 import { connect } from "mongoose";
-import { MONGO_URI, DB_MESSAGES } from "./constants";
+import { MONGO_URI } from "./constants";
+import { DB_MESSAGES } from "./messages";
 
 const connectToDB = () => {
     connect(MONGO_URI)

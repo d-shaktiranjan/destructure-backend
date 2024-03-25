@@ -4,9 +4,9 @@ import {
     GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET,
     GOOGLE_REDIRECT_URI,
-    AUTH_MESSAGES,
     COOKIES_OPTIONS,
 } from "../config/constants";
+import { AUTH_MESSAGES } from "../config/messages";
 import asyncWrapper from "../middlewares/asyncWrap.middleware";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
 import User from "../models/User.model";

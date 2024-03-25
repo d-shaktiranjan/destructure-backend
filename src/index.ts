@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express, { Response, Request, json } from "express";
-import { PORT, APP_MESSAGES, CORS_ORIGINS } from "./config/constants";
+import { PORT, CORS_ORIGINS } from "./config/constants";
+import { APP_MESSAGES } from "./config/messages";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 

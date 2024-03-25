@@ -10,7 +10,7 @@ import { BlogDocument } from "../libs/BlogDocument.lib";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
 import nullChecker from "../utils/nullChecker.util";
 import { getBlogById } from "../utils/blog.util";
-import { COMMENT_MESSAGES, GENERIC_MESSAGE } from "../config/constants";
+import { COMMENT_MESSAGES, GENERIC_MESSAGES } from "../config/messages";
 
 export const addComment = asyncWrapper(
     async (req: AuthRequest, res: Response) => {
@@ -43,7 +43,7 @@ export const removeComment = asyncWrapper(
 
         // check ownership
         if (comment.user !== req.user?._id)
-            return errorResponse(res, GENERIC_MESSAGE.NOT_ALLOWED, 401);
+            return errorResponse(res, GENERIC_MESSAGES.NOT_ALLOWED, 401);
 
         // delete the comment
         await comment.deleteOne();
