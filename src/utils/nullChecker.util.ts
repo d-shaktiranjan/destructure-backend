@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { errorResponse } from "./apiResponse.util";
-import { APP_MESSAGES } from "../config/constants";
+import { APP_MESSAGES } from "../config/messages";
 
 const nullChecker = (res: Response, elementObject: object): null | Response => {
     for (const [key, value] of Object.entries(elementObject)) {

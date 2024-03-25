@@ -1,4 +1,4 @@
-import { BlogDocument } from "@/libs/BlogDocument.lib";
+import { BlogDocument } from "../libs/BlogDocument.lib";
 import { Schema, model } from "mongoose";
 
 const blogSchema = new Schema<BlogDocument>(

@@ -10,11 +10,8 @@ import nullChecker from "../utils/nullChecker.util";
 import { getReactionCountOfBlog } from "../utils/reaction.util";
 
 // constant
-import {
-    BLOG_MESSAGES,
-    REACTIONS,
-    REACTION_MESSAGES,
-} from "../config/constants";
+import { REACTIONS } from "../config/constants";
+import { BLOG_MESSAGES, REACTION_MESSAGES } from "../config/messages";
 
 // model & lib imports
 import Reaction from "../models/Reaction.model";
@@ -26,7 +23,7 @@ import {
     getBlogDetailsService,
     getBlogListService,
 } from "../services/blog.service";
-import { BlogDocument } from "@/libs/BlogDocument.lib";
+import { BlogDocument } from "../libs/BlogDocument.lib";
 
 export const createBlog = asyncWrapper(
     async (req: AuthRequest, res: Response) => {

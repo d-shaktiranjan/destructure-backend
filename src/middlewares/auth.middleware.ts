@@ -6,7 +6,8 @@ import User from "../models/User.model";
 import asyncWrapper from "./asyncWrap.middleware";
 
 import { errorResponse } from "../utils/apiResponse.util";
-import { JWT_SECRET, AUTH_MESSAGES } from "../config/constants";
+import { JWT_SECRET } from "../config/constants";
+import { AUTH_MESSAGES } from "../config/messages";
 import { AuthRequest } from "../libs/AuthRequest.lib";
 import { UserDocument } from "../libs/UserDocument.lib";
 

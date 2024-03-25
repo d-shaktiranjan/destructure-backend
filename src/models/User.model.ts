@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 import { sign } from "jsonwebtoken";
 import { JWT_SECRET, AUTH_TOKEN_EXPIRY } from "../config/constants";
-import { UserDocument } from "@/libs/UserDocument.lib";
+import { UserDocument } from "../libs/UserDocument.lib";
 
 const userSchema = new Schema<UserDocument>(
     {

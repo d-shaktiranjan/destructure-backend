@@ -1,16 +1,23 @@
+// package imports
 import { Request, Response } from "express";
 import { OAuth2Client } from "google-auth-library";
+
+// config imports
 import {
     GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET,
     GOOGLE_REDIRECT_URI,
-    AUTH_MESSAGES,
     COOKIES_OPTIONS,
 } from "../config/constants";
-import asyncWrapper from "../middlewares/asyncWrap.middleware";
-import { errorResponse, successResponse } from "../utils/apiResponse.util";
+import { AUTH_MESSAGES } from "../config/messages";
+
+// model & libs imports
 import User from "../models/User.model";
 import { AuthRequest } from "../libs/AuthRequest.lib";
+
+// util & middlewares imports
+import asyncWrapper from "../middlewares/asyncWrap.middleware";
+import { errorResponse, successResponse } from "../utils/apiResponse.util";
 
 const oAuth2Client = new OAuth2Client({
     clientId: GOOGLE_CLIENT_ID,
