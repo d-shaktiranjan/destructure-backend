@@ -4,13 +4,13 @@ export const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017";
 export const DEBUG: boolean = process.env.DEBUG === "true";
 export const JWT_SECRET: string = process.env.JWT_SECRET || "";
 export const AUTH_TOKEN_EXPIRY: string = process.env.AUTH_TOKEN_EXPIRY || "3d";
-export const CLIENT_URL: string =
-    process.env.CLIENT_URL || "https://destructure.in";
 
 // google oAuth constants
 export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 export const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 export const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI;
+
+export const CORS_ORIGINS: string[] = eval(process.env.CORS_ORIGINS || "");
 
 export const COOKIES_OPTIONS = { secure: true, httpOnly: true } as const;
 
