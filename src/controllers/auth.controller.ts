@@ -1,13 +1,11 @@
 // package imports
 import { Request, Response } from "express";
-import { OAuth2Client } from "google-auth-library";
 
 // config imports
 import {
     GOOGLE_CLIENT_ID,
-    GOOGLE_CLIENT_SECRET,
-    GOOGLE_REDIRECT_URI,
     COOKIES_OPTIONS,
+    CORS_ORIGINS,
 } from "../config/constants";
 import { AUTH_MESSAGES } from "../config/messages";
 
@@ -18,14 +16,20 @@ import { AuthRequest } from "../libs/AuthRequest.lib";
 // util & middlewares imports
 import asyncWrapper from "../middlewares/asyncWrap.middleware";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
+import { getOAuth2Client } from "../services/auth.service";
 
-const oAuth2Client = new OAuth2Client({
-    clientId: GOOGLE_CLIENT_ID,
-    clientSecret: GOOGLE_CLIENT_SECRET,
-    redirectUri: GOOGLE_REDIRECT_URI,
-});
+let oAuth2Client = getOAuth2Client();
 
 export const googleLogin = asyncWrapper(async (req: Request, res: Response) => {
+    // check origin
+    const requestOrigin = req.headers.referer;
+    if (!requestOrigin || !CORS_ORIGINS.includes(requestOrigin))
+        return errorResponse(res, AUTH_MESSAGES.UNABLE_TO_LOGIN, 406);
+
+    // update oAuth client based on origin
+    oAuth2Client = getOAuth2Client(requestOrigin);
+    console.log(oAuth2Client);
+
     const redirectUrl = oAuth2Client.generateAuthUrl({
         scope: ["profile", "email"],
     });
