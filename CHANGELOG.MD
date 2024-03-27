@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.0.8
+
+### Release Date- 27th Mar 24
+
+#### Added
+
+-   dynamic redirectUri after sign in.
+
+#### Changed
+
+-   constant.ts file.
+-   packages to latest version.
+
 ## 0.0.7
 
 ### Release Date- 26th Mar 24
