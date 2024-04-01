@@ -27,8 +27,7 @@ export const googleLogin = asyncWrapper(async (req: Request, res: Response) => {
         return errorResponse(res, AUTH_MESSAGES.UNABLE_TO_LOGIN, 406);
 
     // update oAuth client based on origin
-    oAuth2Client = getOAuth2Client(requestOrigin);
-    console.log(oAuth2Client);
+    oAuth2Client = getOAuth2Client(`${requestOrigin}api/auth`);
 
     const redirectUrl = oAuth2Client.generateAuthUrl({
         scope: ["profile", "email"],
