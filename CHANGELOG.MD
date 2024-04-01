@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.0.9
+
+### Release Date- 1st Apr 24
+
+#### Fixed
+
+-   dynamic redirectUri issue.
+
 ## 0.0.8
 
 ### Release Date- 27th Mar 24
