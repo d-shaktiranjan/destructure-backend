@@ -1,5 +1,5 @@
-// types
 import { Request, Response } from "express";
+import { isValidObjectId } from "mongoose";
 
 // middleware
 import asyncWrapper from "../middlewares/asyncWrap.middleware";
@@ -11,26 +11,45 @@ import { getReactionCountOfBlog } from "../utils/reaction.util";
 
 // constant
 import { REACTIONS } from "../config/constants";
-import { BLOG_MESSAGES, REACTION_MESSAGES } from "../config/messages";
+import {
+    BLOG_MESSAGES,
+    GENERIC_MESSAGES,
+    REACTION_MESSAGES,
+    USER_MESSAGES,
+} from "../config/messages";
 
 // model & lib imports
 import Reaction from "../models/Reaction.model";
 import Blog from "../models/Blog.model";
 import { AuthRequest } from "../libs/AuthRequest.lib";
 import { ReactionDocument } from "../libs/ReactionDocument.lib";
+import { BlogDocument } from "../libs/BlogDocument.lib";
+import User from "../models/User.model";
 
 import {
     getBlogDetailsService,
     getBlogListService,
 } from "../services/blog.service";
-import { BlogDocument } from "../libs/BlogDocument.lib";
 
 export const createBlog = asyncWrapper(
     async (req: AuthRequest, res: Response) => {
         // get values from request body & null check
-        const { title, description, slug, content } = req.body;
+        const { title, description, slug, content, coAuthor } = req.body;
         const status = nullChecker(res, { title, description, slug, content });
         if (status !== null) return status;
+
+        // fetch coAuthor
+        if (coAuthor) {
+            if (!isValidObjectId(coAuthor))
+                return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
+
+            const coAuthorObj = await User.findById(coAuthor);
+            if (!coAuthorObj)
+                return errorResponse(res, USER_MESSAGES.NOT_FOUND);
+
+            if (coAuthorObj._id === req.user?._id)
+                return errorResponse(res, BLOG_MESSAGES.AUTHORSHIP);
+        }
 
         // check existing blogObject
         const existingBlog = await Blog.findOne({
@@ -45,6 +64,7 @@ export const createBlog = asyncWrapper(
             description,
             slug,
             content,
+            coAuthor,
             author: req?.user?._id,
         });
         await newBlog.save();

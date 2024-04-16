@@ -6,5 +6,6 @@ export interface BlogDocument extends Document {
     slug: string;
     content: string;
     author: Schema.Types.ObjectId;
+    coAuthor: Schema.Types.ObjectId;
     isPublic: boolean;
 }

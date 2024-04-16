@@ -37,6 +37,7 @@ export enum BLOG_MESSAGES {
     UPDATED = "Blog updated successfully",
     IMAGE_REQUIRED = "Image required",
     IMAGE_UPLOADED = "Image upload successfully",
+    AUTHORSHIP = "Author & co-author must be different",
 }
 
 export enum REACTION_MESSAGES {
@@ -52,6 +53,11 @@ export enum COMMENT_MESSAGES {
     DELETED = "Comment deleted",
 }
 
+export enum USER_MESSAGES {
+    NOT_FOUND = "User not found with this given details",
+}
+
 export enum GENERIC_MESSAGES {
     NOT_ALLOWED = "You are not allowed to perform this action",
+    INVALID_ID = "Invalid object ID",
 }
