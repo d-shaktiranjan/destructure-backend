@@ -1,7 +1,8 @@
 import { Router } from "express";
 
-import { isAuthenticated } from "../middlewares/auth.middleware";
+import { isAdmin, isAuthenticated } from "../middlewares/auth.middleware";
 import {
+    coAuthorList,
     getBlogDetails,
     getBlogList,
     reaction,
@@ -10,7 +11,8 @@ import {
 const router = Router();
 
 router.get("/", getBlogList);
-router.get("/:slug", getBlogDetails);
 router.post("/reaction", isAuthenticated, reaction);
+router.get("/author", isAuthenticated, isAdmin, coAuthorList);
+router.get("/:slug", getBlogDetails);
 
 export default router;

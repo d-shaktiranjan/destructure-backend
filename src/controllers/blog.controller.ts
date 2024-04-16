@@ -180,3 +180,19 @@ export const imageUpload = asyncWrapper(async (req: Request, res: Response) => {
         url: file.path,
     });
 });
+
+export const coAuthorList = asyncWrapper(
+    async (req: AuthRequest, res: Response) => {
+        const adminList = await User.find({
+            isAdmin: true,
+            _id: { $ne: req.user?._id },
+        }).select("_id name picture");
+
+        return successResponse(
+            res,
+            BLOG_MESSAGES.CO_AUTHOR_LIST,
+            200,
+            adminList,
+        );
+    },
+);

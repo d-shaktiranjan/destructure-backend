@@ -38,6 +38,7 @@ export enum BLOG_MESSAGES {
     IMAGE_REQUIRED = "Image required",
     IMAGE_UPLOADED = "Image upload successfully",
     AUTHORSHIP = "Author & co-author must be different",
+    CO_AUTHOR_LIST = "Co-author list fetched",
 }
 
 export enum REACTION_MESSAGES {
