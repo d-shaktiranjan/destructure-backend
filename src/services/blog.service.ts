@@ -45,6 +45,25 @@ export const getBlogListService = async (
         },
         {
             $lookup: {
+                from: "users",
+                localField: "coAuthor",
+                foreignField: "_id",
+                as: "coAuthor",
+                pipeline: [
+                    {
+                        $project: {
+                            email: 0,
+                            isAdmin: 0,
+                            createdAt: 0,
+                            updatedAt: 0,
+                            __v: 0,
+                        },
+                    },
+                ],
+            },
+        },
+        {
+            $lookup: {
                 from: "comments",
                 localField: "_id",
                 foreignField: "blog",
@@ -67,6 +86,13 @@ export const getBlogListService = async (
         {
             $addFields: {
                 author: { $first: "$author" },
+                coAuthor: {
+                    $cond: {
+                        if: { $first: "$coAuthor" },
+                        then: { $first: "$coAuthor" },
+                        else: null,
+                    },
+                },
                 comments: { $size: "$comments" },
                 reactions: { $size: "$reactions" },
                 reactionStatus: {

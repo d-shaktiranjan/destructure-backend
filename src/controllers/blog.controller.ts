@@ -1,5 +1,5 @@
-// types
 import { Request, Response } from "express";
+import { isValidObjectId } from "mongoose";
 
 // middleware
 import asyncWrapper from "../middlewares/asyncWrap.middleware";
@@ -11,26 +11,45 @@ import { getReactionCountOfBlog } from "../utils/reaction.util";
 
 // constant
 import { REACTIONS } from "../config/constants";
-import { BLOG_MESSAGES, REACTION_MESSAGES } from "../config/messages";
+import {
+    BLOG_MESSAGES,
+    GENERIC_MESSAGES,
+    REACTION_MESSAGES,
+    USER_MESSAGES,
+} from "../config/messages";
 
 // model & lib imports
 import Reaction from "../models/Reaction.model";
 import Blog from "../models/Blog.model";
 import { AuthRequest } from "../libs/AuthRequest.lib";
 import { ReactionDocument } from "../libs/ReactionDocument.lib";
+import { BlogDocument } from "../libs/BlogDocument.lib";
+import User from "../models/User.model";
 
 import {
     getBlogDetailsService,
     getBlogListService,
 } from "../services/blog.service";
-import { BlogDocument } from "../libs/BlogDocument.lib";
 
 export const createBlog = asyncWrapper(
     async (req: AuthRequest, res: Response) => {
         // get values from request body & null check
-        const { title, description, slug, content } = req.body;
+        const { title, description, slug, content, coAuthor } = req.body;
         const status = nullChecker(res, { title, description, slug, content });
         if (status !== null) return status;
+
+        // fetch coAuthor
+        if (coAuthor) {
+            if (!isValidObjectId(coAuthor))
+                return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
+
+            const coAuthorObj = await User.findById(coAuthor);
+            if (!coAuthorObj)
+                return errorResponse(res, USER_MESSAGES.NOT_FOUND);
+
+            if (coAuthorObj._id === req.user?._id)
+                return errorResponse(res, BLOG_MESSAGES.AUTHORSHIP);
+        }
 
         // check existing blogObject
         const existingBlog = await Blog.findOne({
@@ -45,6 +64,7 @@ export const createBlog = asyncWrapper(
             description,
             slug,
             content,
+            coAuthor,
             author: req?.user?._id,
         });
         await newBlog.save();
@@ -79,27 +99,48 @@ export const updateBlog = asyncWrapper(async (req: Request, res: Response) => {
     if (!blog) return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND);
 
     // validate request body data
-    const allowedKeys = ["title", "description", "content", "isPublic", "slug"];
+    const allowedKeys = [
+        "title",
+        "description",
+        "content",
+        "isPublic",
+        "slug",
+        "coAuthor",
+    ];
+
+    // update fields
     for (const keyName in req.body) {
         if (!allowedKeys.includes(keyName))
             return errorResponse(res, keyName + BLOG_MESSAGES.KEY_NOT_ALLOWED);
-    }
+        if (keyName === "slug") continue;
 
-    // update fields
-    for (const keyName of allowedKeys) {
         const key = keyName as keyof BlogDocument;
         const value = req.body[key];
-        if (value == null) continue;
+        if (value === null) continue;
 
         // isPublic type check
-        if (key == "isPublic" && typeof value != "boolean")
+        if (key === "isPublic" && typeof value != "boolean")
             return errorResponse(res, BLOG_MESSAGES.IS_PUBLIC_TYPE);
 
         // title unique checking
-        if (key == "title") {
+        if (key === "title") {
             const existingBlog = await Blog.findOne({ title: value });
             if (existingBlog && existingBlog._id !== blog._id)
                 return errorResponse(res, BLOG_MESSAGES.UNIQUE_TITLE);
+        }
+
+        // handle coAuthor
+        if (key === "coAuthor") {
+            if (!isValidObjectId(value))
+                return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
+            const coAuthor = await User.findById(value);
+            if (!coAuthor) return errorResponse(res, USER_MESSAGES.NOT_FOUND);
+
+            if (!coAuthor.isAdmin)
+                return errorResponse(res, BLOG_MESSAGES.CO_AUTHOR_ADD_FAILED);
+
+            if (coAuthor.__v === blog._id)
+                return errorResponse(res, BLOG_MESSAGES.AUTHORSHIP);
         }
 
         // update fields
@@ -160,3 +201,19 @@ export const imageUpload = asyncWrapper(async (req: Request, res: Response) => {
         url: file.path,
     });
 });
+
+export const coAuthorList = asyncWrapper(
+    async (req: AuthRequest, res: Response) => {
+        const adminList = await User.find({
+            isAdmin: true,
+            _id: { $ne: req.user?._id },
+        }).select("_id name picture");
+
+        return successResponse(
+            res,
+            BLOG_MESSAGES.CO_AUTHOR_LIST,
+            200,
+            adminList,
+        );
+    },
+);

@@ -27,6 +27,10 @@ const blogSchema = new Schema<BlogDocument>(
             ref: "User",
             required: true,
         },
+        coAuthor: {
+            type: Schema.Types.ObjectId,
+            ref: "User",
+        },
         isPublic: {
             type: Boolean,
             default: false,
