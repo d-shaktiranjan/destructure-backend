@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.0
+
+### Release Date- 1st Apr 24
+
+#### Added
+
+-   `coAuthor` field in blog model.
+-   allow `coAuthor` field in create & update.
+-   `coAuthor` in blog list.
+
 ## 0.0.9
 
 ### Release Date- 1st Apr 24
