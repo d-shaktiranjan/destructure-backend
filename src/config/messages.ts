@@ -39,6 +39,7 @@ export enum BLOG_MESSAGES {
     IMAGE_UPLOADED = "Image upload successfully",
     AUTHORSHIP = "Author & co-author must be different",
     CO_AUTHOR_LIST = "Co-author list fetched",
+    CO_AUTHOR_ADD_FAILED = "Unable to set co-author",
 }
 
 export enum REACTION_MESSAGES {

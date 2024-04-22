@@ -99,7 +99,14 @@ export const updateBlog = asyncWrapper(async (req: Request, res: Response) => {
     if (!blog) return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND);
 
     // validate request body data
-    const allowedKeys = ["title", "description", "content", "isPublic", "slug"];
+    const allowedKeys = [
+        "title",
+        "description",
+        "content",
+        "isPublic",
+        "slug",
+        "coAuthor",
+    ];
     for (const keyName in req.body) {
         if (!allowedKeys.includes(keyName))
             return errorResponse(res, keyName + BLOG_MESSAGES.KEY_NOT_ALLOWED);
@@ -109,17 +116,31 @@ export const updateBlog = asyncWrapper(async (req: Request, res: Response) => {
     for (const keyName of allowedKeys) {
         const key = keyName as keyof BlogDocument;
         const value = req.body[key];
-        if (value == null) continue;
+        if (value === null) continue;
 
         // isPublic type check
-        if (key == "isPublic" && typeof value != "boolean")
+        if (key === "isPublic" && typeof value != "boolean")
             return errorResponse(res, BLOG_MESSAGES.IS_PUBLIC_TYPE);
 
         // title unique checking
-        if (key == "title") {
+        if (key === "title") {
             const existingBlog = await Blog.findOne({ title: value });
             if (existingBlog && existingBlog._id !== blog._id)
                 return errorResponse(res, BLOG_MESSAGES.UNIQUE_TITLE);
+        }
+
+        // handle coAuthor
+        if (key === "coAuthor") {
+            if (!isValidObjectId(value))
+                return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
+            const coAuthor = await User.findById(value);
+            if (!coAuthor) return errorResponse(res, USER_MESSAGES.NOT_FOUND);
+
+            if (!coAuthor.isAdmin)
+                return errorResponse(res, BLOG_MESSAGES.CO_AUTHOR_ADD_FAILED);
+
+            if (coAuthor.__v === blog._id)
+                return errorResponse(res, BLOG_MESSAGES.AUTHORSHIP);
         }
 
         // update fields
