@@ -107,13 +107,13 @@ export const updateBlog = asyncWrapper(async (req: Request, res: Response) => {
         "slug",
         "coAuthor",
     ];
+
+    // update fields
     for (const keyName in req.body) {
         if (!allowedKeys.includes(keyName))
             return errorResponse(res, keyName + BLOG_MESSAGES.KEY_NOT_ALLOWED);
-    }
+        if (keyName === "slug") continue;
 
-    // update fields
-    for (const keyName of allowedKeys) {
         const key = keyName as keyof BlogDocument;
         const value = req.body[key];
         if (value === null) continue;
