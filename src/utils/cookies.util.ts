@@ -1,8 +1,7 @@
-import { Request } from "express";
-import { COOKIES_OPTIONS } from "../config/constants";
+import { COOKIES_OPTIONS, DEBUG } from "../config/constants";
 
-const getCookiesOptions = (req: Request): Record<string, unknown> => {
-    if (req.get("origin")?.split("//")[1].startsWith("localhost")) {
+const getCookiesOptions = (): Record<string, unknown> => {
+    if (DEBUG) {
         return { ...COOKIES_OPTIONS, sameSite: "none" };
     }
     return COOKIES_OPTIONS;

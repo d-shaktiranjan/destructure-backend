@@ -60,7 +60,7 @@ export const googleCallback = asyncWrapper(
         }
         await userObject.save();
         const jwt = userObject.generateAuthToken();
-        res.cookie("authToken", jwt, getCookiesOptions(req));
+        res.cookie("authToken", jwt, getCookiesOptions());
 
         return successResponse(res, AUTH_MESSAGES.LOGIN, 200, {
             jwt,
@@ -70,7 +70,7 @@ export const googleCallback = asyncWrapper(
 );
 
 export const logout = (req: Request, res: Response) => {
-    res.clearCookie("authToken", getCookiesOptions(req));
+    res.clearCookie("authToken", getCookiesOptions());
     return successResponse(res, AUTH_MESSAGES.LOGOUT);
 };
 
