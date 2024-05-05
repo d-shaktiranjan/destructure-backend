@@ -17,6 +17,7 @@ export const COOKIES_OPTIONS = {
     secure: true,
     httpOnly: true,
     domain: ".destructure.in",
+    sameSite: "strict",
 } as const;
 
 // reactions

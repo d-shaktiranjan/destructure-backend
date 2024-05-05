@@ -2,11 +2,7 @@
 import { Request, Response } from "express";
 
 // config imports
-import {
-    GOOGLE_CLIENT_ID,
-    COOKIES_OPTIONS,
-    CORS_ORIGINS,
-} from "../config/constants";
+import { GOOGLE_CLIENT_ID, CORS_ORIGINS } from "../config/constants";
 import { AUTH_MESSAGES } from "../config/messages";
 
 // model & libs imports
@@ -17,6 +13,7 @@ import { AuthRequest } from "../libs/AuthRequest.lib";
 import asyncWrapper from "../middlewares/asyncWrap.middleware";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
 import { getOAuth2Client } from "../services/auth.service";
+import getCookiesOptions from "../utils/cookies.util";
 
 let oAuth2Client = getOAuth2Client();
 
@@ -63,7 +60,7 @@ export const googleCallback = asyncWrapper(
         }
         await userObject.save();
         const jwt = userObject.generateAuthToken();
-        res.cookie("authToken", jwt, COOKIES_OPTIONS);
+        res.cookie("authToken", jwt, getCookiesOptions(req));
 
         return successResponse(res, AUTH_MESSAGES.LOGIN, 200, {
             jwt,
@@ -73,7 +70,7 @@ export const googleCallback = asyncWrapper(
 );
 
 export const logout = (req: Request, res: Response) => {
-    res.clearCookie("authToken", COOKIES_OPTIONS);
+    res.clearCookie("authToken", getCookiesOptions(req));
     return successResponse(res, AUTH_MESSAGES.LOGOUT);
 };
 
