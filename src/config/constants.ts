@@ -13,7 +13,11 @@ export const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI;
 export const CORS_ORIGINS: string[] = eval(process.env.CORS_ORIGINS || "");
 // ########## end environment variables ##########
 
-export const COOKIES_OPTIONS = { secure: true, httpOnly: true } as const;
+export const COOKIES_OPTIONS = {
+    secure: true,
+    httpOnly: true,
+    domain: ".destructure.in",
+} as const;
 
 // reactions
 export enum REACTIONS {
