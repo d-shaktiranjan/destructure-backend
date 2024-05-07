@@ -1,5 +1,5 @@
 import "dotenv/config";
-import express, { Response, Request, json } from "express";
+import express, { Response, Request, json, static as static_ } from "express";
 import { PORT, CORS_ORIGINS } from "./config/constants";
 import { APP_MESSAGES } from "./config/messages";
 import cookieParser from "cookie-parser";
@@ -24,6 +24,7 @@ const app = express();
 app.use(cors({ origin: CORS_ORIGINS, credentials: true }));
 app.use(json());
 app.use(cookieParser());
+app.use(static_("public"));
 
 // route usages
 app.use("/api/blogs", blogRouter);
