@@ -25,3 +25,9 @@ export enum REACTIONS {
     THINKING = "THINKING",
     DISLIKE = "DISLIKE",
 }
+
+export const ALLOWED_IMAGE_MIMETYPE: readonly string[] = [
+    "image/jpeg",
+    "image/png",
+    "image/gif",
+];

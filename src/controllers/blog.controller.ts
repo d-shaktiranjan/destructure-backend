@@ -10,7 +10,7 @@ import nullChecker from "../utils/nullChecker.util";
 import { getReactionCountOfBlog } from "../utils/reaction.util";
 
 // constant
-import { REACTIONS } from "../config/constants";
+import { ALLOWED_IMAGE_MIMETYPE, REACTIONS } from "../config/constants";
 import {
     BLOG_MESSAGES,
     GENERIC_MESSAGES,
@@ -196,6 +196,10 @@ export const reaction = asyncWrapper(
 export const imageUpload = asyncWrapper(async (req: Request, res: Response) => {
     const file = req.file;
     if (!file) return errorResponse(res, BLOG_MESSAGES.IMAGE_REQUIRED);
+
+    // allow only images
+    if (!ALLOWED_IMAGE_MIMETYPE.includes(file.mimetype))
+        return errorResponse(res, BLOG_MESSAGES.IMAGE_ONLY, 406);
 
     return successResponse(res, BLOG_MESSAGES.IMAGE_UPLOADED, 201, {
         url: file.path,

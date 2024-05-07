@@ -37,6 +37,7 @@ export enum BLOG_MESSAGES {
     UPDATED = "Blog updated successfully",
     IMAGE_REQUIRED = "Image required",
     IMAGE_UPLOADED = "Image upload successfully",
+    IMAGE_ONLY = "This file format is not acceptable",
     AUTHORSHIP = "Author & co-author must be different",
     CO_AUTHOR_LIST = "Co-author list fetched",
     CO_AUTHOR_ADD_FAILED = "Unable to set co-author",
