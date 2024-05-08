@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.1
+
+### Release Date- 8th May 24
+
+#### Added
+
+-   serving static files logic.
+-   file url after success upload.
+
 ## 0.1.0
 
 ### Release Date- 1st Apr 24

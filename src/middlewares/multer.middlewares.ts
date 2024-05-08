@@ -3,7 +3,7 @@ import { mkdirSync, existsSync } from "fs";
 
 const storage = diskStorage({
     destination: (req, file, cb) => {
-        const path = "./temp";
+        const path = "./public/images";
         if (!existsSync(path)) mkdirSync(path);
         cb(null, path);
     },
