@@ -201,8 +201,11 @@ export const imageUpload = asyncWrapper(async (req: Request, res: Response) => {
     if (!ALLOWED_IMAGE_MIMETYPE.includes(file.mimetype))
         return errorResponse(res, BLOG_MESSAGES.IMAGE_ONLY, 406);
 
+    const host = req.protocol + "://" + req.get("host");
+    const url = `${host}/${file.path.replace("public/", "")}`;
+
     return successResponse(res, BLOG_MESSAGES.IMAGE_UPLOADED, 201, {
-        url: file.path,
+        url,
     });
 });
 
