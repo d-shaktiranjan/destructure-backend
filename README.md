@@ -1,6 +1,6 @@
 # Setup
 
-Install [NVM]()  
+Install [NVM](https://github.com/nvm-sh/nvm?tab=readme-ov-file#installing-and-updating)  
 Then install Node JS by running following command
 
 ```bash

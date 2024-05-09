@@ -14,6 +14,20 @@ export const getBlogListService = async (
     const count = parseInt(req.query.count as string) || 10;
     const skip = (page - 1) * count;
 
+    // sort variables
+    let sort = req.query.sort;
+    switch (sort) {
+        case "oldest":
+            sort = "createdAt";
+            break;
+        case "mostLiked":
+            sort = "-reactions";
+            break;
+        default:
+            sort = "-createdAt";
+            break;
+    }
+
     // blog filter
     let filter = {};
     if (!isAdmin) filter = { isPublic: true };
@@ -106,7 +120,7 @@ export const getBlogListService = async (
         },
         { $skip: skip },
         { $limit: count },
-    ]);
+    ]).sort(sort);
 
     return successResponse(res, BLOG_MESSAGES.ALL_FETCHED, 200, allBlogs, {
         isNextNull,
