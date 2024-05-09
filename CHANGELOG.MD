@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.3
+
+### Release Date- 9th May 24
+
+#### Added
+
+-   sort by date & like feature.
+
 ## 0.1.2
 
 ### Release Date- 9th May 24
