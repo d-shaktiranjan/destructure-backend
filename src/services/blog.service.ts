@@ -16,11 +16,17 @@ export const getBlogListService = async (
 
     // sort variables
     let sort = req.query.sort;
-    if (sort) {
-        if (sort === "oldest") sort = "createdAt";
-        else if (sort === "mostLiked") sort = "-reactions";
-        else sort = "-createdAt";
-    } else sort = "-createdAt";
+    switch (sort) {
+        case "oldest":
+            sort = "createdAt";
+            break;
+        case "mostLiked":
+            sort = "-reactions";
+            break;
+        default:
+            sort = "-createdAt";
+            break;
+    }
 
     // blog filter
     let filter = {};
