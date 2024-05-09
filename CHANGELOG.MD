@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.2
+
+### Release Date- 9th May 24
+
+#### Added
+
+-   logic to remove file if it is not acceptable.
+
 ## 0.1.1
 
 ### Release Date- 8th May 24

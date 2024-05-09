@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { isValidObjectId } from "mongoose";
+import { unlink } from "fs/promises";
 
 // middleware
 import asyncWrapper from "../middlewares/asyncWrap.middleware";
@@ -198,8 +199,10 @@ export const imageUpload = asyncWrapper(async (req: Request, res: Response) => {
     if (!file) return errorResponse(res, BLOG_MESSAGES.IMAGE_REQUIRED);
 
     // allow only images
-    if (!ALLOWED_IMAGE_MIMETYPE.includes(file.mimetype))
+    if (!ALLOWED_IMAGE_MIMETYPE.includes(file.mimetype)) {
+        unlink(file.path);
         return errorResponse(res, BLOG_MESSAGES.IMAGE_ONLY, 406);
+    }
 
     const host = req.protocol + "://" + req.get("host");
     const url = `${host}/${file.path.replace("public/", "")}`;
