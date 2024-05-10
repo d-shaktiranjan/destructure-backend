@@ -43,7 +43,7 @@ export const removeComment = asyncWrapper(
         if (!comment) return errorResponse(res, COMMENT_MESSAGES.NOT_FOUND);
 
         // check ownership
-        if (comment.user !== req.user?._id)
+        if (String(comment.user) !== String(req.user?._id))
             return errorResponse(res, GENERIC_MESSAGES.NOT_ALLOWED, 401);
 
         // delete the comment
@@ -54,7 +54,7 @@ export const removeComment = asyncWrapper(
 
 export const updateComment = asyncWrapper(
     async (req: AuthRequest, res: Response) => {
-        const { _id, content } = req.query;
+        const { _id, content } = req.body;
         nullChecker(res, { _id, content });
 
         if (!isValidObjectId(_id))
@@ -65,7 +65,7 @@ export const updateComment = asyncWrapper(
         if (!comment) return errorResponse(res, COMMENT_MESSAGES.NOT_FOUND);
 
         // check ownership
-        if (comment.user !== req.user?._id)
+        if (String(comment.user) !== String(req.user?._id))
             return errorResponse(res, GENERIC_MESSAGES.NOT_ALLOWED, 401);
 
         // update comment
