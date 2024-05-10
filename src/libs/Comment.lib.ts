@@ -6,6 +6,7 @@ export interface CommentDocument extends Document {
     blog: Schema.Types.ObjectId;
     content: string;
     parent?: Schema.Types.ObjectId;
+    isEdited?: boolean;
     createdAt: Date;
     updatedAt: Date;
 }
