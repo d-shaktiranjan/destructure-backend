@@ -1,4 +1,5 @@
 import { Response } from "express";
+import { isValidObjectId } from "mongoose";
 
 // lib, model & lib
 import asyncWrapper from "../middlewares/asyncWrap.middleware";
@@ -48,5 +49,30 @@ export const removeComment = asyncWrapper(
         // delete the comment
         await comment.deleteOne();
         return successResponse(res, COMMENT_MESSAGES.DELETED, 202);
+    },
+);
+
+export const updateComment = asyncWrapper(
+    async (req: AuthRequest, res: Response) => {
+        const { _id, content } = req.query;
+        nullChecker(res, { _id, content });
+
+        if (!isValidObjectId(_id))
+            return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
+
+        // fetch the comment
+        const comment = await Comment.findById(_id);
+        if (!comment) return errorResponse(res, COMMENT_MESSAGES.NOT_FOUND);
+
+        // check ownership
+        if (comment.user !== req.user?._id)
+            return errorResponse(res, GENERIC_MESSAGES.NOT_ALLOWED, 401);
+
+        // update comment
+        comment.content = content as string;
+        comment.isEdited = true;
+        await comment.save();
+
+        return successResponse(res, COMMENT_MESSAGES.UPDATED, 202);
     },
 );
