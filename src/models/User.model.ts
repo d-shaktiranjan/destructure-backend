@@ -33,6 +33,7 @@ userSchema.methods.generateAuthToken = function () {
             _id: this._id,
             email: this.email,
             name: this.name,
+            isAdmin: this.isAdmin,
         },
         JWT_SECRET,
         {
