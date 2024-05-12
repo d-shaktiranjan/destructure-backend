@@ -93,10 +93,14 @@ export const getBlogDetailsAdmin = asyncWrapper(
 );
 
 export const updateBlog = asyncWrapper(async (req: Request, res: Response) => {
-    const { slug } = req.body;
+    const { _id } = req.body;
+    nullChecker(res, { _id });
+
+    if (!isValidObjectId(_id))
+        return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
 
     // fetch blog in DB
-    const blog = await Blog.findOne({ slug });
+    const blog = await Blog.findById(_id);
     if (!blog) return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND);
 
     // validate request body data
