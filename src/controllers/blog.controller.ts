@@ -158,15 +158,18 @@ export const updateBlog = asyncWrapper(async (req: Request, res: Response) => {
 
 export const reaction = asyncWrapper(
     async (req: AuthRequest, res: Response) => {
-        const { slug, reaction } = req.body;
-        nullChecker(res, { slug });
+        const { _id, reaction } = req.body;
+        nullChecker(res, { _id });
+
+        if (!isValidObjectId(_id))
+            return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
 
         // validate reaction
         if (reaction && !Object.values(REACTIONS).includes(reaction))
             return errorResponse(res, REACTION_MESSAGES.INVALID);
 
         // fetch blog
-        const blog = await Blog.findOne({ slug });
+        const blog = await Blog.findById(_id);
         if (!blog) return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND, 404);
 
         // check for existing reaction
