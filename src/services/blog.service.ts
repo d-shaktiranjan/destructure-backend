@@ -1,8 +1,12 @@
 import { Request, Response } from "express";
+import { isValidObjectId } from "mongoose";
+
 import Blog from "../models/Blog.model";
-import { BLOG_MESSAGES } from "../config/messages";
-import { errorResponse, successResponse } from "../utils/apiResponse.util";
 import { AuthRequest } from "../libs/AuthRequest.lib";
+
+import { BLOG_MESSAGES, GENERIC_MESSAGES } from "../config/messages";
+import { errorResponse, successResponse } from "../utils/apiResponse.util";
+import nullChecker from "../utils/nullChecker.util";
 
 export const getBlogListService = async (
     req: AuthRequest,
@@ -132,26 +136,24 @@ export const getBlogDetailsService = async (
     res: Response,
     isAdmin: boolean,
 ) => {
-    try {
-        // collect slug from query
-        const { slug } = req.params;
-        if (!slug || typeof slug != "string")
-            return errorResponse(res, BLOG_MESSAGES.SLUG_MISSING);
+    // collect slug from query
+    const { _id } = req.params;
+    nullChecker(res, { _id });
 
-        const searchFilter: { slug: string; isPublic?: boolean } = {
-            slug,
-            isPublic: true,
-        };
+    if (!isValidObjectId(_id))
+        return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
 
-        // admin check
-        if (isAdmin) delete searchFilter["isPublic"];
+    const searchFilter: { _id: string; isPublic?: boolean } = {
+        _id,
+        isPublic: true,
+    };
 
-        // fetch from DB
-        const blog = await Blog.findOne(searchFilter).select("-_id -__v");
-        if (!blog) return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND);
+    // admin check
+    if (isAdmin) delete searchFilter["isPublic"];
 
-        return successResponse(res, BLOG_MESSAGES.BLOG_FETCHED, 200, blog);
-    } catch (error) {
-        return errorResponse(res, "");
-    }
+    // fetch from DB
+    const blog = await Blog.findOne(searchFilter).select("-__v");
+    if (!blog) return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND);
+
+    return successResponse(res, BLOG_MESSAGES.BLOG_FETCHED, 200, blog);
 };
