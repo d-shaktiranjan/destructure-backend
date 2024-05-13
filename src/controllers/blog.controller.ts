@@ -107,6 +107,7 @@ export const updateBlog = asyncWrapper(async (req: Request, res: Response) => {
 
     // validate request body data
     const allowedKeys = [
+        "_id",
         "title",
         "description",
         "content",
@@ -119,7 +120,7 @@ export const updateBlog = asyncWrapper(async (req: Request, res: Response) => {
     for (const keyName in req.body) {
         if (!allowedKeys.includes(keyName))
             return errorResponse(res, keyName + BLOG_MESSAGES.KEY_NOT_ALLOWED);
-        if (keyName === "slug") continue;
+        if (keyName === "_id") continue;
 
         const key = keyName as keyof BlogDocument;
         const value = req.body[key];
