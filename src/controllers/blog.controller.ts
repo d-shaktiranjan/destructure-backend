@@ -89,11 +89,6 @@ export const getBlogDetails = asyncWrapper(
     },
 );
 
-export const getBlogDetailsAdmin = asyncWrapper(
-    async (req: AuthRequest, res: Response) =>
-        getBlogDetailsService(req, res, true),
-);
-
 export const updateBlog = asyncWrapper(async (req: Request, res: Response) => {
     const { _id } = req.body;
     nullChecker(res, { _id });
