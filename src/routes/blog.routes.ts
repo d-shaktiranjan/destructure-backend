@@ -1,6 +1,10 @@
 import { Router } from "express";
 
-import { isAdmin, isAuthenticated } from "../middlewares/auth.middleware";
+import {
+    allowBoth,
+    isAdmin,
+    isAuthenticated,
+} from "../middlewares/auth.middleware";
 import {
     coAuthorList,
     getBlogDetails,
@@ -13,6 +17,6 @@ const router = Router();
 router.get("/", getBlogList);
 router.post("/reaction", isAuthenticated, reaction);
 router.get("/author", isAuthenticated, isAdmin, coAuthorList);
-router.get("/:slug", getBlogDetails);
+router.get("/details", allowBoth, getBlogDetails);
 
 export default router;

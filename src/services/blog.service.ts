@@ -137,7 +137,7 @@ export const getBlogDetailsService = async (
     isAdmin: boolean,
 ) => {
     // collect slug from query
-    const { _id } = req.params;
+    const _id = req.query._id as string;
     nullChecker(res, { _id });
 
     if (!isValidObjectId(_id))

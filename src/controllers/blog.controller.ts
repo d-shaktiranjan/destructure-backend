@@ -83,8 +83,10 @@ export const getBlogListAdmin = asyncWrapper(
 );
 
 export const getBlogDetails = asyncWrapper(
-    async (req: Request, res: Response) =>
-        getBlogDetailsService(req, res, false),
+    async (req: AuthRequest, res: Response) => {
+        if (req.user?.isAdmin) return getBlogDetailsService(req, res, true);
+        return getBlogDetailsService(req, res, false);
+    },
 );
 
 export const getBlogDetailsAdmin = asyncWrapper(
