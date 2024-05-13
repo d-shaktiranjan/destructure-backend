@@ -1,7 +1,6 @@
 import { Router } from "express";
 import {
     createBlog,
-    getBlogDetailsAdmin,
     getBlogListAdmin,
     imageUpload,
     updateBlog,
@@ -19,7 +18,6 @@ const blogRouter = Router();
 blogRouter.post("/create", createBlog);
 blogRouter.get("/", getBlogListAdmin);
 blogRouter.put("/update", updateBlog);
-blogRouter.get("/:slug", getBlogDetailsAdmin);
 blogRouter.post("/image-upload", upload.single("image"), imageUpload);
 
 // route usages

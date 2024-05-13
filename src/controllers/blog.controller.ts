@@ -83,24 +83,26 @@ export const getBlogListAdmin = asyncWrapper(
 );
 
 export const getBlogDetails = asyncWrapper(
-    async (req: Request, res: Response) =>
-        getBlogDetailsService(req, res, false),
-);
-
-export const getBlogDetailsAdmin = asyncWrapper(
-    async (req: AuthRequest, res: Response) =>
-        getBlogDetailsService(req, res, true),
+    async (req: AuthRequest, res: Response) => {
+        if (req.user?.isAdmin) return getBlogDetailsService(req, res, true);
+        return getBlogDetailsService(req, res, false);
+    },
 );
 
 export const updateBlog = asyncWrapper(async (req: Request, res: Response) => {
-    const { slug } = req.body;
+    const { _id } = req.body;
+    nullChecker(res, { _id });
+
+    if (!isValidObjectId(_id))
+        return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
 
     // fetch blog in DB
-    const blog = await Blog.findOne({ slug });
+    const blog = await Blog.findById(_id);
     if (!blog) return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND);
 
     // validate request body data
     const allowedKeys = [
+        "_id",
         "title",
         "description",
         "content",
@@ -113,7 +115,7 @@ export const updateBlog = asyncWrapper(async (req: Request, res: Response) => {
     for (const keyName in req.body) {
         if (!allowedKeys.includes(keyName))
             return errorResponse(res, keyName + BLOG_MESSAGES.KEY_NOT_ALLOWED);
-        if (keyName === "slug") continue;
+        if (keyName === "_id") continue;
 
         const key = keyName as keyof BlogDocument;
         const value = req.body[key];
@@ -154,15 +156,18 @@ export const updateBlog = asyncWrapper(async (req: Request, res: Response) => {
 
 export const reaction = asyncWrapper(
     async (req: AuthRequest, res: Response) => {
-        const { slug, reaction } = req.body;
-        nullChecker(res, { slug });
+        const { _id, reaction } = req.body;
+        nullChecker(res, { _id });
+
+        if (!isValidObjectId(_id))
+            return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
 
         // validate reaction
         if (reaction && !Object.values(REACTIONS).includes(reaction))
             return errorResponse(res, REACTION_MESSAGES.INVALID);
 
         // fetch blog
-        const blog = await Blog.findOne({ slug });
+        const blog = await Blog.findById(_id);
         if (!blog) return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND, 404);
 
         // check for existing reaction
