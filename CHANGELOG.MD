@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.7
+
+### Release Date- 18th May 24
+
+#### Added
+
+-   unique slug checking route.
+-   unique slug creating route.
+
 ## 0.1.6
 
 ### Release Date- 18th May 24

@@ -9,6 +9,7 @@ import asyncWrapper from "../middlewares/asyncWrap.middleware";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
 import nullChecker from "../utils/nullChecker.util";
 import { getReactionCountOfBlog } from "../utils/reaction.util";
+import { generateSlugUntil, isSlugUniqueUtil } from "../utils/blog.util";
 
 // constant
 import { ALLOWED_IMAGE_MIMETYPE, REACTIONS } from "../config/constants";
@@ -230,5 +231,30 @@ export const coAuthorList = asyncWrapper(
             200,
             adminList,
         );
+    },
+);
+
+export const checkUniqueSlug = asyncWrapper(
+    async (req: Request, res: Response) => {
+        const slug = req.query.slug as string;
+        nullChecker(res, { slug });
+
+        if (await isSlugUniqueUtil(slug))
+            return successResponse(res, BLOG_MESSAGES.SLUG_UNIQUE, 200, {
+                isUnique: true,
+            });
+
+        return errorResponse(res, BLOG_MESSAGES.SLUG_NOT_UNIQUE, 409);
+    },
+);
+
+export const generateSlug = asyncWrapper(
+    async (req: Request, res: Response) => {
+        const title = req.query.title as string;
+        nullChecker(res, { title });
+
+        return successResponse(res, BLOG_MESSAGES.SLUG_GENERATED, 200, {
+            slug: await generateSlugUntil(title),
+        });
     },
 );
