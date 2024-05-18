@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.6
+
+### Release Date- 18th May 24
+
+#### Added
+
+-   `totalCount` in blog list.
+
 ## 0.1.5
 
 ### Release Date- 11th May 24
