@@ -128,6 +128,7 @@ export const getBlogListService = async (
 
     return successResponse(res, BLOG_MESSAGES.ALL_FETCHED, 200, allBlogs, {
         isNextNull,
+        totalCount: await Blog.countDocuments(filter),
     });
 };
 
