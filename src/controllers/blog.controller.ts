@@ -251,6 +251,8 @@ export const checkUniqueSlug = asyncWrapper(
 export const generateSlug = asyncWrapper(
     async (req: Request, res: Response) => {
         const title = req.query.title as string;
+        nullChecker(res, { title });
+
         return successResponse(res, BLOG_MESSAGES.SLUG_GENERATED, 200, {
             slug: await generateSlugUntil(title),
         });
