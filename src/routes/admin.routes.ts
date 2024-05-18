@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+    checkUniqueSlug,
     createBlog,
     getBlogListAdmin,
     imageUpload,
@@ -19,6 +20,9 @@ blogRouter.post("/create", createBlog);
 blogRouter.get("/", getBlogListAdmin);
 blogRouter.put("/update", updateBlog);
 blogRouter.post("/image-upload", upload.single("image"), imageUpload);
+
+// blog slug routes
+blogRouter.get("/slug/check", checkUniqueSlug);
 
 // route usages
 router.use("/blogs", blogRouter);

@@ -14,3 +14,8 @@ export const getBlogById = async (
     if (!blog) return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND);
     return blog;
 };
+
+export const isSlugUniqueUtil = async (slug: string): Promise<boolean> => {
+    const blog = await Blog.findOne({ slug });
+    return blog === null;
+};
