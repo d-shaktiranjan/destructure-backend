@@ -21,7 +21,7 @@ export const isSlugUniqueUtil = async (slug: string): Promise<boolean> => {
 };
 
 export const generateSlugUntil = async (title: string): Promise<string> => {
-    let slug = title.replaceAll(" ", "-");
+    let slug = title.replaceAll(" ", "-").toLocaleLowerCase();
     if (await isSlugUniqueUtil(slug)) return slug;
 
     let count = 2;
