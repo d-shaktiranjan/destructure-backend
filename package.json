@@ -1,6 +1,6 @@
 {
     "name": "destructure-backend",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "description": "Destructure app backend",
     "main": "src/index.ts",
     "scripts": {
