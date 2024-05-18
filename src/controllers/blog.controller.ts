@@ -9,7 +9,7 @@ import asyncWrapper from "../middlewares/asyncWrap.middleware";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
 import nullChecker from "../utils/nullChecker.util";
 import { getReactionCountOfBlog } from "../utils/reaction.util";
-import { isSlugUniqueUtil } from "../utils/blog.util";
+import { generateSlugUntil, isSlugUniqueUtil } from "../utils/blog.util";
 
 // constant
 import { ALLOWED_IMAGE_MIMETYPE, REACTIONS } from "../config/constants";
@@ -245,5 +245,14 @@ export const checkUniqueSlug = asyncWrapper(
             });
 
         return errorResponse(res, BLOG_MESSAGES.SLUG_NOT_UNIQUE, 409);
+    },
+);
+
+export const generateSlug = asyncWrapper(
+    async (req: Request, res: Response) => {
+        const title = req.query.title as string;
+        return successResponse(res, BLOG_MESSAGES.SLUG_GENERATED, 200, {
+            slug: await generateSlugUntil(title),
+        });
     },
 );

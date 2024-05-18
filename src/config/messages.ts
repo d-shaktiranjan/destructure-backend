@@ -43,6 +43,7 @@ export enum BLOG_MESSAGES {
     CO_AUTHOR_ADD_FAILED = "Unable to set co-author",
     SLUG_UNIQUE = "Slug is unique",
     SLUG_NOT_UNIQUE = "Slug is not unique",
+    SLUG_GENERATED = "Unique slug generated",
 }
 
 export enum REACTION_MESSAGES {
