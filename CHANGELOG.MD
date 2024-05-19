@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.8
+
+### Release Date- 20th May 24
+
+#### Added
+
+-   comment list route & controller.
+-   reply list route & controller.
+
 ## 0.1.7
 
 ### Release Date- 18th May 24
