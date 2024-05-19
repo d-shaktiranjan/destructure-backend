@@ -4,6 +4,7 @@ import { isAuthenticated } from "../middlewares/auth.middleware";
 import {
     addComment,
     getComments,
+    getReplyList,
     removeComment,
     updateComment,
 } from "../controllers/comment.controller";
@@ -20,6 +21,7 @@ protectedRouter
     .put(updateComment);
 
 router.get("/", getComments);
+router.get("/reply", getReplyList);
 
 router.use(protectedRouter);
 export default router;

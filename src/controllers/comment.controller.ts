@@ -91,3 +91,18 @@ export const getComments = asyncWrapper(async (req: Request, res: Response) => {
 
     return getCommentService(res, matchQuery);
 });
+
+export const getReplyList = asyncWrapper(
+    async (req: Request, res: Response) => {
+        const _id = req.query._id as string;
+        nullChecker(res, { _id });
+        if (!isValidObjectId(_id))
+            return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
+
+        const matchQuery: Record<string, unknown> = {
+            parent: new Types.ObjectId(_id),
+        };
+
+        return getCommentService(res, matchQuery, COMMENT_MESSAGES.REPLY_LIST);
+    },
+);
