@@ -1,5 +1,5 @@
-import { Response } from "express";
-import { isValidObjectId } from "mongoose";
+import { Request, Response } from "express";
+import { isValidObjectId, Types } from "mongoose";
 
 // lib, model & lib
 import asyncWrapper from "../middlewares/asyncWrap.middleware";
@@ -12,6 +12,7 @@ import { errorResponse, successResponse } from "../utils/apiResponse.util";
 import nullChecker from "../utils/nullChecker.util";
 import { getBlogById } from "../utils/blog.util";
 import { COMMENT_MESSAGES, GENERIC_MESSAGES } from "../config/messages";
+import { getCommentService } from "../services/comment.service";
 
 export const addComment = asyncWrapper(
     async (req: AuthRequest, res: Response) => {
@@ -76,3 +77,17 @@ export const updateComment = asyncWrapper(
         return successResponse(res, COMMENT_MESSAGES.UPDATED, 202);
     },
 );
+
+export const getComments = asyncWrapper(async (req: Request, res: Response) => {
+    const blog = req.query.blog as string;
+    nullChecker(res, { blog });
+    if (!isValidObjectId(blog))
+        return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
+
+    const matchQuery: Record<string, unknown> = {
+        blog: new Types.ObjectId(blog),
+        parent: undefined,
+    };
+
+    return getCommentService(res, matchQuery);
+});

@@ -58,6 +58,7 @@ export enum COMMENT_MESSAGES {
     NOT_FOUND = "Comment not found",
     DELETED = "Comment deleted",
     UPDATED = "Comment updated",
+    LIST_FETCHED = "Comment list fetched",
 }
 
 export enum USER_MESSAGES {
