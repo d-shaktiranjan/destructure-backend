@@ -6,7 +6,10 @@ const reactionSchema = new Schema<ReactionDocument>({
     blog: {
         type: Schema.Types.ObjectId,
         ref: "Blog",
-        required: true,
+    },
+    comment: {
+        type: Schema.Types.ObjectId,
+        ref: "Comment",
     },
     user: {
         type: Schema.Types.ObjectId,
