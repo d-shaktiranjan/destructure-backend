@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.9
+
+### Release Date- 20th May 24
+
+#### Changed
+
+-   user aggregate method.
+
 ## 0.1.8
 
 ### Release Date- 20th May 24
