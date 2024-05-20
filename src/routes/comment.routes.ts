@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { isAuthenticated } from "../middlewares/auth.middleware";
+import { allowBoth, isAuthenticated } from "../middlewares/auth.middleware";
 import {
     addComment,
     getComments,
@@ -20,8 +20,8 @@ protectedRouter
     .delete(removeComment)
     .put(updateComment);
 
-router.get("/", getComments);
-router.get("/reply", getReplyList);
+router.get("/", allowBoth, getComments);
+router.get("/reply", allowBoth, getReplyList);
 
 router.use(protectedRouter);
 export default router;

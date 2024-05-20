@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { isValidObjectId, Types } from "mongoose";
 
 // lib, model & lib
@@ -78,22 +78,24 @@ export const updateComment = asyncWrapper(
     },
 );
 
-export const getComments = asyncWrapper(async (req: Request, res: Response) => {
-    const blog = req.query.blog as string;
-    nullChecker(res, { blog });
-    if (!isValidObjectId(blog))
-        return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
+export const getComments = asyncWrapper(
+    async (req: AuthRequest, res: Response) => {
+        const blog = req.query.blog as string;
+        nullChecker(res, { blog });
+        if (!isValidObjectId(blog))
+            return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
 
-    const matchQuery: Record<string, unknown> = {
-        blog: new Types.ObjectId(blog),
-        parent: undefined,
-    };
+        const matchQuery: Record<string, unknown> = {
+            blog: new Types.ObjectId(blog),
+            parent: undefined,
+        };
 
-    return getCommentService(res, matchQuery);
-});
+        return getCommentService(req, res, matchQuery);
+    },
+);
 
 export const getReplyList = asyncWrapper(
-    async (req: Request, res: Response) => {
+    async (req: AuthRequest, res: Response) => {
         const _id = req.query._id as string;
         nullChecker(res, { _id });
         if (!isValidObjectId(_id))
@@ -103,6 +105,11 @@ export const getReplyList = asyncWrapper(
             parent: new Types.ObjectId(_id),
         };
 
-        return getCommentService(res, matchQuery, COMMENT_MESSAGES.REPLY_LIST);
+        return getCommentService(
+            req,
+            res,
+            matchQuery,
+            COMMENT_MESSAGES.REPLY_LIST,
+        );
     },
 );
