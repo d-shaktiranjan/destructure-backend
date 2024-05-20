@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.10
+
+### Release Date- 20th May 24
+
+#### Added
+
+-   ownership status in comment & reply list.
+
+#### Removed
+
+-   `content` from blog list.
+
 ## 0.1.9
 
 ### Release Date- 20th May 24

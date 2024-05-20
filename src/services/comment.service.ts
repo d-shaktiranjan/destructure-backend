@@ -7,8 +7,10 @@ import { COMMENT_MESSAGES } from "../config/messages";
 import Comment from "../models/Comment.model";
 import { successResponse } from "../utils/apiResponse.util";
 import { userAggregateUtil } from "../utils/aggregate.util";
+import { AuthRequest } from "../libs/AuthRequest.lib";
 
 export const getCommentService = async (
+    req: AuthRequest,
     res: Response,
     matchQuery: Record<string, unknown>,
     responseMessage: string = COMMENT_MESSAGES.LIST_FETCHED,
@@ -19,6 +21,10 @@ export const getCommentService = async (
         {
             $addFields: {
                 user: { $first: "$user" },
+                own: { $first: "$user._id" },
+                isCommentOwner: {
+                    $eq: [{ $first: "$user._id" }, req.user?._id],
+                },
             },
         },
         {

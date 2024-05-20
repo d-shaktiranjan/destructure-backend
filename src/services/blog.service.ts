@@ -64,6 +64,7 @@ export const getBlogListService = async (
         {
             $project: {
                 __v: 0,
+                content: 0,
             },
         },
         {
