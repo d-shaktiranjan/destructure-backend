@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.11
+
+### Release Date- 20th May 24
+
+#### Added
+
+-   route & controller to reply to a comment.
+
 ## 0.1.10
 
 ### Release Date- 20th May 24
