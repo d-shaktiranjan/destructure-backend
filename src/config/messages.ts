@@ -60,6 +60,7 @@ export enum COMMENT_MESSAGES {
     UPDATED = "Comment updated",
     LIST_FETCHED = "Comment list fetched",
     REPLY_LIST = "Reply list fetched",
+    REPLY_ADDED = "Reply added",
 }
 
 export enum USER_MESSAGES {

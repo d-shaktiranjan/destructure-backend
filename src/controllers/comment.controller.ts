@@ -113,3 +113,27 @@ export const getReplyList = asyncWrapper(
         );
     },
 );
+
+export const addReply = asyncWrapper(
+    async (req: AuthRequest, res: Response) => {
+        const { _id, content } = req.body;
+        nullChecker(res, { _id, content });
+        if (!isValidObjectId(_id))
+            return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
+
+        // fetch comment
+        const comment = await Comment.findById(_id);
+        if (!comment) return errorResponse(res, COMMENT_MESSAGES.NOT_FOUND);
+
+        // create new reply
+        const reply = new Comment({
+            user: req.user?._id,
+            blog: comment.blog,
+            parent: comment._id,
+            content,
+        });
+        await reply.save();
+
+        return successResponse(res, COMMENT_MESSAGES.REPLY_ADDED);
+    },
+);
