@@ -6,6 +6,7 @@ import { COMMENT_MESSAGES } from "../config/messages";
 // model & lib imports
 import Comment from "../models/Comment.model";
 import { successResponse } from "../utils/apiResponse.util";
+import { userAggregateUtil } from "../utils/aggregate.util";
 
 export const getCommentService = async (
     res: Response,
@@ -14,25 +15,7 @@ export const getCommentService = async (
 ) => {
     const allComments = await Comment.aggregate([
         { $match: matchQuery },
-        {
-            $lookup: {
-                from: "users",
-                localField: "user",
-                foreignField: "_id",
-                as: "user",
-                pipeline: [
-                    {
-                        $project: {
-                            email: 0,
-                            isAdmin: 0,
-                            createdAt: 0,
-                            updatedAt: 0,
-                            __v: 0,
-                        },
-                    },
-                ],
-            },
-        },
+        userAggregateUtil("user"),
         {
             $addFields: {
                 user: { $first: "$user" },

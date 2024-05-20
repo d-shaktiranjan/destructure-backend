@@ -7,6 +7,7 @@ import { AuthRequest } from "../libs/AuthRequest.lib";
 import { BLOG_MESSAGES, GENERIC_MESSAGES } from "../config/messages";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
 import nullChecker from "../utils/nullChecker.util";
+import { userAggregateUtil } from "../utils/aggregate.util";
 
 export const getBlogListService = async (
     req: AuthRequest,
@@ -42,44 +43,8 @@ export const getBlogListService = async (
 
     const allBlogs = await Blog.aggregate([
         { $match: filter },
-        {
-            $lookup: {
-                from: "users",
-                localField: "author",
-                foreignField: "_id",
-                as: "author",
-                pipeline: [
-                    {
-                        $project: {
-                            email: 0,
-                            isAdmin: 0,
-                            createdAt: 0,
-                            updatedAt: 0,
-                            __v: 0,
-                        },
-                    },
-                ],
-            },
-        },
-        {
-            $lookup: {
-                from: "users",
-                localField: "coAuthor",
-                foreignField: "_id",
-                as: "coAuthor",
-                pipeline: [
-                    {
-                        $project: {
-                            email: 0,
-                            isAdmin: 0,
-                            createdAt: 0,
-                            updatedAt: 0,
-                            __v: 0,
-                        },
-                    },
-                ],
-            },
-        },
+        userAggregateUtil("author"),
+        userAggregateUtil("coAuthor"),
         {
             $lookup: {
                 from: "comments",
