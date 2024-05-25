@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.12
+
+### Release Date- 25th May 24
+
+#### Added
+
+-   reaction support for comment & reply.
+
+#### Fixed
+
+-   reaction update issue.
+
+#### Changed
+
+-   all documents into one file.
+
 ## 0.1.11
 
 ### Release Date- 20th May 24
