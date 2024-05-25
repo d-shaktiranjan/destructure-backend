@@ -1,3 +1,5 @@
+import { AuthRequest } from "../libs/AuthRequest.lib";
+
 export const userAggregateUtil = (localField: string) => {
     return {
         $lookup: {
@@ -16,6 +18,30 @@ export const userAggregateUtil = (localField: string) => {
                     },
                 },
             ],
+        },
+    };
+};
+
+export const reactionLookup = (foreignField: "comment" | "blog") => {
+    return {
+        $lookup: {
+            from: "reactions",
+            localField: "_id",
+            foreignField,
+            as: "reactions",
+        },
+    };
+};
+
+export const reactionAddField = (req: AuthRequest) => {
+    return {
+        reactions: { $size: "$reactions" },
+        reactionStatus: {
+            $cond: {
+                if: { $in: [req.user?._id, "$reactions.user"] },
+                then: { $first: "$reactions.reaction" },
+                else: null,
+            },
         },
     };
 };

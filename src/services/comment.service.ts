@@ -6,7 +6,11 @@ import { COMMENT_MESSAGES } from "../config/messages";
 // model & lib imports
 import Comment from "../models/Comment.model";
 import { successResponse } from "../utils/apiResponse.util";
-import { userAggregateUtil } from "../utils/aggregate.util";
+import {
+    userAggregateUtil,
+    reactionLookup,
+    reactionAddField,
+} from "../utils/aggregate.util";
 import { AuthRequest } from "../libs/AuthRequest.lib";
 
 export const getCommentService = async (
@@ -18,14 +22,7 @@ export const getCommentService = async (
     const allComments = await Comment.aggregate([
         { $match: matchQuery },
         userAggregateUtil("user"),
-        {
-            $lookup: {
-                from: "reactions",
-                localField: "_id",
-                foreignField: "comment",
-                as: "reactions",
-            },
-        },
+        reactionLookup("comment"),
         {
             $addFields: {
                 user: { $first: "$user" },
@@ -33,14 +30,7 @@ export const getCommentService = async (
                 isCommentOwner: {
                     $eq: [{ $first: "$user._id" }, req.user?._id],
                 },
-                reactions: { $size: "$reactions" },
-                reactionStatus: {
-                    $cond: {
-                        if: { $in: [req.user?._id, "$reactions.user"] },
-                        then: { $first: "$reactions.reaction" },
-                        else: null,
-                    },
-                },
+                ...reactionAddField(req),
             },
         },
         {
