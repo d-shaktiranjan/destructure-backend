@@ -13,7 +13,7 @@ import {
 
 const router = Router();
 
-router.get("/", getBlogList);
+router.get("/", allowBoth, getBlogList);
 router.get("/author", isAuthenticated, isAdmin, coAuthorList);
 router.get("/details", allowBoth, getBlogDetails);
 

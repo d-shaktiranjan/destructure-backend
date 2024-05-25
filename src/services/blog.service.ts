@@ -7,7 +7,11 @@ import { AuthRequest } from "../libs/AuthRequest.lib";
 import { BLOG_MESSAGES, GENERIC_MESSAGES } from "../config/messages";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
 import nullChecker from "../utils/nullChecker.util";
-import { userAggregateUtil } from "../utils/aggregate.util";
+import {
+    reactionLookup,
+    reactionAddField,
+    userAggregateUtil,
+} from "../utils/aggregate.util";
 
 export const getBlogListService = async (
     req: AuthRequest,
@@ -53,14 +57,7 @@ export const getBlogListService = async (
                 as: "comments",
             },
         },
-        {
-            $lookup: {
-                from: "reactions",
-                localField: "_id",
-                foreignField: "blog",
-                as: "reactions",
-            },
-        },
+        reactionLookup("blog"),
         {
             $project: {
                 __v: 0,
@@ -78,14 +75,7 @@ export const getBlogListService = async (
                     },
                 },
                 comments: { $size: "$comments" },
-                reactions: { $size: "$reactions" },
-                reactionStatus: {
-                    $cond: {
-                        if: { $in: [req.user?._id, "$reactions.user"] },
-                        then: { $first: "$reactions.reaction" },
-                        else: null,
-                    },
-                },
+                ...reactionAddField(req),
             },
         },
         { $skip: skip },
