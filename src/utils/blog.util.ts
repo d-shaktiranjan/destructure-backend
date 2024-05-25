@@ -3,7 +3,7 @@ import { Schema } from "mongoose";
 
 import Blog from "../models/Blog.model";
 import { errorResponse } from "./apiResponse.util";
-import { BlogDocument } from "../libs/BlogDocument.lib";
+import { BlogDocument } from "../libs/Documents.lib";
 import { BLOG_MESSAGES } from "../config/messages";
 
 export const getBlogById = async (

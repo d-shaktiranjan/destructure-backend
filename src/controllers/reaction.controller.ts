@@ -2,11 +2,15 @@ import { Response } from "express";
 import { isValidObjectId } from "mongoose";
 
 // model & lib
-import { AuthRequest } from "../libs/AuthRequest.lib";
-import { ReactionDocument } from "../libs/ReactionDocument.lib";
 import Blog from "../models/Blog.model";
 import Reaction from "../models/Reaction.model";
 import Comment from "../models/Comment.model";
+import { AuthRequest } from "../libs/AuthRequest.lib";
+import {
+    BlogDocument,
+    CommentDocument,
+    ReactionDocument,
+} from "../libs/Documents.lib";
 
 // config
 import { REACTIONS } from "../config/constants";
@@ -20,8 +24,6 @@ import {
 import asyncWrapper from "../middlewares/asyncWrap.middleware";
 import nullChecker from "../utils/nullChecker.util";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
-import { BlogDocument } from "@/libs/BlogDocument.lib";
-import { CommentDocument } from "@/libs/Comment.lib";
 
 export const reaction = asyncWrapper(
     async (req: AuthRequest, res: Response) => {

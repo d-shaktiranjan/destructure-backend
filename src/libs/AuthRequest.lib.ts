@@ -1,5 +1,5 @@
 import { Request } from "express";
-import { UserDocument } from "./UserDocument.lib";
+import { UserDocument } from "./Documents.lib";
 
 export interface AuthRequest extends Request {
     user?: UserDocument;

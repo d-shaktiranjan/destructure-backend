@@ -24,8 +24,7 @@ import {
 import Reaction from "../models/Reaction.model";
 import Blog from "../models/Blog.model";
 import { AuthRequest } from "../libs/AuthRequest.lib";
-import { ReactionDocument } from "../libs/ReactionDocument.lib";
-import { BlogDocument } from "../libs/BlogDocument.lib";
+import { ReactionDocument, BlogDocument } from "../libs/Documents.lib";
 import User from "../models/User.model";
 
 import {
