@@ -19,11 +19,27 @@ export const getCommentService = async (
         { $match: matchQuery },
         userAggregateUtil("user"),
         {
+            $lookup: {
+                from: "reactions",
+                localField: "_id",
+                foreignField: "comment",
+                as: "reactions",
+            },
+        },
+        {
             $addFields: {
                 user: { $first: "$user" },
                 own: { $first: "$user._id" },
                 isCommentOwner: {
                     $eq: [{ $first: "$user._id" }, req.user?._id],
+                },
+                reactions: { $size: "$reactions" },
+                reactionStatus: {
+                    $cond: {
+                        if: { $in: [req.user?._id, "$reactions.user"] },
+                        then: { $first: "$reactions.reaction" },
+                        else: null,
+                    },
                 },
             },
         },
