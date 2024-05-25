@@ -8,23 +8,20 @@ import asyncWrapper from "../middlewares/asyncWrap.middleware";
 // util
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
 import nullChecker from "../utils/nullChecker.util";
-import { getReactionCountOfBlog } from "../utils/reaction.util";
 import { generateSlugUntil, isSlugUniqueUtil } from "../utils/blog.util";
 
 // constant
-import { ALLOWED_IMAGE_MIMETYPE, REACTIONS } from "../config/constants";
+import { ALLOWED_IMAGE_MIMETYPE } from "../config/constants";
 import {
     BLOG_MESSAGES,
     GENERIC_MESSAGES,
-    REACTION_MESSAGES,
     USER_MESSAGES,
 } from "../config/messages";
 
 // model & lib imports
-import Reaction from "../models/Reaction.model";
 import Blog from "../models/Blog.model";
 import { AuthRequest } from "../libs/AuthRequest.lib";
-import { ReactionDocument, BlogDocument } from "../libs/Documents.lib";
+import { BlogDocument } from "../libs/Documents.lib";
 import User from "../models/User.model";
 
 import {
@@ -153,51 +150,6 @@ export const updateBlog = asyncWrapper(async (req: Request, res: Response) => {
 
     return successResponse(res, BLOG_MESSAGES.UPDATED, 202, blog);
 });
-
-export const reaction = asyncWrapper(
-    async (req: AuthRequest, res: Response) => {
-        const { _id, reaction } = req.body;
-        nullChecker(res, { _id });
-
-        if (!isValidObjectId(_id))
-            return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
-
-        // validate reaction
-        if (reaction && !Object.values(REACTIONS).includes(reaction))
-            return errorResponse(res, REACTION_MESSAGES.INVALID);
-
-        // fetch blog
-        const blog = await Blog.findById(_id);
-        if (!blog) return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND, 404);
-
-        // check for existing reaction
-        const existingReaction = await Reaction.findOne({
-            blog: blog._id,
-            user: req.user?._id,
-        });
-
-        // remove reaction object if user request the same reaction
-        if (existingReaction && existingReaction.reaction === reaction) {
-            await existingReaction.deleteOne();
-            return successResponse(res, REACTION_MESSAGES.REMOVED, 202, {
-                reaction: getReactionCountOfBlog(blog._id),
-            });
-        }
-
-        // update or create reaction
-        const updatedReaction = existingReaction
-            ? ({ ...existingReaction, reaction } as ReactionDocument)
-            : new Reaction({ user: req.user?._id, blog: blog._id, reaction });
-        await updatedReaction.save();
-
-        const message = existingReaction
-            ? REACTION_MESSAGES.UPDATED
-            : REACTION_MESSAGES.ADDED;
-        const statusCode = existingReaction ? 202 : 201;
-
-        return successResponse(res, message, statusCode);
-    },
-);
 
 export const imageUpload = asyncWrapper(async (req: Request, res: Response) => {
     const file = req.file;
