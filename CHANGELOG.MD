@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.13
+
+### Release Date- 25th May 24
+
+#### Added
+
+-   reaction status added in comment & reply list.
+-   reaction lookup & addFields function to implement DRY.
+
+#### Fixed
+
+-   reaction status in blog list.
+
 ## 0.1.12
 
 ### Release Date- 25th May 24
