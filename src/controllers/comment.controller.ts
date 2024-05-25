@@ -5,7 +5,7 @@ import { isValidObjectId, Types } from "mongoose";
 import asyncWrapper from "../middlewares/asyncWrap.middleware";
 import Comment from "../models/Comment.model";
 import { AuthRequest } from "../libs/AuthRequest.lib";
-import { BlogDocument } from "../libs/BlogDocument.lib";
+import { BlogDocument } from "../libs/Documents.lib";
 
 // utils & config
 import { errorResponse, successResponse } from "../utils/apiResponse.util";

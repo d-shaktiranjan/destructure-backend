@@ -9,7 +9,7 @@ import { errorResponse } from "../utils/apiResponse.util";
 import { JWT_SECRET } from "../config/constants";
 import { AUTH_MESSAGES } from "../config/messages";
 import { AuthRequest } from "../libs/AuthRequest.lib";
-import { UserDocument } from "../libs/UserDocument.lib";
+import { UserDocument } from "../libs/Documents.lib";
 
 export const isAuthenticated = asyncWrapper(
     async (req: AuthRequest, res: Response, next: NextFunction) => {

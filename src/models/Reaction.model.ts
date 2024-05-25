@@ -1,12 +1,15 @@
 import { REACTIONS } from "../config/constants";
-import { ReactionDocument } from "../libs/ReactionDocument.lib";
+import { ReactionDocument } from "../libs/Documents.lib";
 import { Schema, model } from "mongoose";
 
 const reactionSchema = new Schema<ReactionDocument>({
     blog: {
         type: Schema.Types.ObjectId,
         ref: "Blog",
-        required: true,
+    },
+    comment: {
+        type: Schema.Types.ObjectId,
+        ref: "Comment",
     },
     user: {
         type: Schema.Types.ObjectId,
