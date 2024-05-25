@@ -6,11 +6,7 @@ import Blog from "../models/Blog.model";
 import Reaction from "../models/Reaction.model";
 import Comment from "../models/Comment.model";
 import { AuthRequest } from "../libs/AuthRequest.lib";
-import {
-    BlogDocument,
-    CommentDocument,
-    ReactionDocument,
-} from "../libs/Documents.lib";
+import { BlogDocument, CommentDocument } from "../libs/Documents.lib";
 
 // config
 import { REACTIONS } from "../config/constants";
@@ -60,20 +56,24 @@ export const reaction = asyncWrapper(
             return successResponse(res, REACTION_MESSAGES.REMOVED, 202);
         }
 
-        // update or create reaction
-        const updatedReaction = existingReaction
-            ? ({ ...existingReaction, reaction } as ReactionDocument)
-            : new Reaction({
-                  user: req.user?._id,
-                  [String(to).toLocaleLowerCase()]: content._id,
-                  reaction,
-              });
-        await updatedReaction.save();
-
         const message = existingReaction
             ? REACTION_MESSAGES.UPDATED
             : REACTION_MESSAGES.ADDED;
         const statusCode = existingReaction ? 202 : 201;
+
+        // update reaction
+        if (existingReaction) {
+            existingReaction.reaction = reaction;
+            await existingReaction.save();
+            return successResponse(res, message, statusCode);
+        }
+
+        // create new reaction
+        new Reaction({
+            user: req.user?._id,
+            [String(to).toLocaleLowerCase()]: content._id,
+            reaction,
+        }).save();
 
         return successResponse(res, message, statusCode);
     },
