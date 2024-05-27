@@ -36,7 +36,7 @@
         "cspell": "^8.6.1",
         "eslint": "^8.57.0",
         "lefthook": "^1.6.7",
-        "nodemon": "^3.1.0",
+        "nodemon": "^3.1.1",
         "prettier": "^3.2.5",
         "ts-node": "^10.9.2",
         "typescript": "^5.4.3"
