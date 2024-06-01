@@ -31,3 +31,5 @@ export const ALLOWED_IMAGE_MIMETYPE: readonly string[] = [
     "image/png",
     "image/gif",
 ];
+
+export const SEARCH_ARRAY_MAX_LENGTH = 5;

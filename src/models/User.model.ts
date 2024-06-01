@@ -1,7 +1,23 @@
 import { Schema, model } from "mongoose";
 import { sign } from "jsonwebtoken";
-import { JWT_SECRET, AUTH_TOKEN_EXPIRY } from "../config/constants";
-import { UserDocument } from "../libs/Documents.lib";
+import {
+    JWT_SECRET,
+    AUTH_TOKEN_EXPIRY,
+    SEARCH_ARRAY_MAX_LENGTH,
+} from "../config/constants";
+import { SearchDocument, UserDocument } from "../libs/Documents.lib";
+
+const searchSchema = new Schema<SearchDocument>({
+    query: {
+        type: String,
+        required: true,
+    },
+    blog: {
+        type: Schema.Types.ObjectId,
+        ref: "Blog",
+        required: false,
+    },
+});
 
 const userSchema = new Schema<UserDocument>(
     {
@@ -22,6 +38,14 @@ const userSchema = new Schema<UserDocument>(
         isAdmin: {
             type: Boolean,
             default: false,
+        },
+        searches: {
+            type: [searchSchema],
+            validate: [
+                (val: unknown[]): boolean =>
+                    val.length <= SEARCH_ARRAY_MAX_LENGTH,
+                `Exceeds the limit of ${SEARCH_ARRAY_MAX_LENGTH}.`,
+            ],
         },
     },
     { timestamps: true },
