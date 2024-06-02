@@ -105,8 +105,41 @@ export const getBlogDetailsService = async (
     if (isAdmin) delete searchFilter["isPublic"];
 
     // fetch from DB
-    const blog = await Blog.findOne(searchFilter).select("-__v");
-    if (!blog) return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND);
+    const blog = await Blog.aggregate([
+        { $match: searchFilter },
+        userAggregateUtil("author"),
+        userAggregateUtil("coAuthor"),
+        {
+            $lookup: {
+                from: "comments",
+                localField: "_id",
+                foreignField: "blog",
+                as: "comments",
+            },
+        },
+        reactionLookup("blog"),
+        {
+            $project: {
+                __v: 0,
+            },
+        },
+        {
+            $addFields: {
+                author: { $first: "$author" },
+                coAuthor: {
+                    $cond: {
+                        if: { $first: "$coAuthor" },
+                        then: { $first: "$coAuthor" },
+                        else: null,
+                    },
+                },
+                comments: { $size: "$comments" },
+                ...reactionAddField(req),
+            },
+        },
+    ]);
+    if (blog.length === 0)
+        return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND, 404);
 
-    return successResponse(res, BLOG_MESSAGES.BLOG_FETCHED, 200, blog);
+    return successResponse(res, BLOG_MESSAGES.BLOG_FETCHED, 200, blog[0]);
 };
