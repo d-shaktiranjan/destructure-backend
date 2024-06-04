@@ -10,11 +10,9 @@ export const userAggregateUtil = (localField: string) => {
             pipeline: [
                 {
                     $project: {
-                        email: 0,
-                        isAdmin: 0,
-                        createdAt: 0,
-                        updatedAt: 0,
-                        __v: 0,
+                        _id: 1,
+                        name: 1,
+                        picture: 1,
                     },
                 },
             ],
