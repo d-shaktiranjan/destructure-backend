@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.14
+
+### Release Date- 4th Jun 24
+
+#### Added
+
+-   author info in details route.
+-   reaction & comment info in details page.
+
+#### Changed
+
+-   fetch blog details by `slug`.
+
 ## 0.1.13
 
 ### Release Date- 25th May 24
