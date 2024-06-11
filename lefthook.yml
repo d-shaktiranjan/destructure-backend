@@ -1,11 +1,11 @@
 pre-commit:
   commands:
     spell:
-      ren: pnpm spell
+      ren: npm run spell
     format:
-      run: pnpm format_check
+      run: npm run format_check
     lint:
-      run: pnpm lint
+      run: npm run lint
 
 commit-msg:
   commands:
