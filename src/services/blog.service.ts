@@ -10,6 +10,7 @@ import {
     reactionLookup,
     reactionAddField,
     userAggregateUtil,
+    commentLookup,
 } from "../utils/aggregate.util";
 
 export const getBlogListService = async (
@@ -48,14 +49,7 @@ export const getBlogListService = async (
         { $match: filter },
         userAggregateUtil("author"),
         userAggregateUtil("coAuthor"),
-        {
-            $lookup: {
-                from: "comments",
-                localField: "_id",
-                foreignField: "blog",
-                as: "comments",
-            },
-        },
+        commentLookup(),
         reactionLookup("blog"),
         {
             $project: {

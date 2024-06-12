@@ -43,3 +43,14 @@ export const reactionAddField = (req: AuthRequest) => {
         },
     };
 };
+
+export const commentLookup = () => {
+    return {
+        $lookup: {
+            from: "comments",
+            localField: "_id",
+            foreignField: "blog",
+            as: "comments",
+        },
+    };
+};
