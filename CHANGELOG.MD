@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.15
+
+### Release Date- 12th Jun 24
+
+#### Added
+
+-   route & controller to get blog stats(reaction, comment).
+
 ## 0.1.14
 
 ### Release Date- 4th Jun 24
