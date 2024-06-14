@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.16
+
+### Release Date- 14th Jun 24
+
+#### Added
+
+-   route & controller to get public blog's slug list.
+
 ## 0.1.15
 
 ### Release Date- 12th Jun 24
