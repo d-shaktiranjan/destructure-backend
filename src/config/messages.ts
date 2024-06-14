@@ -45,6 +45,7 @@ export enum BLOG_MESSAGES {
     SLUG_NOT_UNIQUE = "Slug is not unique",
     SLUG_GENERATED = "Unique slug generated",
     STATS_FETCHED = "Blog stats fetched",
+    SLUG_LIST_FETCHED = "Slug list fetched",
 }
 
 export enum REACTION_MESSAGES {

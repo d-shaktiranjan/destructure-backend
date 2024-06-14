@@ -10,6 +10,7 @@ import {
     getBlogDetails,
     getBlogList,
     blogStats,
+    slugList,
 } from "../controllers/blog.controller";
 
 const router = Router();
@@ -19,5 +20,6 @@ router.get("/", getBlogList);
 router.get("/author", isAuthenticated, isAdmin, coAuthorList);
 router.get("/details", getBlogDetails);
 router.get("/stats", blogStats);
+router.get("/slugs", slugList);
 
 export default router;
