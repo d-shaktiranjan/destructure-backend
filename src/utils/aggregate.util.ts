@@ -1,4 +1,5 @@
 import { AuthRequest } from "../libs/AuthRequest.lib";
+import { REACTIONS } from "../config/constants";
 
 export const userAggregateUtil = (localField: string) => {
     return {
@@ -31,14 +32,47 @@ export const reactionLookup = (foreignField: "comment" | "blog") => {
     };
 };
 
-export const reactionAddField = (req: AuthRequest) => {
+export const reactionAddField = (
+    req: AuthRequest,
+    isIncludeExtra: boolean = false,
+) => {
     return {
-        reactions: { $size: "$reactions" },
+        // if user authenticated then his reaction on the content
         reactionStatus: {
             $cond: {
                 if: { $in: [req.user?._id, "$reactions.user"] },
                 then: { $first: "$reactions.reaction" },
                 else: null,
+            },
+        },
+
+        // individual reaction counts
+        reactions: {
+            $cond: {
+                if: isIncludeExtra,
+                then: Object.keys(REACTIONS).reduce(
+                    (accumulator, reaction) => {
+                        const reactionKey = reaction as keyof typeof REACTIONS;
+                        accumulator[REACTIONS[reactionKey]] = {
+                            $size: {
+                                $filter: {
+                                    input: "$reactions",
+                                    cond: {
+                                        $eq: [
+                                            "$$this.reaction",
+                                            REACTIONS[reactionKey],
+                                        ],
+                                    },
+                                },
+                            },
+                        };
+                        return accumulator;
+                    },
+                    { TOTAL: { $size: "$reactions" } } as {
+                        [key: string]: unknown;
+                    },
+                ),
+                else: { $size: "$reactions" },
             },
         },
     };

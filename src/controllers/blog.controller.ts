@@ -226,7 +226,7 @@ export const blogStats = asyncWrapper(async (req: Request, res: Response) => {
         commentLookup(),
         {
             $addFields: {
-                ...reactionAddField(req),
+                ...reactionAddField(req, true),
                 comments: { $size: "$comments" },
             },
         },
