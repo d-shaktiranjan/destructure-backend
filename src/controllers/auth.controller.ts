@@ -2,11 +2,7 @@
 import { Request, Response } from "express";
 
 // config imports
-import {
-    GOOGLE_CLIENT_ID,
-    COOKIES_OPTIONS,
-    CORS_ORIGINS,
-} from "../config/constants";
+import { COOKIES_OPTIONS, CORS_ORIGINS } from "../config/constants";
 import { AUTH_MESSAGES } from "../config/messages";
 
 // model & libs imports
@@ -37,31 +33,38 @@ export const googleLogin = asyncWrapper(async (req: Request, res: Response) => {
 
 export const googleCallback = asyncWrapper(
     async (req: Request, res: Response) => {
-        const { code } = req.query;
+        const { token } = req.query;
 
-        const { tokens } = await oAuth2Client.getToken(code as string);
-        oAuth2Client.setCredentials(tokens);
+        const userInfo = await fetch(
+            "https://www.googleapis.com/oauth2/v3/userinfo",
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            },
+        );
 
-        const user = await oAuth2Client.verifyIdToken({
-            idToken: tokens.id_token as string,
-            audience: GOOGLE_CLIENT_ID,
-        });
-        if (!user) return errorResponse(res, AUTH_MESSAGES.FAILED);
-        const userPayload = user.getPayload();
+        if (!userInfo.ok) {
+            return errorResponse(res, AUTH_MESSAGES.FAILED);
+        }
 
-        // store user in DB
-        let userObject = await User.findOne({ email: userPayload?.email });
+        const userPayload = await userInfo.json();
+
+        // Store user in the database
+        let userObject = await User.findOne({ email: userPayload.email });
         if (userObject) {
-            userObject.name = userPayload?.name || "";
-            userObject.picture = userPayload?.picture;
+            userObject.name = userPayload.name || "";
+            userObject.picture = userPayload.picture;
         } else {
             userObject = new User({
-                name: userPayload?.name,
-                email: userPayload?.email,
-                picture: userPayload?.picture,
+                name: userPayload.name,
+                email: userPayload.email,
+                picture: userPayload.picture,
             });
         }
         await userObject.save();
+
+        // Generate a JWT and set it as a cookie
         const jwt = userObject.generateAuthToken();
         res.cookie("authToken", jwt, COOKIES_OPTIONS);
 
