@@ -1,12 +1,10 @@
 // package imports
 import { Response, NextFunction } from "express";
-import { verify } from "jsonwebtoken";
 
 import User from "../models/User.model";
 import asyncWrapper from "./asyncWrap.middleware";
 
 import { errorResponse } from "../utils/apiResponse.util";
-import { JWT_SECRET } from "../config/constants";
 import { AUTH_MESSAGES } from "../config/messages";
 import { AuthRequest } from "../libs/AuthRequest.lib";
 import { UserDocument } from "../libs/Documents.lib";
@@ -53,15 +51,35 @@ async function decodeToken(req: AuthRequest, res: Response) {
     if (!authToken) return null;
 
     try {
-        // decode JWT
-        const decodedValue = verify(authToken, JWT_SECRET) as {
-            _id: string;
-        };
+        const userInfo = await fetch(
+            "https://www.googleapis.com/oauth2/v3/userinfo",
+            {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                },
+            },
+        );
 
-        // fetch user from DB
-        const user = await User.findById(decodedValue?._id).select("-__v");
-        if (!user) return errorResponse(res, AUTH_MESSAGES.INVALID_TOKEN);
-        return user;
+        if (!userInfo.ok) {
+            return errorResponse(res, AUTH_MESSAGES.FAILED);
+        }
+
+        const userPayload = await userInfo.json();
+
+        // Store user in the database
+        let userObject = await User.findOne({ email: userPayload.email });
+        if (userObject) {
+            userObject.name = userPayload.name || "";
+            userObject.picture = userPayload.picture;
+        } else {
+            userObject = new User({
+                name: userPayload.name,
+                email: userPayload.email,
+                picture: userPayload.picture,
+            });
+        }
+        await userObject.save();
+        return userObject;
     } catch (error) {
         return errorResponse(res, AUTH_MESSAGES.INVALID_TOKEN);
     }
