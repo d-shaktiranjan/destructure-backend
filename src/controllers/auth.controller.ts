@@ -2,11 +2,7 @@
 import { Request, Response } from "express";
 
 // config imports
-import {
-    GOOGLE_CLIENT_ID,
-    COOKIES_OPTIONS,
-    CORS_ORIGINS,
-} from "../config/constants";
+import { GOOGLE_CLIENT_ID, CORS_ORIGINS } from "../config/constants";
 import { AUTH_MESSAGES } from "../config/messages";
 
 // model & libs imports
@@ -63,19 +59,12 @@ export const googleCallback = asyncWrapper(
         }
         await userObject.save();
         const jwt = userObject.generateAuthToken();
-        res.cookie("authToken", jwt, COOKIES_OPTIONS);
 
         return successResponse(res, AUTH_MESSAGES.LOGIN, 200, {
             jwt,
-            user: userObject,
         });
     },
 );
-
-export const logout = (req: Request, res: Response) => {
-    res.clearCookie("authToken", COOKIES_OPTIONS);
-    return successResponse(res, AUTH_MESSAGES.LOGOUT);
-};
 
 export const profile = asyncWrapper(async (req: AuthRequest, res: Response) => {
     return successResponse(res, AUTH_MESSAGES.PROFILE, 200, req.user);
