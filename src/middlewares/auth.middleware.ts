@@ -55,13 +55,19 @@ async function decodeToken(req: AuthRequest, res: Response) {
     try {
         // decode JWT
         const decodedValue = verify(authToken, JWT_SECRET) as {
-            _id: string;
+            email: string;
         };
 
         // fetch user from DB
-        const user = await User.findById(decodedValue?._id).select("-__v");
-        if (!user) return errorResponse(res, AUTH_MESSAGES.INVALID_TOKEN);
-        return user;
+        const user = await User.findOne({ email: decodedValue?.email }).select(
+            "-__v",
+        );
+        if (user) return user;
+
+        // create new user
+        const newUser = new User(decodedValue); // TODO
+        await newUser.save();
+        return newUser;
     } catch (error) {
         return errorResponse(res, AUTH_MESSAGES.INVALID_TOKEN);
     }
