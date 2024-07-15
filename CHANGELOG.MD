@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.18
+
+### Release Date- 15th Jul 24
+
+#### Removed
+
+-   cookies support.
+-   `logout` route & controller.
+-   `userInfo` in google callback.
+
+#### Added
+
+-   `picture` in JWT.
+
 ## 0.1.17
 
 ### Release Date- 15th Jul 24
