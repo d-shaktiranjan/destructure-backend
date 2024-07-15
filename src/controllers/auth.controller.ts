@@ -62,7 +62,6 @@ export const googleCallback = asyncWrapper(
 
         return successResponse(res, AUTH_MESSAGES.LOGIN, 200, {
             jwt,
-            user: userObject,
         });
     },
 );
