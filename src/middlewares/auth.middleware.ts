@@ -45,11 +45,8 @@ export const isAdmin = (
 };
 
 async function decodeToken(req: AuthRequest, res: Response) {
-    // collect JWT from cookies or header
-    const authToken =
-        req.cookies?.authToken ||
-        req.header("Authorization")?.replace("Bearer ", "");
-
+    // collect JWT from header
+    const authToken = req.header("Authorization")?.replace("Bearer ", "");
     if (!authToken) return null;
 
     try {

@@ -9,7 +9,6 @@ export const APP_MESSAGES = {
 
 export enum AUTH_MESSAGES {
     LOGIN = "Login success",
-    LOGOUT = "Logout success",
     FAILED = "Login failed",
     PROFILE = "Profile details fetched",
     MISSING_TOKEN = "Auth token is missing",
@@ -44,6 +43,8 @@ export enum BLOG_MESSAGES {
     SLUG_UNIQUE = "Slug is unique",
     SLUG_NOT_UNIQUE = "Slug is not unique",
     SLUG_GENERATED = "Unique slug generated",
+    STATS_FETCHED = "Blog stats fetched",
+    SLUG_LIST_FETCHED = "Slug list fetched",
 }
 
 export enum REACTION_MESSAGES {

@@ -9,12 +9,17 @@ import {
     coAuthorList,
     getBlogDetails,
     getBlogList,
+    blogStats,
+    slugList,
 } from "../controllers/blog.controller";
 
 const router = Router();
+router.use(allowBoth);
 
-router.get("/", allowBoth, getBlogList);
+router.get("/", getBlogList);
 router.get("/author", isAuthenticated, isAdmin, coAuthorList);
-router.get("/details", allowBoth, getBlogDetails);
+router.get("/details", getBlogDetails);
+router.get("/stats", blogStats);
+router.get("/slugs", slugList);
 
 export default router;

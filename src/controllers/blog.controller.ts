@@ -5,11 +5,6 @@ import { unlink } from "fs/promises";
 // middleware
 import asyncWrapper from "../middlewares/asyncWrap.middleware";
 
-// util
-import { errorResponse, successResponse } from "../utils/apiResponse.util";
-import nullChecker from "../utils/nullChecker.util";
-import { generateSlugUntil, isSlugUniqueUtil } from "../utils/blog.util";
-
 // constant
 import { ALLOWED_IMAGE_MIMETYPE } from "../config/constants";
 import {
@@ -28,6 +23,16 @@ import {
     getBlogDetailsService,
     getBlogListService,
 } from "../services/blog.service";
+
+// util
+import { errorResponse, successResponse } from "../utils/apiResponse.util";
+import nullChecker from "../utils/nullChecker.util";
+import { generateSlugUntil, isSlugUniqueUtil } from "../utils/blog.util";
+import {
+    commentLookup,
+    reactionAddField,
+    reactionLookup,
+} from "../utils/aggregate.util";
 
 export const createBlog = asyncWrapper(
     async (req: AuthRequest, res: Response) => {
@@ -209,3 +214,40 @@ export const generateSlug = asyncWrapper(
         });
     },
 );
+
+export const blogStats = asyncWrapper(async (req: Request, res: Response) => {
+    const slug = req.query.slug as string;
+    nullChecker(res, { slug });
+
+    // fetch blog details
+    const blog = await Blog.aggregate([
+        { $match: { slug } },
+        reactionLookup("blog"),
+        commentLookup(),
+        {
+            $addFields: {
+                ...reactionAddField(req, true),
+                comments: { $size: "$comments" },
+            },
+        },
+        { $project: { _id: 0, reactions: 1, comments: 1, reactionStatus: 1 } },
+    ]);
+
+    if (blog.length === 0)
+        return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND);
+
+    return successResponse(res, BLOG_MESSAGES.STATS_FETCHED, 200, blog[0]);
+});
+
+export const slugList = asyncWrapper(async (req: Request, res: Response) => {
+    const slugList = (await Blog.find({ isPublic: true })).map(
+        (blog) => blog.slug,
+    );
+
+    return successResponse(
+        res,
+        BLOG_MESSAGES.SLUG_LIST_FETCHED,
+        slugList.length === 0 ? 204 : 200,
+        slugList,
+    );
+});

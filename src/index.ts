@@ -23,7 +23,7 @@ import apiMetaData from "./utils/apiMetaData.util";
 const app = express();
 
 // middlewares
-app.use(cors({ origin: CORS_ORIGINS, credentials: true }));
+app.use(cors({ origin: CORS_ORIGINS }));
 app.use(json());
 app.use(cookieParser());
 app.use(static_("public"));

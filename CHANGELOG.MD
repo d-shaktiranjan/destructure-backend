@@ -2,6 +2,57 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.18
+
+### Release Date- 15th Jul 24
+
+#### Removed
+
+-   cookies support.
+-   `logout` route & controller.
+-   `userInfo` in google callback.
+
+#### Added
+
+-   `picture` in JWT.
+
+## 0.1.17
+
+### Release Date- 15th Jul 24
+
+#### Added
+
+-   individual reaction count in blog stats controller.
+
+## 0.1.16
+
+### Release Date- 14th Jun 24
+
+#### Added
+
+-   route & controller to get public blog's slug list.
+
+## 0.1.15
+
+### Release Date- 12th Jun 24
+
+#### Added
+
+-   route & controller to get blog stats(reaction, comment).
+
+## 0.1.14
+
+### Release Date- 4th Jun 24
+
+#### Added
+
+-   author info in details route.
+-   reaction & comment info in details page.
+
+#### Changed
+
+-   fetch blog details by `slug`.
+
 ## 0.1.13
 
 ### Release Date- 25th May 24

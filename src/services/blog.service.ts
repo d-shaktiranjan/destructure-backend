@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
-import { isValidObjectId } from "mongoose";
 
 import Blog from "../models/Blog.model";
 import { AuthRequest } from "../libs/AuthRequest.lib";
 
-import { BLOG_MESSAGES, GENERIC_MESSAGES } from "../config/messages";
+import { BLOG_MESSAGES } from "../config/messages";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
 import nullChecker from "../utils/nullChecker.util";
 import {
     reactionLookup,
     reactionAddField,
     userAggregateUtil,
+    commentLookup,
 } from "../utils/aggregate.util";
 
 export const getBlogListService = async (
@@ -49,14 +49,7 @@ export const getBlogListService = async (
         { $match: filter },
         userAggregateUtil("author"),
         userAggregateUtil("coAuthor"),
-        {
-            $lookup: {
-                from: "comments",
-                localField: "_id",
-                foreignField: "blog",
-                as: "comments",
-            },
-        },
+        commentLookup(),
         reactionLookup("blog"),
         {
             $project: {
@@ -94,14 +87,11 @@ export const getBlogDetailsService = async (
     isAdmin: boolean,
 ) => {
     // collect slug from query
-    const _id = req.query._id as string;
-    nullChecker(res, { _id });
+    const slug = req.query.slug as string;
+    nullChecker(res, { slug });
 
-    if (!isValidObjectId(_id))
-        return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
-
-    const searchFilter: { _id: string; isPublic?: boolean } = {
-        _id,
+    const searchFilter: { slug: string; isPublic?: boolean } = {
+        slug,
         isPublic: true,
     };
 
@@ -109,8 +99,41 @@ export const getBlogDetailsService = async (
     if (isAdmin) delete searchFilter["isPublic"];
 
     // fetch from DB
-    const blog = await Blog.findOne(searchFilter).select("-__v");
-    if (!blog) return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND);
+    const blog = await Blog.aggregate([
+        { $match: searchFilter },
+        userAggregateUtil("author"),
+        userAggregateUtil("coAuthor"),
+        {
+            $lookup: {
+                from: "comments",
+                localField: "_id",
+                foreignField: "blog",
+                as: "comments",
+            },
+        },
+        reactionLookup("blog"),
+        {
+            $project: {
+                __v: 0,
+            },
+        },
+        {
+            $addFields: {
+                author: { $first: "$author" },
+                coAuthor: {
+                    $cond: {
+                        if: { $first: "$coAuthor" },
+                        then: { $first: "$coAuthor" },
+                        else: null,
+                    },
+                },
+                comments: { $size: "$comments" },
+                ...reactionAddField(req),
+            },
+        },
+    ]);
+    if (blog.length === 0)
+        return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND, 404);
 
-    return successResponse(res, BLOG_MESSAGES.BLOG_FETCHED, 200, blog);
+    return successResponse(res, BLOG_MESSAGES.BLOG_FETCHED, 200, blog[0]);
 };

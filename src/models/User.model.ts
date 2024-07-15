@@ -58,6 +58,7 @@ userSchema.methods.generateAuthToken = function () {
             email: this.email,
             name: this.name,
             isAdmin: this.isAdmin,
+            picture: this.picture,
         },
         JWT_SECRET,
         {

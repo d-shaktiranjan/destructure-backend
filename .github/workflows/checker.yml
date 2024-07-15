@@ -17,37 +17,18 @@ jobs:
         with:
           node-version-file: .nvmrc
 
-      - uses: pnpm/action-setup@v2
-        name: Install pnpm
-        with:
-          version: 8
-          run_install: false
-
-      - name: Get pnpm store directory
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-      - uses: actions/cache@v3
-        name: Setup pnpm cache
-        with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
       - name: Install dependencies
         run: |
-          pnpm install && echo "All dependency installed successfully ✅"
+          npm i && echo "All dependency installed successfully ✅"
       
       - name: Format Checking
         run: |
-          pnpm format_check && echo "Congrats your code is well formatted 🌸"
+          npm run format_check && echo "Congrats your code is well formatted 🌸"
 
       - name: Spell Checking
         run: |
-          pnpm spell && echo "Congrats no spelling mistake in your code 😊"
+          npm run spell && echo "Congrats no spelling mistake in your code 😊"
 
       - name: ESLint Checking
         run: |
-          pnpm lint && echo "Congrats your code passes the ESLint check 👍"
+          npm run lint && echo "Congrats your code passes the ESLint check 👍"
