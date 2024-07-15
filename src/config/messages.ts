@@ -9,7 +9,6 @@ export const APP_MESSAGES = {
 
 export enum AUTH_MESSAGES {
     LOGIN = "Login success",
-    LOGOUT = "Logout success",
     FAILED = "Login failed",
     PROFILE = "Profile details fetched",
     MISSING_TOKEN = "Auth token is missing",
