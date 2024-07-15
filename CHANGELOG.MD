@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.17
+
+### Release Date- 15th Jul 24
+
+#### Added
+
+-   individual reaction count in blog stats controller.
+
 ## 0.1.16
 
 ### Release Date- 14th Jun 24
