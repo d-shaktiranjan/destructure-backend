@@ -65,6 +65,10 @@ export const updateComment = asyncWrapper(
         const comment = await Comment.findById(_id);
         if (!comment) return errorResponse(res, COMMENT_MESSAGES.NOT_FOUND);
 
+        // check for admin soft delete
+        if (comment.isDeleted)
+            return errorResponse(res, COMMENT_MESSAGES.UNABLE_TO_UPDATE, 406);
+
         // check ownership
         if (String(comment.user) !== String(req.user?._id))
             return errorResponse(res, GENERIC_MESSAGES.NOT_ALLOWED, 401);
