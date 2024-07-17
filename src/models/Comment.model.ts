@@ -21,6 +21,9 @@ const commentSchema = new Schema<CommentDocument>(
         isEdited: {
             type: Boolean,
         },
+        isDeleted: {
+            type: Boolean,
+        },
         parent: {
             type: Schema.Types.ObjectId,
             ref: "Comment",
