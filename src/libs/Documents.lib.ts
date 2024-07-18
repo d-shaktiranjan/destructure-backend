@@ -19,6 +19,7 @@ export interface CommentDocument extends Document {
     content: string;
     parent?: Schema.Types.ObjectId;
     isEdited?: boolean;
+    isDeleted?: boolean;
     createdAt: Date;
     updatedAt: Date;
 }

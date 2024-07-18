@@ -59,9 +59,12 @@ export enum COMMENT_MESSAGES {
     NOT_FOUND = "Comment not found",
     DELETED = "Comment deleted",
     UPDATED = "Comment updated",
+    UNABLE_TO_UPDATE = "Can't update this comment",
     LIST_FETCHED = "Comment list fetched",
     REPLY_LIST = "Reply list fetched",
     REPLY_ADDED = "Reply added",
+    SOFT_DELETE = "Soft delete success",
+    SOFT_DELETE_VALUE = "This comment is deleted by an admin",
 }
 
 export enum USER_MESSAGES {

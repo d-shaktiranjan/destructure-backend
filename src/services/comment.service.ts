@@ -26,7 +26,6 @@ export const getCommentService = async (
         {
             $addFields: {
                 user: { $first: "$user" },
-                own: { $first: "$user._id" },
                 isCommentOwner: {
                     $eq: [{ $first: "$user._id" }, req.user?._id],
                 },
