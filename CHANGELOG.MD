@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.19
+
+### Release Date- 18th Jul 24
+
+#### Added
+
+-   `isDeleted` field.
+-   comment soft delete route & controller.
+-   logic that soft deleted comment can't update.
+
 ## 0.1.18
 
 ### Release Date- 15th Jul 24
