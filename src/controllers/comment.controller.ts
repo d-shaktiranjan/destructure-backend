@@ -1,4 +1,4 @@
-import { Response } from "express";
+import { Request, Response } from "express";
 import { isValidObjectId, Types } from "mongoose";
 
 // lib, model & lib
@@ -64,6 +64,10 @@ export const updateComment = asyncWrapper(
         // fetch the comment
         const comment = await Comment.findById(_id);
         if (!comment) return errorResponse(res, COMMENT_MESSAGES.NOT_FOUND);
+
+        // check for admin soft delete
+        if (comment.isDeleted)
+            return errorResponse(res, COMMENT_MESSAGES.UNABLE_TO_UPDATE, 406);
 
         // check ownership
         if (String(comment.user) !== String(req.user?._id))
@@ -137,3 +141,22 @@ export const addReply = asyncWrapper(
         return successResponse(res, COMMENT_MESSAGES.REPLY_ADDED);
     },
 );
+
+export const softDelete = asyncWrapper(async (req: Request, res: Response) => {
+    const { _id } = req.query;
+    nullChecker(res, { _id });
+
+    if (!isValidObjectId(_id))
+        return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
+
+    // fetch comment
+    const comment = await Comment.findById(_id);
+    if (!comment) return errorResponse(res, COMMENT_MESSAGES.NOT_FOUND);
+
+    // soft delete
+    comment.isDeleted = true;
+    comment.content = COMMENT_MESSAGES.SOFT_DELETE_VALUE;
+    await comment.save();
+
+    return successResponse(res, COMMENT_MESSAGES.SOFT_DELETE);
+});
