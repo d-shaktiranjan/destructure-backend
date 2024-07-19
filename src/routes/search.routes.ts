@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { addSearchItem } from "../controllers/search.controller";
-import { isAuthenticated } from "../middlewares/auth.middleware";
+import { allowBoth } from "../middlewares/auth.middleware";
+import { search } from "../controllers/search.controller";
 
 const router = Router();
-router.use(isAuthenticated);
+router.use(allowBoth);
 
-router.route("/").post(addSearchItem);
+router.route("/").get(search);
 
 export default router;
