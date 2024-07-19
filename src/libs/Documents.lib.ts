@@ -45,7 +45,6 @@ export interface UserDocument extends Document {
 export interface SearchDocument extends Document {
     readonly _id: Schema.Types.ObjectId;
     query: string;
-    user: Schema.Types.ObjectId;
     blog?: Schema.Types.ObjectId;
     createdAt: Date;
 }

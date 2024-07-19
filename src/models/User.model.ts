@@ -17,6 +17,10 @@ const searchSchema = new Schema<SearchDocument>({
         ref: "Blog",
         required: false,
     },
+    createdAt: {
+        type: Schema.Types.Date,
+        default: Date.now,
+    },
 });
 
 const userSchema = new Schema<UserDocument>(
