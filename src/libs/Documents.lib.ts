@@ -40,6 +40,7 @@ export interface UserDocument extends Document {
     isAdmin: boolean;
     searches: SearchDocument[];
     generateAuthToken: () => string;
+    storeSearchResult: (query: string) => void;
 }
 
 export interface SearchDocument extends Document {

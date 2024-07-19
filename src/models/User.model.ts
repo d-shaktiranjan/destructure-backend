@@ -71,4 +71,10 @@ userSchema.methods.generateAuthToken = function () {
     );
 };
 
+userSchema.methods.storeSearchResult = function (query: string) {
+    if (this.searches.length >= 5) this.searches.shift();
+    this.searches.push({ query });
+    this.save();
+};
+
 export default model<UserDocument>("User", userSchema);

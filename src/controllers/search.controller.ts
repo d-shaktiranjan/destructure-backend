@@ -23,6 +23,8 @@ export const search = asyncWrapper(async (req: AuthRequest, res: Response) => {
         ],
     }).select("_id title description slug");
 
+    if (req.user) req.user.storeSearchResult(query);
+
     return successResponse(
         res,
         SEARCH_MESSAGES.RESULT_FETCHED,
