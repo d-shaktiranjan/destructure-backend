@@ -81,4 +81,5 @@ export enum SEARCH_MESSAGES {
     HISTORY_FETCHED = "Search history fetched",
     NOT_FOUND = "Search result not found",
     HISTORY_DELETED = "Search history deleted",
+    LINK_BLOG_IN_QUERY = "Blog linked with the query",
 }

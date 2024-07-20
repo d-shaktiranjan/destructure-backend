@@ -4,6 +4,7 @@ import {
     deleteSearchHistory,
     getSearchHistory,
     search,
+    linkBlogInSearch,
 } from "../controllers/search.controller";
 
 const router = Router();
@@ -15,6 +16,7 @@ router
     .use(isAuthenticated)
     .route("/history")
     .get(getSearchHistory)
-    .delete(deleteSearchHistory);
+    .delete(deleteSearchHistory)
+    .patch(linkBlogInSearch);
 
 export default router;
