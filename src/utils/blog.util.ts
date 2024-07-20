@@ -9,7 +9,7 @@ import ApiError from "../libs/ApiError.lib";
 export const getBlogById = async (
     res: Response,
     _id: Schema.Types.ObjectId,
-): Promise<BlogDocument | Response> => {
+): Promise<BlogDocument> => {
     const blog = await Blog.findById(_id);
     if (!blog) throw new ApiError(BLOG_MESSAGES.BLOG_NOT_FOUND);
     return blog;
