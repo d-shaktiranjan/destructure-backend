@@ -32,3 +32,12 @@ export const search = asyncWrapper(async (req: AuthRequest, res: Response) => {
         blogs,
     );
 });
+
+export const getSearchHistory = (req: AuthRequest, res: Response) => {
+    return successResponse(
+        res,
+        SEARCH_MESSAGES.HISTORY_FETCHED,
+        200,
+        req.user?.searches,
+    );
+};

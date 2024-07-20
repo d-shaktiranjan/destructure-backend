@@ -78,4 +78,5 @@ export enum GENERIC_MESSAGES {
 
 export enum SEARCH_MESSAGES {
     RESULT_FETCHED = "Search result fetched",
+    HISTORY_FETCHED = "Search history fetched",
 }
