@@ -1,13 +1,12 @@
 import { Response } from "express";
-import { errorResponse } from "./apiResponse.util";
 import { APP_MESSAGES } from "../config/messages";
+import ApiError from "../libs/ApiError.lib";
 
-const nullChecker = (res: Response, elementObject: object): null | Response => {
+const nullChecker = (res: Response, elementObject: object) => {
     for (const [key, value] of Object.entries(elementObject)) {
         if (!value || value.trim() === "")
-            return errorResponse(res, key + APP_MESSAGES.MISSING);
+            throw new ApiError(key + APP_MESSAGES.MISSING);
     }
-    return null;
 };
 
 export default nullChecker;

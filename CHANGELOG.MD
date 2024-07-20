@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.20
+
+### Release Date- 20th Jul 24
+
+#### Improved
+
+-   error handing.
+
 ## 0.1.19
 
 ### Release Date- 18th Jul 24
