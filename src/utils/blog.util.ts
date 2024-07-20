@@ -2,16 +2,16 @@ import { Response } from "express";
 import { Schema } from "mongoose";
 
 import Blog from "../models/Blog.model";
-import { errorResponse } from "./apiResponse.util";
 import { BlogDocument } from "../libs/Documents.lib";
 import { BLOG_MESSAGES } from "../config/messages";
+import ApiError from "../libs/ApiError.lib";
 
 export const getBlogById = async (
     res: Response,
     _id: Schema.Types.ObjectId,
-): Promise<BlogDocument | Response> => {
+): Promise<BlogDocument> => {
     const blog = await Blog.findById(_id);
-    if (!blog) return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND);
+    if (!blog) throw new ApiError(BLOG_MESSAGES.BLOG_NOT_FOUND);
     return blog;
 };
 

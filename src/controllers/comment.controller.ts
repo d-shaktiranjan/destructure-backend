@@ -5,7 +5,6 @@ import { isValidObjectId, Types } from "mongoose";
 import asyncWrapper from "../middlewares/asyncWrap.middleware";
 import Comment from "../models/Comment.model";
 import { AuthRequest } from "../libs/AuthRequest.lib";
-import { BlogDocument } from "../libs/Documents.lib";
 
 // utils & config
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
@@ -20,7 +19,7 @@ export const addComment = asyncWrapper(
         nullChecker(res, { blog, content });
 
         // fetch blog
-        const blogObject = (await getBlogById(res, blog)) as BlogDocument;
+        const blogObject = await getBlogById(res, blog);
 
         // create a new object on DB
         const comment = new Comment({
