@@ -7,7 +7,7 @@ import Blog from "../models/Blog.model";
 
 // config & utils import
 import { SEARCH_MESSAGES } from "../config/messages";
-import { successResponse } from "../utils/apiResponse.util";
+import { errorResponse, successResponse } from "../utils/apiResponse.util";
 import nullChecker from "../utils/nullChecker.util";
 
 export const search = asyncWrapper(async (req: AuthRequest, res: Response) => {
@@ -40,4 +40,21 @@ export const getSearchHistory = (req: AuthRequest, res: Response) => {
         200,
         req.user?.searches,
     );
+};
+
+export const deleteSearchHistory = (req: AuthRequest, res: Response) => {
+    const _id = req.query._id as string;
+    nullChecker(res, { _id });
+
+    // get the index of the query
+    const user = req.user;
+    const index = user?.searches.findIndex((item) => String(item._id) === _id);
+    if (index === undefined || index < 0)
+        return errorResponse(res, SEARCH_MESSAGES.NOT_FOUND);
+
+    // remove the item
+    req.user?.searches.splice(index, 1);
+    req.user?.save();
+
+    return successResponse(res, SEARCH_MESSAGES.HISTORY_DELETED);
 };

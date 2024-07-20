@@ -79,4 +79,6 @@ export enum GENERIC_MESSAGES {
 export enum SEARCH_MESSAGES {
     RESULT_FETCHED = "Search result fetched",
     HISTORY_FETCHED = "Search history fetched",
+    NOT_FOUND = "Search result not found",
+    HISTORY_DELETED = "Search history deleted",
 }
