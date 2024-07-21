@@ -16,6 +16,7 @@ export const search = asyncWrapper(async (req: AuthRequest, res: Response) => {
 
     const regex = new RegExp(query, "i");
     const blogs = await Blog.find({
+        isPublic: true,
         $or: [
             { title: { $regex: regex } },
             { description: { $regex: regex } },
