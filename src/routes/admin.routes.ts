@@ -16,17 +16,12 @@ const router = Router();
 router.use(isAuthenticated, isAdmin);
 
 // blog routes
-const blogRouter = Router();
-blogRouter.post("/create", createBlog);
-blogRouter.get("/", getBlogListAdmin);
-blogRouter.put("/update", updateBlog);
-blogRouter.post("/image-upload", upload.single("image"), imageUpload);
+router.route("/blog").post(createBlog).get(getBlogListAdmin).put(updateBlog);
 
 // blog slug routes
-blogRouter.get("/slug/check", checkUniqueSlug);
-blogRouter.get("/slug/generate", generateSlug);
+router.get("/slug/check", checkUniqueSlug);
+router.get("/slug/generate", generateSlug);
 
-// route usages
-router.use("/blogs", blogRouter);
+router.post("/upload/image", upload.single("image"), imageUpload);
 
 export default router;

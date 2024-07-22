@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.21
+
+### Release Date- 22th Jul 24
+
+#### Refactor
+
+-   `/admin` routes.
+
+#### Fixed
+
+-   `createBlog` controller.
+
 ## 0.1.20
 
 ### Release Date- 20th Jul 24
