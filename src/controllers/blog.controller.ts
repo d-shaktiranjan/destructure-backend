@@ -38,8 +38,7 @@ export const createBlog = asyncWrapper(
     async (req: AuthRequest, res: Response) => {
         // get values from request body & null check
         const { title, description, slug, content, coAuthor } = req.body;
-        const status = nullChecker(res, { title, description, slug, content });
-        if (status !== null) return status;
+        nullChecker(res, { title, description, slug, content });
 
         // fetch coAuthor
         if (coAuthor) {
