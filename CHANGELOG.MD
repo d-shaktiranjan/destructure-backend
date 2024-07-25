@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.22
+
+### Release Date- 25th Jul 24
+
+#### Removed
+
+-   pagination support from blog list.
+
 ## 0.1.21
 
 ### Release Date- 22th Jul 24
