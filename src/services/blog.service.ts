@@ -18,11 +18,6 @@ export const getBlogListService = async (
     res: Response,
     isAdmin: boolean,
 ) => {
-    // pagination calculations
-    const page = parseInt(req.query.page as string) || 1;
-    const count = parseInt(req.query.count as string) || 10;
-    const skip = (page - 1) * count;
-
     // sort variables
     let sort = req.query.sort;
     switch (sort) {
@@ -41,10 +36,7 @@ export const getBlogListService = async (
     let filter = {};
     if (!isAdmin) filter = { isPublic: true };
 
-    // meta data calculation
-    const totalBlogs = await Blog.countDocuments(filter);
-    const isNextNull = skip + count >= totalBlogs;
-
+    // fetch blog from DB
     const allBlogs = await Blog.aggregate([
         { $match: filter },
         userAggregateUtil("author"),
@@ -71,14 +63,9 @@ export const getBlogListService = async (
                 ...reactionAddField(req),
             },
         },
-        { $skip: skip },
-        { $limit: count },
     ]).sort(sort);
 
-    return successResponse(res, BLOG_MESSAGES.ALL_FETCHED, 200, allBlogs, {
-        isNextNull,
-        totalCount: await Blog.countDocuments(filter),
-    });
+    return successResponse(res, BLOG_MESSAGES.ALL_FETCHED, 200, allBlogs);
 };
 
 export const getBlogDetailsService = async (
