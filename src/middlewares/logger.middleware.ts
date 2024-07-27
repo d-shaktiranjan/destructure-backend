@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import Logger from "../models/Logger.model";
 
 const logger = (req: Request, res: Response, next: NextFunction) => {
     const originalSend = res.send.bind(res);
@@ -12,11 +13,23 @@ const logger = (req: Request, res: Response, next: NextFunction) => {
     next();
 
     res.on("finish", () => {
-        console.log("base url", req.baseUrl);
-        console.log("METHOD", req.method);
-        console.log(res.getHeaders());
-        console.log("Request Body:", JSON.stringify(req.body));
-        console.log("Response Body:", responseBody);
+        const method = req.method;
+        const route = req.baseUrl || "/";
+        const statusCode = res.statusCode;
+
+        console.log(`${method}- ${route} ${statusCode}`);
+
+        // create log
+        const log = new Logger({
+            route,
+            statusCode,
+            method,
+            headers: req.headers,
+            query: req.query,
+            body: req.body,
+            response: JSON.parse((responseBody as string) || "{}"),
+        });
+        log.save();
     });
 };
 
