@@ -40,3 +40,15 @@ export interface UserDocument extends Document {
     isAdmin: boolean;
     generateAuthToken: () => string;
 }
+
+export interface LoggerDocument extends Document {
+    readonly _id: Schema.Types.ObjectId;
+    method: string;
+    route: string;
+    statusCode: number;
+    headers: Record<string, unknown>;
+    query: Record<string, unknown>;
+    body: Record<string, unknown>;
+    response: Record<string, unknown>;
+    createdAt: Date;
+}
