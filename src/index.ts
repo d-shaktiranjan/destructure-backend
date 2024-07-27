@@ -18,6 +18,7 @@ import reactRouter from "./routes/react.routes";
 
 // util imports
 import apiMetaData from "./utils/apiMetaData.util";
+import logger from "./middlewares/logger.middleware";
 
 const app = express();
 
@@ -26,6 +27,8 @@ app.use(cors({ origin: CORS_ORIGINS }));
 app.use(json());
 app.use(cookieParser());
 app.use(static_("public"));
+
+app.use(logger);
 
 // route usages
 app.use("/api/blogs", blogRouter);
