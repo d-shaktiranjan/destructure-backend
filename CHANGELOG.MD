@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.23
+
+### Release Date- 28th Jul 24
+
+#### Added
+
+-   api logger.
+-   env variable to control log to store in DB.
+-   colors into api logging.
+
 ## 0.1.22
 
 ### Release Date- 25th Jul 24
