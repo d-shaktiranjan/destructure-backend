@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import Logger from "../models/Logger.model";
 import { IS_STORE_LOG } from "../config/constants";
-console.log("IS_STORE_LOG", IS_STORE_LOG);
 
 const logger = (req: Request, res: Response, next: NextFunction) => {
     const originalSend = res.send.bind(res);
@@ -14,12 +13,24 @@ const logger = (req: Request, res: Response, next: NextFunction) => {
     };
     next();
 
+    const colorize = (...args: Array<unknown>) => ({
+        red: `\x1b[31m${args.join(" ")}`,
+        green: `\x1b[32m${args.join(" ")}`,
+        cyan: `\x1b[36m${args.join(" ")}`,
+        bgRed: `\x1b[41m${args.join(" ")}\x1b[0m`,
+    });
+
     res.on("finish", () => {
         const method = req.method;
         const route = req.baseUrl || "/";
         const statusCode = res.statusCode;
 
-        console.log(`${method}- ${route} ${statusCode}`);
+        const logMessage = `${method}- ${route} ${statusCode}`;
+        if (statusCode >= 500) console.log(colorize(logMessage).bgRed);
+        else if (statusCode >= 400) console.log(colorize(logMessage).red);
+        else if (statusCode >= 300) console.log(colorize(logMessage).cyan);
+        else if (statusCode >= 200) console.log(colorize(logMessage).green);
+        else console.log(logMessage);
 
         // create log
         if (IS_STORE_LOG) {
