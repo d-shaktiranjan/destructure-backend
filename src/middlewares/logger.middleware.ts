@@ -22,7 +22,7 @@ const logger = (req: Request, res: Response, next: NextFunction) => {
 
     res.on("finish", () => {
         const method = req.method;
-        const route = req.baseUrl || "/";
+        const route = req.baseUrl + req.url;
         const statusCode = res.statusCode;
 
         const logMessage = `${method}- ${route} ${statusCode}`;
