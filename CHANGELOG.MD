@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.24
+
+### Release Date- 29th Jul 24
+
+#### Added
+
+-   image list route.
+
+#### Changed
+
+-   upload image route.
+
+#### Fixed
+
+-   route in logger.
+
 ## 0.1.23
 
 ### Release Date- 28th Jul 24
