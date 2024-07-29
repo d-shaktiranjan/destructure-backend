@@ -34,9 +34,6 @@ export enum BLOG_MESSAGES {
     IS_PUBLIC_TYPE = "isPublic must be a bool value",
     UNIQUE_TITLE = "Title must be unique",
     UPDATED = "Blog updated successfully",
-    IMAGE_REQUIRED = "Image required",
-    IMAGE_UPLOADED = "Image upload successfully",
-    IMAGE_ONLY = "This file format is not acceptable",
     AUTHORSHIP = "Author & co-author must be different",
     CO_AUTHOR_LIST = "Co-author list fetched",
     CO_AUTHOR_ADD_FAILED = "Unable to set co-author",
@@ -78,4 +75,7 @@ export enum GENERIC_MESSAGES {
 
 export enum IMAGE_MESSAGES {
     LIST_FETCHED = "Image list fetched",
+    IMAGE_REQUIRED = "Image required",
+    IMAGE_UPLOADED = "Image upload successfully",
+    IMAGE_ONLY = "This file format is not acceptable",
 }
