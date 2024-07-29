@@ -75,3 +75,7 @@ export enum GENERIC_MESSAGES {
     NOT_ALLOWED = "You are not allowed to perform this action",
     INVALID_ID = "Invalid object ID",
 }
+
+export enum IMAGE_MESSAGES {
+    LIST_FETCHED = "Image list fetched",
+}

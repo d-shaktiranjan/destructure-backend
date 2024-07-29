@@ -7,6 +7,7 @@ import {
     imageUpload,
     updateBlog,
 } from "../controllers/blog.controller";
+import { imageList } from "../controllers/images.controller";
 
 // middleware imports
 import { isAdmin, isAuthenticated } from "../middlewares/auth.middleware";
@@ -23,5 +24,6 @@ router.get("/slug/check", checkUniqueSlug);
 router.get("/slug/generate", generateSlug);
 
 router.post("/upload/image", upload.single("image"), imageUpload);
+router.route("/images").get(imageList);
 
 export default router;
