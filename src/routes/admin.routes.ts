@@ -26,6 +26,6 @@ router.get("/slug/generate", generateSlug);
 router
     .route("/images")
     .get(imageList)
-    .post(upload.single("image"), imageUpload);
+    .post(upload.array("images"), imageUpload);
 
 export default router;

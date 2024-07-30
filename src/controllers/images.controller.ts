@@ -17,19 +17,22 @@ export const imageList = asyncWrapper(async (req: Request, res: Response) => {
 });
 
 export const imageUpload = asyncWrapper(async (req: Request, res: Response) => {
-    const file = req.file;
-    if (!file) return errorResponse(res, IMAGE_MESSAGES.IMAGE_REQUIRED);
+    const files = req.files;
+    if (!files || !Array.isArray(files) || files.length == 0)
+        return errorResponse(res, IMAGE_MESSAGES.IMAGE_REQUIRED);
 
-    // allow only images
-    if (!ALLOWED_IMAGE_MIMETYPE.includes(file.mimetype)) {
-        unlink(file.path);
-        return errorResponse(res, IMAGE_MESSAGES.IMAGE_ONLY, 406);
-    }
-
+    const urls: string[] = [];
     const host = req.protocol + "://" + req.get("host");
-    const url = `${host}/${file.path.replace("public/", "")}`;
+    files.forEach((file) => {
+        // allow only images
+        if (!ALLOWED_IMAGE_MIMETYPE.includes(file.mimetype)) {
+            unlink(file.path);
+            return errorResponse(res, IMAGE_MESSAGES.IMAGE_ONLY, 406);
+        }
 
-    return successResponse(res, IMAGE_MESSAGES.IMAGE_UPLOADED, 201, {
-        url,
+        const url = `${host}/${file.path.replace("public/", "")}`;
+        urls.push(url);
     });
+
+    return successResponse(res, IMAGE_MESSAGES.IMAGE_UPLOADED, 201, urls);
 });

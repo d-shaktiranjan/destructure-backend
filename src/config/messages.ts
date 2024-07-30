@@ -76,6 +76,6 @@ export enum GENERIC_MESSAGES {
 export enum IMAGE_MESSAGES {
     LIST_FETCHED = "Image list fetched",
     IMAGE_REQUIRED = "Image required",
-    IMAGE_UPLOADED = "Image upload successfully",
+    IMAGE_UPLOADED = "Images uploaded successfully",
     IMAGE_ONLY = "This file format is not acceptable",
 }
