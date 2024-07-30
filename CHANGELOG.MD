@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.25
+
+### Release Date- 30th Jul 24
+
+#### Added
+
+-   multiple image upload support.
+
 ## 0.1.24
 
 ### Release Date- 29th Jul 24
