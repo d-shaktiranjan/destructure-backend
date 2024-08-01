@@ -12,8 +12,12 @@
         "format_check": "prettier ./src --check",
         "spell": "cspell lint ./src/"
     },
-    "keywords": [],
-    "author": "",
+    "keywords": [
+        "NodeJS",
+        "Express",
+        "MongoDB"
+    ],
+    "author": "Shakti Ranjan Debata",
     "license": "ISC",
     "dependencies": {
         "cookie-parser": "^1.4.6",
