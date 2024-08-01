@@ -2,6 +2,60 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.25
+
+### Release Date- 30th Jul 24
+
+#### Added
+
+-   multiple image upload support.
+
+## 0.1.24
+
+### Release Date- 29th Jul 24
+
+#### Added
+
+-   image list route.
+
+#### Changed
+
+-   upload image route.
+
+#### Fixed
+
+-   route in logger.
+
+## 0.1.23
+
+### Release Date- 28th Jul 24
+
+#### Added
+
+-   api logger.
+-   env variable to control log to store in DB.
+-   colors into api logging.
+
+## 0.1.22
+
+### Release Date- 25th Jul 24
+
+#### Removed
+
+-   pagination support from blog list.
+
+## 0.1.21
+
+### Release Date- 22th Jul 24
+
+#### Refactor
+
+-   `/admin` routes.
+
+#### Fixed
+
+-   `createBlog` controller.
+
 ## 0.1.20
 
 ### Release Date- 20th Jul 24

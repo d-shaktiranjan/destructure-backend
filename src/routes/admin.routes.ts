@@ -4,9 +4,9 @@ import {
     createBlog,
     generateSlug,
     getBlogListAdmin,
-    imageUpload,
     updateBlog,
 } from "../controllers/blog.controller";
+import { imageList, imageUpload } from "../controllers/images.controller";
 
 // middleware imports
 import { isAdmin, isAuthenticated } from "../middlewares/auth.middleware";
@@ -16,17 +16,16 @@ const router = Router();
 router.use(isAuthenticated, isAdmin);
 
 // blog routes
-const blogRouter = Router();
-blogRouter.post("/create", createBlog);
-blogRouter.get("/", getBlogListAdmin);
-blogRouter.put("/update", updateBlog);
-blogRouter.post("/image-upload", upload.single("image"), imageUpload);
+router.route("/blog").post(createBlog).get(getBlogListAdmin).put(updateBlog);
 
 // blog slug routes
-blogRouter.get("/slug/check", checkUniqueSlug);
-blogRouter.get("/slug/generate", generateSlug);
+router.get("/slug/check", checkUniqueSlug);
+router.get("/slug/generate", generateSlug);
 
-// route usages
-router.use("/blogs", blogRouter);
+// image routes
+router
+    .route("/images")
+    .get(imageList)
+    .post(upload.array("images"), imageUpload);
 
 export default router;

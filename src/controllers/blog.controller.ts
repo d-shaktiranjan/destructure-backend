@@ -1,12 +1,10 @@
 import { Request, Response } from "express";
 import { isValidObjectId } from "mongoose";
-import { unlink } from "fs/promises";
 
 // middleware
 import asyncWrapper from "../middlewares/asyncWrap.middleware";
 
 // constant
-import { ALLOWED_IMAGE_MIMETYPE } from "../config/constants";
 import {
     BLOG_MESSAGES,
     GENERIC_MESSAGES,
@@ -38,8 +36,7 @@ export const createBlog = asyncWrapper(
     async (req: AuthRequest, res: Response) => {
         // get values from request body & null check
         const { title, description, slug, content, coAuthor } = req.body;
-        const status = nullChecker(res, { title, description, slug, content });
-        if (status !== null) return status;
+        nullChecker(res, { title, description, slug, content });
 
         // fetch coAuthor
         if (coAuthor) {
@@ -154,24 +151,6 @@ export const updateBlog = asyncWrapper(async (req: Request, res: Response) => {
     await blog.save();
 
     return successResponse(res, BLOG_MESSAGES.UPDATED, 202, blog);
-});
-
-export const imageUpload = asyncWrapper(async (req: Request, res: Response) => {
-    const file = req.file;
-    if (!file) return errorResponse(res, BLOG_MESSAGES.IMAGE_REQUIRED);
-
-    // allow only images
-    if (!ALLOWED_IMAGE_MIMETYPE.includes(file.mimetype)) {
-        unlink(file.path);
-        return errorResponse(res, BLOG_MESSAGES.IMAGE_ONLY, 406);
-    }
-
-    const host = req.protocol + "://" + req.get("host");
-    const url = `${host}/${file.path.replace("public/", "")}`;
-
-    return successResponse(res, BLOG_MESSAGES.IMAGE_UPLOADED, 201, {
-        url,
-    });
 });
 
 export const coAuthorList = asyncWrapper(

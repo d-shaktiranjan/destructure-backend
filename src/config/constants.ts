@@ -4,6 +4,7 @@ export const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017";
 export const DEBUG: boolean = process.env.DEBUG === "true";
 export const JWT_SECRET: string = process.env.JWT_SECRET || "";
 export const AUTH_TOKEN_EXPIRY: string = process.env.AUTH_TOKEN_EXPIRY || "3d";
+export const IS_STORE_LOG = process.env.IS_STORE_LOG == "true";
 
 // google oAuth constants
 export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
