@@ -35,7 +35,7 @@ import {
 export const createBlog = aw(async (req: AuthRequest, res: Response) => {
     // get values from request body & null check
     const { title, description, slug, content, coAuthor } = req.body;
-    nullChecker(res, { title, description, slug, content });
+    nullChecker({ title, description, slug, content });
 
     // fetch coAuthor
     if (coAuthor) {
@@ -84,7 +84,7 @@ export const getBlogDetails = aw(async (req: AuthRequest, res: Response) => {
 
 export const updateBlog = aw(async (req: Request, res: Response) => {
     const { _id } = req.body;
-    nullChecker(res, { _id });
+    nullChecker({ _id });
 
     if (!isValidObjectId(_id))
         return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
@@ -158,7 +158,7 @@ export const coAuthorList = aw(async (req: AuthRequest, res: Response) => {
 
 export const checkUniqueSlug = aw(async (req: Request, res: Response) => {
     const slug = req.query.slug as string;
-    nullChecker(res, { slug });
+    nullChecker({ slug });
 
     if (await isSlugUniqueUtil(slug))
         return successResponse(res, BLOG_MESSAGES.SLUG_UNIQUE, 200, {
@@ -170,7 +170,7 @@ export const checkUniqueSlug = aw(async (req: Request, res: Response) => {
 
 export const generateSlug = aw(async (req: Request, res: Response) => {
     const title = req.query.title as string;
-    nullChecker(res, { title });
+    nullChecker({ title });
 
     return successResponse(res, BLOG_MESSAGES.SLUG_GENERATED, 200, {
         slug: await generateSlugUntil(title),
@@ -179,7 +179,7 @@ export const generateSlug = aw(async (req: Request, res: Response) => {
 
 export const blogStats = aw(async (req: Request, res: Response) => {
     const slug = req.query.slug as string;
-    nullChecker(res, { slug });
+    nullChecker({ slug });
 
     // fetch blog details
     const blog = await Blog.aggregate([

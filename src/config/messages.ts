@@ -71,6 +71,8 @@ export enum USER_MESSAGES {
 export enum GENERIC_MESSAGES {
     NOT_ALLOWED = "You are not allowed to perform this action",
     INVALID_ID = "Invalid object ID",
+    FIELD_ERROR = "Some field errors",
+    KEY_MISSING_OR_NULL = "This field is missing or null value provided",
 }
 
 export enum IMAGE_MESSAGES {

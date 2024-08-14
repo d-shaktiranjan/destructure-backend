@@ -15,7 +15,7 @@ import { getCommentService } from "../services/comment.service";
 
 export const addComment = aw(async (req: AuthRequest, res: Response) => {
     const { blog, content } = req.body;
-    nullChecker(res, { blog, content });
+    nullChecker({ blog, content });
 
     // fetch blog
     const blogObject = await getBlogById(res, blog);
@@ -33,7 +33,7 @@ export const addComment = aw(async (req: AuthRequest, res: Response) => {
 
 export const removeComment = aw(async (req: AuthRequest, res: Response) => {
     const { _id } = req.query;
-    nullChecker(res, { _id });
+    nullChecker({ _id });
 
     // find the comment on Db
     const comment = await Comment.findById(_id);
@@ -50,7 +50,7 @@ export const removeComment = aw(async (req: AuthRequest, res: Response) => {
 
 export const updateComment = aw(async (req: AuthRequest, res: Response) => {
     const { _id, content } = req.body;
-    nullChecker(res, { _id, content });
+    nullChecker({ _id, content });
 
     if (!isValidObjectId(_id))
         return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
@@ -77,7 +77,7 @@ export const updateComment = aw(async (req: AuthRequest, res: Response) => {
 
 export const getComments = aw(async (req: AuthRequest, res: Response) => {
     const blog = req.query.blog as string;
-    nullChecker(res, { blog });
+    nullChecker({ blog });
     if (!isValidObjectId(blog))
         return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
 
@@ -91,7 +91,7 @@ export const getComments = aw(async (req: AuthRequest, res: Response) => {
 
 export const getReplyList = aw(async (req: AuthRequest, res: Response) => {
     const _id = req.query._id as string;
-    nullChecker(res, { _id });
+    nullChecker({ _id });
     if (!isValidObjectId(_id))
         return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
 
@@ -104,7 +104,7 @@ export const getReplyList = aw(async (req: AuthRequest, res: Response) => {
 
 export const addReply = aw(async (req: AuthRequest, res: Response) => {
     const { _id, content } = req.body;
-    nullChecker(res, { _id, content });
+    nullChecker({ _id, content });
     if (!isValidObjectId(_id))
         return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
 
@@ -126,7 +126,7 @@ export const addReply = aw(async (req: AuthRequest, res: Response) => {
 
 export const softDelete = aw(async (req: Request, res: Response) => {
     const { _id } = req.query;
-    nullChecker(res, { _id });
+    nullChecker({ _id });
 
     if (!isValidObjectId(_id))
         return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);

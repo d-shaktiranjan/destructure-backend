@@ -23,7 +23,7 @@ import { errorResponse, successResponse } from "../utils/apiResponse.util";
 
 export const reaction = aw(async (req: AuthRequest, res: Response) => {
     const { _id, reaction, to } = req.body;
-    nullChecker(res, { _id, to });
+    nullChecker({ _id, to });
 
     // validate to
     if (!["COMMENT", "BLOG"].includes(to)) return errorResponse(res, "");
