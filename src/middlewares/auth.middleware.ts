@@ -3,7 +3,7 @@ import { Response, NextFunction } from "express";
 import { verify } from "jsonwebtoken";
 
 import User from "../models/User.model";
-import asyncWrapper from "./asyncWrap.middleware";
+import aw from "./asyncWrap.middleware";
 
 import { errorResponse } from "../utils/apiResponse.util";
 import { JWT_SECRET } from "../config/constants";
@@ -11,7 +11,7 @@ import { AUTH_MESSAGES } from "../config/messages";
 import { AuthRequest } from "../libs/AuthRequest.lib";
 import { UserDocument } from "../libs/Documents.lib";
 
-export const isAuthenticated = asyncWrapper(
+export const isAuthenticated = aw(
     async (req: AuthRequest, res: Response, next: NextFunction) => {
         const user = (await decodeToken(req, res)) as UserDocument;
         if (!user) return errorResponse(res, AUTH_MESSAGES.MISSING_TOKEN);
@@ -21,7 +21,7 @@ export const isAuthenticated = asyncWrapper(
     },
 );
 
-export const allowBoth = asyncWrapper(
+export const allowBoth = aw(
     async (req: AuthRequest, res: Response, next: NextFunction) => {
         const user = (await decodeToken(req, res)) as UserDocument;
         if (user) req.user = user;
