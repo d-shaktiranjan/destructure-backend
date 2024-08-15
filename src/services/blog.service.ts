@@ -75,7 +75,7 @@ export const getBlogDetailsService = async (
 ) => {
     // collect slug from query
     const slug = req.query.slug as string;
-    nullChecker(res, { slug });
+    nullChecker({ slug });
 
     const searchFilter: { slug: string; isPublic?: boolean } = {
         slug,

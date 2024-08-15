@@ -1,7 +1,7 @@
 import { Response } from "express";
 
 // middleware, model & lib imports
-import asyncWrapper from "../middlewares/asyncWrap.middleware";
+import aw from "../middlewares/asyncWrap.middleware";
 import { AuthRequest } from "../libs/AuthRequest.lib";
 import Blog from "../models/Blog.model";
 
@@ -10,9 +10,9 @@ import { BLOG_MESSAGES, SEARCH_MESSAGES } from "../config/messages";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
 import nullChecker from "../utils/nullChecker.util";
 
-export const search = asyncWrapper(async (req: AuthRequest, res: Response) => {
+export const search = aw(async (req: AuthRequest, res: Response) => {
     const query = req.query.query as string;
-    nullChecker(res, { query });
+    nullChecker({ query });
 
     const regex = new RegExp(query, "i");
     const blogs = await Blog.find({
@@ -45,7 +45,7 @@ export const getSearchHistory = (req: AuthRequest, res: Response) => {
 
 export const deleteSearchHistory = (req: AuthRequest, res: Response) => {
     const _id = req.query._id as string;
-    nullChecker(res, { _id });
+    nullChecker({ _id });
 
     // get the index of the query
     const user = req.user;
@@ -60,28 +60,23 @@ export const deleteSearchHistory = (req: AuthRequest, res: Response) => {
     return successResponse(res, SEARCH_MESSAGES.HISTORY_DELETED);
 };
 
-export const linkBlogInSearch = asyncWrapper(
-    async (req: AuthRequest, res: Response) => {
-        const { _id, blog } = req.body;
-        nullChecker(res, { _id, blog });
+export const linkBlogInSearch = aw(async (req: AuthRequest, res: Response) => {
+    const { _id, blog } = req.body;
+    nullChecker({ _id, blog });
 
-        // get the index of the query
-        const user = req.user;
-        const index = user?.searches.findIndex(
-            (item) => String(item._id) === _id,
-        );
-        if (index === undefined || index < 0)
-            return errorResponse(res, SEARCH_MESSAGES.NOT_FOUND);
+    // get the index of the query
+    const user = req.user;
+    const index = user?.searches.findIndex((item) => String(item._id) === _id);
+    if (index === undefined || index < 0)
+        return errorResponse(res, SEARCH_MESSAGES.NOT_FOUND);
 
-        // find the blog
-        const blogObject = await Blog.findOne({ slug: blog });
-        if (!blogObject)
-            return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND);
+    // find the blog
+    const blogObject = await Blog.findOne({ slug: blog });
+    if (!blogObject) return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND);
 
-        // update the search object
-        user!.searches[index].blog = blogObject._id;
-        user?.save();
+    // update the search object
+    user!.searches[index].blog = blogObject._id;
+    user?.save();
 
-        return successResponse(res, SEARCH_MESSAGES.LINK_BLOG_IN_QUERY);
-    },
-);
+    return successResponse(res, SEARCH_MESSAGES.LINK_BLOG_IN_QUERY);
+});
