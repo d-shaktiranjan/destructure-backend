@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { isValidObjectId } from "mongoose";
 
 // middleware
-import asyncWrapper from "../middlewares/asyncWrap.middleware";
+import aw from "../middlewares/asyncWrap.middleware";
 
 // constant
 import {
@@ -32,65 +32,59 @@ import {
     reactionLookup,
 } from "../utils/aggregate.util";
 
-export const createBlog = asyncWrapper(
-    async (req: AuthRequest, res: Response) => {
-        // get values from request body & null check
-        const { title, description, slug, content, coAuthor } = req.body;
-        nullChecker(res, { title, description, slug, content });
+export const createBlog = aw(async (req: AuthRequest, res: Response) => {
+    // get values from request body & null check
+    const { title, description, slug, content, coAuthor } = req.body;
+    nullChecker({ title, description, slug, content });
 
-        // fetch coAuthor
-        if (coAuthor) {
-            if (!isValidObjectId(coAuthor))
-                return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
+    // fetch coAuthor
+    if (coAuthor) {
+        if (!isValidObjectId(coAuthor))
+            return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
 
-            const coAuthorObj = await User.findById(coAuthor);
-            if (!coAuthorObj)
-                return errorResponse(res, USER_MESSAGES.NOT_FOUND);
+        const coAuthorObj = await User.findById(coAuthor);
+        if (!coAuthorObj) return errorResponse(res, USER_MESSAGES.NOT_FOUND);
 
-            if (coAuthorObj._id === req.user?._id)
-                return errorResponse(res, BLOG_MESSAGES.AUTHORSHIP);
-        }
+        if (coAuthorObj._id === req.user?._id)
+            return errorResponse(res, BLOG_MESSAGES.AUTHORSHIP);
+    }
 
-        // check existing blogObject
-        const existingBlog = await Blog.findOne({
-            $or: [{ title }, { slug }, { description }],
-        });
-        if (existingBlog)
-            return errorResponse(res, BLOG_MESSAGES.ALREADY_EXITS);
+    // check existing blogObject
+    const existingBlog = await Blog.findOne({
+        $or: [{ title }, { slug }, { description }],
+    });
+    if (existingBlog) return errorResponse(res, BLOG_MESSAGES.ALREADY_EXITS);
 
-        // create new blogObject
-        const newBlog = new Blog({
-            title,
-            description,
-            slug,
-            content,
-            coAuthor,
-            author: req?.user?._id,
-        });
-        await newBlog.save();
+    // create new blogObject
+    const newBlog = new Blog({
+        title,
+        description,
+        slug,
+        content,
+        coAuthor,
+        author: req?.user?._id,
+    });
+    await newBlog.save();
 
-        return successResponse(res, BLOG_MESSAGES.CREATED, 201, newBlog);
-    },
-);
+    return successResponse(res, BLOG_MESSAGES.CREATED, 201, newBlog);
+});
 
-export const getBlogList = asyncWrapper(async (req: Request, res: Response) =>
+export const getBlogList = aw(async (req: Request, res: Response) =>
     getBlogListService(req, res, false),
 );
 
-export const getBlogListAdmin = asyncWrapper(
-    async (req: Request, res: Response) => getBlogListService(req, res, true),
+export const getBlogListAdmin = aw(async (req: Request, res: Response) =>
+    getBlogListService(req, res, true),
 );
 
-export const getBlogDetails = asyncWrapper(
-    async (req: AuthRequest, res: Response) => {
-        if (req.user?.isAdmin) return getBlogDetailsService(req, res, true);
-        return getBlogDetailsService(req, res, false);
-    },
-);
+export const getBlogDetails = aw(async (req: AuthRequest, res: Response) => {
+    if (req.user?.isAdmin) return getBlogDetailsService(req, res, true);
+    return getBlogDetailsService(req, res, false);
+});
 
-export const updateBlog = asyncWrapper(async (req: Request, res: Response) => {
+export const updateBlog = aw(async (req: Request, res: Response) => {
     const { _id } = req.body;
-    nullChecker(res, { _id });
+    nullChecker({ _id });
 
     if (!isValidObjectId(_id))
         return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
@@ -153,50 +147,39 @@ export const updateBlog = asyncWrapper(async (req: Request, res: Response) => {
     return successResponse(res, BLOG_MESSAGES.UPDATED, 202, blog);
 });
 
-export const coAuthorList = asyncWrapper(
-    async (req: AuthRequest, res: Response) => {
-        const adminList = await User.find({
-            isAdmin: true,
-            _id: { $ne: req.user?._id },
-        }).select("_id name picture");
+export const coAuthorList = aw(async (req: AuthRequest, res: Response) => {
+    const adminList = await User.find({
+        isAdmin: true,
+        _id: { $ne: req.user?._id },
+    }).select("_id name picture");
 
-        return successResponse(
-            res,
-            BLOG_MESSAGES.CO_AUTHOR_LIST,
-            200,
-            adminList,
-        );
-    },
-);
+    return successResponse(res, BLOG_MESSAGES.CO_AUTHOR_LIST, 200, adminList);
+});
 
-export const checkUniqueSlug = asyncWrapper(
-    async (req: Request, res: Response) => {
-        const slug = req.query.slug as string;
-        nullChecker(res, { slug });
-
-        if (await isSlugUniqueUtil(slug))
-            return successResponse(res, BLOG_MESSAGES.SLUG_UNIQUE, 200, {
-                isUnique: true,
-            });
-
-        return errorResponse(res, BLOG_MESSAGES.SLUG_NOT_UNIQUE, 409);
-    },
-);
-
-export const generateSlug = asyncWrapper(
-    async (req: Request, res: Response) => {
-        const title = req.query.title as string;
-        nullChecker(res, { title });
-
-        return successResponse(res, BLOG_MESSAGES.SLUG_GENERATED, 200, {
-            slug: await generateSlugUntil(title),
-        });
-    },
-);
-
-export const blogStats = asyncWrapper(async (req: Request, res: Response) => {
+export const checkUniqueSlug = aw(async (req: Request, res: Response) => {
     const slug = req.query.slug as string;
-    nullChecker(res, { slug });
+    nullChecker({ slug });
+
+    if (await isSlugUniqueUtil(slug))
+        return successResponse(res, BLOG_MESSAGES.SLUG_UNIQUE, 200, {
+            isUnique: true,
+        });
+
+    return errorResponse(res, BLOG_MESSAGES.SLUG_NOT_UNIQUE, 409);
+});
+
+export const generateSlug = aw(async (req: Request, res: Response) => {
+    const title = req.query.title as string;
+    nullChecker({ title });
+
+    return successResponse(res, BLOG_MESSAGES.SLUG_GENERATED, 200, {
+        slug: await generateSlugUntil(title),
+    });
+});
+
+export const blogStats = aw(async (req: Request, res: Response) => {
+    const slug = req.query.slug as string;
+    nullChecker({ slug });
 
     // fetch blog details
     const blog = await Blog.aggregate([
@@ -218,7 +201,7 @@ export const blogStats = asyncWrapper(async (req: Request, res: Response) => {
     return successResponse(res, BLOG_MESSAGES.STATS_FETCHED, 200, blog[0]);
 });
 
-export const slugList = asyncWrapper(async (req: Request, res: Response) => {
+export const slugList = aw(async (req: Request, res: Response) => {
     const slugList = (await Blog.find({ isPublic: true })).map(
         (blog) => blog.slug,
     );
