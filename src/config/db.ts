@@ -8,6 +8,7 @@ const connectToDB = () => {
         .catch((error) => {
             console.log(DB_MESSAGES.FAILED);
             console.log(error);
+            process.exit();
         });
 };
 export default connectToDB;
