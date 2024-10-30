@@ -10,6 +10,8 @@ USER node
 
 COPY --chown=node:node . .
 
+RUN [ ! -f .env ] && cp .env.sample .env || echo ".env already exists."
+
 RUN npm install
 RUN npm run build
 
