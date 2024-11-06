@@ -4,7 +4,7 @@
     "description": "Destructure app backend",
     "main": "src/index.ts",
     "scripts": {
-        "start": "bun src/index.js",
+        "start": "bun src/index.ts",
         "dev": "nodemon --exec bun src/index.ts",
         "lint": "eslint ./src/",
         "format": "prettier ./src --write",

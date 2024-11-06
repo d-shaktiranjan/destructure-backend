@@ -1,21 +1,19 @@
-FROM node:20.13.1-alpine
+FROM oven/bun:1.1.33
 
-RUN mkdir -p /usr/src/destructure && chown -R node:node /usr/src/destructure
+RUN mkdir -p /usr/src/destructure && chown -R bun:bun /usr/src/destructure
 
 WORKDIR /usr/src/destructure
 
-COPY package.json ./
+COPY package.json bun.lockb ./
 
-USER node
+USER bun
 
-COPY --chown=node:node . .
+COPY --chown=bun:bun . .
 
 RUN [ ! -f .env ] && cp .env.sample .env || echo ".env already exists."
 
-RUN npm install
-RUN npm run build
-
+RUN bun i
 
 EXPOSE 8000
 
-CMD [ "npm", "start" ]
+CMD [ "bun", "start" ]
