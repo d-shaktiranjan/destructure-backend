@@ -10,25 +10,25 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version-file: .nvmrc
+          node-version-file: .bun-version
 
       - name: Install dependencies
         run: |
-          npm i && echo "All dependency installed successfully ✅"
-      
+          bun i && echo "All dependency installed successfully ✅"
+
       - name: Format Checking
         run: |
-          npm run format_check && echo "Congrats your code is well formatted 🌸"
+          bun format_check && echo "Congrats your code is well formatted 🌸"
 
       - name: Spell Checking
         run: |
-          npm run spell && echo "Congrats no spelling mistake in your code 😊"
+          bun spell && echo "Congrats no spelling mistake in your code 😊"
 
       - name: ESLint Checking
         run: |
-          npm run lint && echo "Congrats your code passes the ESLint check 👍"
+          bun lint && echo "Congrats your code passes the ESLint check 👍"
