@@ -135,7 +135,7 @@ export const updateBlog = aw(async (req: Request, res: Response) => {
             if (!coAuthor.isAdmin)
                 return errorResponse(res, BLOG_MESSAGES.CO_AUTHOR_ADD_FAILED);
 
-            if (coAuthor.__v === blog._id)
+            if (coAuthor._id === blog.author)
                 return errorResponse(res, BLOG_MESSAGES.AUTHORSHIP);
         }
 
