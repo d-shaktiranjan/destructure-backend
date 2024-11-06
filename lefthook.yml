@@ -1,13 +1,13 @@
 pre-commit:
   commands:
     spell:
-      ren: npm run spell
+      ren: bun spell
     format:
-      run: npm run format_check
+      run: bun format_check
     lint:
-      run: npm run lint
+      run: bun lint
 
 commit-msg:
   commands:
     validate:
-      run: npx ts-node ./.git_hooks/commitMessage.ts
+      run: bun ./.git_hooks/commitMessage.ts

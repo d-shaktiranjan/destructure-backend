@@ -18,17 +18,16 @@ docker-compose down
 
 ## Manual installation
 
-Install [Node](https://nodejs.org/en) or [NVM](https://github.com/nvm-sh/nvm?tab=readme-ov-file#installing-and-updating)  
-If you installed NVM then install Node JS by running following command
+Install [Bun](https://bun.sh/) by run the following command.
 
 ```bash
-nvm use
+curl -fsSL https://bun.sh/install | bash
 ```
 
 Now, install the packages
 
 ```bash
-npm install
+bun install
 ```
 
 Then create .env file by running following command & add values
@@ -40,7 +39,7 @@ cp .env.sample .env
 And
 
 ```bash
-npm run dev
+bun dev
 ```
 
 ### API docs and figma design.
