@@ -38,7 +38,16 @@ export interface UserDocument extends Document {
     email: string;
     picture?: string;
     isAdmin: boolean;
+    searches: SearchDocument[];
     generateAuthToken: () => string;
+    storeSearchResult: (query: string) => void;
+}
+
+export interface SearchDocument extends Document {
+    readonly _id: Schema.Types.ObjectId;
+    query: string;
+    blog?: Schema.Types.ObjectId;
+    createdAt: Date;
 }
 
 export interface LoggerDocument extends Document {

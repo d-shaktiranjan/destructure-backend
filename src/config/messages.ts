@@ -75,6 +75,14 @@ export enum GENERIC_MESSAGES {
     KEY_MISSING_OR_NULL = "This field is missing or null value provided",
 }
 
+export enum SEARCH_MESSAGES {
+    RESULT_FETCHED = "Search result fetched",
+    HISTORY_FETCHED = "Search history fetched",
+    NOT_FOUND = "Search result not found",
+    HISTORY_DELETED = "Search history deleted",
+    LINK_BLOG_IN_QUERY = "Blog linked with the query",
+}
+
 export enum IMAGE_MESSAGES {
     LIST_FETCHED = "Image list fetched",
     IMAGE_REQUIRED = "Image required",

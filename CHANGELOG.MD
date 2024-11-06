@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.0.0
+
+### Release Date- 6th Nov 24
+
+#### Added
+
+-   search feature.
+
 ## 0.1.25
 
 ### Release Date- 30th Jul 24

@@ -43,8 +43,6 @@ And
 npm run dev
 ```
 
-**MUST** Follow [Code of conduct](./docs/COC.md).
-
 ### API docs and figma design.
 
 [https://postman.destructure.in](https://postman.destructure.in)
@@ -52,3 +50,5 @@ npm run dev
 [https://figma.destructure.in](https://figma.destructure.in)
 
 (We don’t implement this design on our site for specific reasons, but feel free to take a look.)
+
+**MUST** Follow [Code of conduct](./docs/COC.md).
