@@ -20,8 +20,8 @@ const apiMetaData = {
     tag: process.env.TAG,
     host: "",
     runningBranch: getRunningBranch(),
-    documentation: null,
-    license: null,
+    documentation: "https://postman.destructure.in",
+    license: "CC BY-NC-ND 4.0",
 };
 
 export default apiMetaData;
