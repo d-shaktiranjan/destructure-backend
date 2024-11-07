@@ -51,4 +51,4 @@ npm run dev
 
 (We don’t implement this design on our site for specific reasons, but feel free to take a look.)
 
-**MUST** Follow [Code of conduct](./docs/COC.md).
+#### You can also check out the [bun version](https://github.com/d-shaktiranjan/destructure-backend/tree/main-bun).

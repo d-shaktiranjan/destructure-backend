@@ -1,8 +1,22 @@
-node_modules
-dist
-.env
-temp/
+# Ignore node_modules directory
+node_modules/
 
-# public dir
+# Ingnore build
+dist/
+
+# Ignore environment variables file
+.env
+
+# Temp files
+temp/*
+
+# Public dir
 public/images/*
 !public/images/.gitkeep
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+
+# Ignore macOS system files
+.DS_Store
