@@ -34,4 +34,4 @@ This code of conduct outlines the guidelines and expectations for contributors p
 -   **MUST:** Make atomic commit.
 -   **MUST:** Be follow branch naming conventions.
 -   **MUST:** Be follow commit message conventions.
--   **MUST:** Follow [Git Conduct](./gitConduct.md).
+-   **MUST:** Follow [Git Conduct](./docs/gitConduct.md).

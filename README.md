@@ -50,5 +50,3 @@ npm run dev
 [https://figma.destructure.in](https://figma.destructure.in)
 
 (We don’t implement this design on our site for specific reasons, but feel free to take a look.)
-
-**MUST** Follow [Code of conduct](./docs/COC.md).
