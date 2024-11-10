@@ -11,7 +11,8 @@ const getRunningBranch = (): string => {
         const file = readFileSync(".git/HEAD", "utf8");
         return file.replace("ref: refs/heads/", "").replaceAll("\n", "");
     } catch (error) {
-        return "unknown";
+        if (error instanceof Error) return error.message;
+        return "Error";
     }
 };
 
