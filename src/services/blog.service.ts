@@ -4,7 +4,11 @@ import Blog from "../models/Blog.model";
 import { AuthRequest } from "../libs/AuthRequest.lib";
 
 import { BLOG_MESSAGES } from "../config/messages";
-import { errorResponse, successResponse } from "../utils/apiResponse.util";
+import {
+    errorResponse,
+    noContentResponse,
+    successResponse,
+} from "../utils/apiResponse.util";
 import nullChecker from "../utils/nullChecker.util";
 import {
     reactionLookup,
@@ -64,6 +68,7 @@ export const getBlogListService = async (
             },
         },
     ]).sort(sort);
+    if (allBlogs.length === 0) return noContentResponse(res);
 
     return successResponse(res, BLOG_MESSAGES.ALL_FETCHED, 200, allBlogs);
 };
