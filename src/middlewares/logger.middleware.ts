@@ -40,7 +40,7 @@ const logger = (req: Request, res: Response, next: NextFunction) => {
                 method,
                 headers: req.headers,
                 query: req.query,
-                body: req.body,
+                body: req.body || {},
                 response: JSON.parse((responseBody as string) || "{}"),
             });
             log.save();
