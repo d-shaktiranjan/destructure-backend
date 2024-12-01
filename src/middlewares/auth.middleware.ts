@@ -5,16 +5,16 @@ import { verify } from "jsonwebtoken";
 import User from "../models/User.model";
 import aw from "./asyncWrap.middleware";
 
-import { errorResponse } from "../utils/apiResponse.util";
 import { JWT_SECRET } from "../config/constants";
 import { AUTH_MESSAGES } from "../config/messages";
 import { AuthRequest } from "../libs/AuthRequest.lib";
 import { UserDocument } from "../libs/Documents.lib";
+import ApiError from "../libs/ApiError.lib";
 
 export const isAuthenticated = aw(
     async (req: AuthRequest, res: Response, next: NextFunction) => {
-        const user = (await decodeToken(req, res)) as UserDocument;
-        if (!user) return errorResponse(res, AUTH_MESSAGES.MISSING_TOKEN);
+        const user = (await decodeToken(req)) as UserDocument;
+        if (!user) throw new ApiError(AUTH_MESSAGES.MISSING_TOKEN);
 
         req.user = user;
         next();
@@ -23,7 +23,7 @@ export const isAuthenticated = aw(
 
 export const allowBoth = aw(
     async (req: AuthRequest, res: Response, next: NextFunction) => {
-        const user = (await decodeToken(req, res)) as UserDocument;
+        const user = (await decodeToken(req)) as UserDocument;
         if (user) req.user = user;
         next();
     },
@@ -36,15 +36,15 @@ export const isAdmin = (
 ) => {
     const user = req.user;
     // check login status
-    if (!user) return errorResponse(res, AUTH_MESSAGES.NOT_AUTHENTICATED, 401);
+    if (!user) throw new ApiError(AUTH_MESSAGES.NOT_AUTHENTICATED, 401);
 
     // check admin status
-    if (!user.isAdmin) return errorResponse(res, AUTH_MESSAGES.NOT_ADMIN, 401);
+    if (!user.isAdmin) throw new ApiError(AUTH_MESSAGES.NOT_ADMIN, 401);
 
     next();
 };
 
-async function decodeToken(req: AuthRequest, res: Response) {
+async function decodeToken(req: AuthRequest) {
     // collect JWT from header
     const authToken = req.header("Authorization")?.replace("Bearer ", "");
     if (!authToken) return null;
@@ -57,11 +57,13 @@ async function decodeToken(req: AuthRequest, res: Response) {
 
         // fetch user from DB
         const user = await User.findById(decodedValue?._id).select("-__v");
-        if (!user) return errorResponse(res, AUTH_MESSAGES.INVALID_TOKEN);
+        if (!user) throw new ApiError(AUTH_MESSAGES.INVALID_TOKEN);
         return user;
     } catch (error) {
         if (error instanceof Error)
-            return errorResponse(res, AUTH_MESSAGES.INVALID_TOKEN, 400);
-        return errorResponse(res, AUTH_MESSAGES.INVALID_TOKEN);
+            throw new ApiError(AUTH_MESSAGES.INVALID_TOKEN, 400, {
+                error: error.message,
+            });
+        throw new ApiError(AUTH_MESSAGES.INVALID_TOKEN);
     }
 }
