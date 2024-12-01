@@ -210,11 +210,7 @@ export const slugList = aw(async (req: Request, res: Response) => {
     const slugList = (await Blog.find({ isPublic: true })).map(
         (blog) => blog.slug,
     );
+    if (slugList.length === 0) return noContentResponse(res);
 
-    return successResponse(
-        res,
-        BLOG_MESSAGES.SLUG_LIST_FETCHED,
-        slugList.length === 0 ? 204 : 200,
-        slugList,
-    );
+    return successResponse(res, BLOG_MESSAGES.SLUG_LIST_FETCHED, 200, slugList);
 });
