@@ -60,6 +60,8 @@ async function decodeToken(req: AuthRequest, res: Response) {
         if (!user) return errorResponse(res, AUTH_MESSAGES.INVALID_TOKEN);
         return user;
     } catch (error) {
+        if (error instanceof Error)
+            return errorResponse(res, AUTH_MESSAGES.INVALID_TOKEN, 400);
         return errorResponse(res, AUTH_MESSAGES.INVALID_TOKEN);
     }
 }

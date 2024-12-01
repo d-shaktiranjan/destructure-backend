@@ -12,10 +12,12 @@ COPY --chown=node:node . .
 
 RUN [ ! -f .env ] && cp .env.sample .env || echo ".env already exists."
 
-RUN npm install
-RUN npm run build
+
+RUN corepack enable pnpm
+RUN pnpm i
+RUN pnpm build
 
 
 EXPOSE 8000
 
-CMD [ "npm", "start" ]
+CMD [ "pnpm", "start" ]

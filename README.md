@@ -25,10 +25,16 @@ If you installed NVM then install Node JS by running following command
 nvm use
 ```
 
+Enable [pnpm]()
+
+```bash
+corepack enable pnpm
+```
+
 Now, install the packages
 
 ```bash
-npm install
+pnpm i
 ```
 
 Then create .env file by running following command & add values
@@ -40,7 +46,7 @@ cp .env.sample .env
 And
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 ### API docs and figma design.
