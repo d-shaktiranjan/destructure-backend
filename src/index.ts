@@ -1,9 +1,16 @@
 import "dotenv/config";
 import express, { Response, Request, json, static as static_ } from "express";
-import { PORT, CORS_ORIGINS } from "./config/constants";
-import { APP_MESSAGES } from "./config/messages";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+
+// middlewares imports
+import logger from "./middlewares/logger.middleware";
+import requestBodyMiddleware from "./middlewares/body.middleware";
+
+// config & utils imports
+import { PORT, CORS_ORIGINS } from "./config/constants";
+import { APP_MESSAGES } from "./config/messages";
+import apiMetaData from "./utils/apiMetaData.util";
 
 // connect to DB
 import connectToDB from "./config/db";
@@ -17,18 +24,14 @@ import commentRouter from "./routes/comment.routes";
 import reactRouter from "./routes/react.routes";
 import searchRouter from "./routes/search.routes";
 
-// util imports
-import apiMetaData from "./utils/apiMetaData.util";
-import logger from "./middlewares/logger.middleware";
-
 const app = express();
 
-// middlewares
+// middlewares usages
 app.use(cors({ origin: CORS_ORIGINS }));
 app.use(json());
 app.use(cookieParser());
 app.use(static_("public"));
-
+app.use(requestBodyMiddleware);
 app.use(logger);
 
 // route usages
