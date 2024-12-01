@@ -23,7 +23,11 @@ import {
 } from "../services/blog.service";
 
 // util
-import { errorResponse, successResponse } from "../utils/apiResponse.util";
+import {
+    errorResponse,
+    noContentResponse,
+    successResponse,
+} from "../utils/apiResponse.util";
 import nullChecker from "../utils/nullChecker.util";
 import { generateSlugUntil, isSlugUniqueUtil } from "../utils/blog.util";
 import {
@@ -152,6 +156,7 @@ export const coAuthorList = aw(async (req: AuthRequest, res: Response) => {
         isAdmin: true,
         _id: { $ne: req.user?._id },
     }).select("_id name picture");
+    if (adminList.length === 0) return noContentResponse(res);
 
     return successResponse(res, BLOG_MESSAGES.CO_AUTHOR_LIST, 200, adminList);
 });
@@ -205,11 +210,7 @@ export const slugList = aw(async (req: Request, res: Response) => {
     const slugList = (await Blog.find({ isPublic: true })).map(
         (blog) => blog.slug,
     );
+    if (slugList.length === 0) return noContentResponse(res);
 
-    return successResponse(
-        res,
-        BLOG_MESSAGES.SLUG_LIST_FETCHED,
-        slugList.length === 0 ? 204 : 200,
-        slugList,
-    );
+    return successResponse(res, BLOG_MESSAGES.SLUG_LIST_FETCHED, 200, slugList);
 });

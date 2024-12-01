@@ -2,7 +2,11 @@ import { readdir, unlink } from "fs/promises";
 import { Request, Response } from "express";
 
 import aw from "../middlewares/asyncWrap.middleware";
-import { errorResponse, successResponse } from "../utils/apiResponse.util";
+import {
+    errorResponse,
+    noContentResponse,
+    successResponse,
+} from "../utils/apiResponse.util";
 import { IMAGE_MESSAGES } from "../config/messages";
 import { ALLOWED_IMAGE_MIMETYPE } from "../config/constants";
 
@@ -12,6 +16,7 @@ export const imageList = aw(async (req: Request, res: Response) => {
     const dirList = (await readdir("public/images"))
         .filter((item) => item != ".gitkeep")
         .map((item) => host + item);
+    if (dirList.length === 0) return noContentResponse(res);
 
     return successResponse(res, IMAGE_MESSAGES.LIST_FETCHED, 200, dirList);
 });
