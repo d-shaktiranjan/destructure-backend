@@ -19,7 +19,7 @@ export enum AUTH_MESSAGES {
 }
 
 export enum DB_MESSAGES {
-    CONNECTED = "DB Connected",
+    CONNECTED = "Successfully connected to MongoDB",
     FAILED = "Unable to connect to DB",
 }
 
