@@ -27,10 +27,7 @@ const logger = (req: Request, res: Response, next: NextFunction) => {
         const statusCode = res.statusCode;
 
         const endTime = Date.now();
-        const timeStamp = new Date()
-            .toISOString()
-            .replace(/T/, " ")
-            .replace(/\..+/, "");
+        const timeStamp = new Date().toLocaleString("sv-SE");
         const logMessage = `[${timeStamp}] ${req.protocol}: ${method} ${route} ${statusCode} (${endTime - startTime}ms)`;
 
         if (statusCode >= 500) console.log(colorize(logMessage).bgRed);
