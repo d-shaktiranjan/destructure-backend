@@ -3,6 +3,7 @@ import Logger from "../models/Logger.model";
 import { IS_STORE_LOG } from "../config/constants";
 
 const logger = (req: Request, res: Response, next: NextFunction) => {
+    const startTime = Date.now();
     const originalSend = res.send.bind(res);
 
     let responseBody: string | Buffer = "";
@@ -25,7 +26,13 @@ const logger = (req: Request, res: Response, next: NextFunction) => {
         const route = req.baseUrl + req.url;
         const statusCode = res.statusCode;
 
-        const logMessage = `${method}- ${route} ${statusCode}`;
+        const endTime = Date.now();
+        const timeStamp = new Date()
+            .toISOString()
+            .replace(/T/, " ")
+            .replace(/\..+/, "");
+        const logMessage = `[${timeStamp}] ${req.protocol}: ${method} ${route} ${statusCode} (${endTime - startTime}ms)`;
+
         if (statusCode >= 500) console.log(colorize(logMessage).bgRed);
         else if (statusCode >= 400) console.log(colorize(logMessage).red);
         else if (statusCode >= 300) console.log(colorize(logMessage).cyan);
