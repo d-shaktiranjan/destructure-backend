@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.0.1
+
+### Release Date-22th Dec 24
+
+#### Added
+
+-   time stamp & time taken in logger.
+
 ## 1.0.0
 
 ### Release Date- 6th Nov 24
