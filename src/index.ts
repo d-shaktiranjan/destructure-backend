@@ -20,6 +20,7 @@ import searchRouter from "./routes/search.routes";
 // util imports
 import apiMetaData from "./utils/apiMetaData.util";
 import logger from "./middlewares/logger.middleware";
+import { loggerTest } from "./utils/logger.util";
 
 const app = express();
 
@@ -46,5 +47,5 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.listen(PORT, () => {
-    console.log(APP_MESSAGES.RUNNING);
+    loggerTest(APP_MESSAGES.RUNNING, "INFO");
 });
