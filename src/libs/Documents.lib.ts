@@ -5,6 +5,8 @@ export interface BlogDocument extends Document {
     readonly _id: Schema.Types.ObjectId;
     title: string;
     description: string;
+    banner: string;
+    bannerBlurData: string;
     slug: string;
     content: string;
     author: Schema.Types.ObjectId;
