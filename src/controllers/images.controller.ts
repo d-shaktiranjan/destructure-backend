@@ -27,7 +27,7 @@ export const imageUpload = aw(async (req: Request, res: Response) => {
     if (!files || !Array.isArray(files) || files.length == 0)
         return errorResponse(res, IMAGE_MESSAGES.IMAGE_REQUIRED);
 
-    const urls: { url: string; base: string }[] = [];
+    const urls: string[] = [];
     const host = req.protocol + "://" + req.get("host");
 
     for (const file of files) {
@@ -40,7 +40,7 @@ export const imageUpload = aw(async (req: Request, res: Response) => {
         // generate url & base64
         const url = `${host}/${file.path.replace("public/", "")}`;
         const base = await generateBase64(file.path);
-        urls.push({ url, base });
+        urls.push(`${url}?blurDataURL=${base}`);
     }
 
     return successResponse(res, IMAGE_MESSAGES.IMAGE_UPLOADED, 201, urls);
