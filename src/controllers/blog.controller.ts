@@ -38,8 +38,8 @@ import {
 
 export const createBlog = aw(async (req: AuthRequest, res: Response) => {
     // get values from request body & null check
-    const { title, description, slug, content, coAuthor } = req.body;
-    nullChecker({ title, description, slug, content });
+    const { title, description, slug, content, banner, coAuthor } = req.body;
+    nullChecker({ title, description, slug, content, banner });
 
     // fetch coAuthor
     if (coAuthor) {
@@ -66,6 +66,7 @@ export const createBlog = aw(async (req: AuthRequest, res: Response) => {
         slug,
         content,
         coAuthor,
+        banner,
         author: req?.user?._id,
     });
     await newBlog.save();
@@ -106,6 +107,7 @@ export const updateBlog = aw(async (req: Request, res: Response) => {
         "isPublic",
         "slug",
         "coAuthor",
+        "banner",
     ];
 
     // update fields
