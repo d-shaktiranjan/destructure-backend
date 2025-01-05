@@ -6,7 +6,6 @@ export interface BlogDocument extends Document {
     title: string;
     description: string;
     banner: string;
-    bannerBlurData: string;
     slug: string;
     content: string;
     author: Schema.Types.ObjectId;

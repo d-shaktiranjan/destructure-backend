@@ -13,7 +13,6 @@ const blogSchema = new Schema<BlogDocument>(
             required: true,
         },
         banner: { type: String, required: true },
-        bannerBlurData: { type: String, required: true },
         slug: {
             type: String,
             required: true,
