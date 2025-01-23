@@ -10,7 +10,7 @@
         "lint": "eslint ./src/",
         "format": "prettier ./src --write",
         "format_check": "prettier ./src --check",
-        "spell": "cspell lint ./src/",
+        "spell": "cspell lint .",
         "lefthook": "ts-node ./.git_hooks/commitMessage.ts"
     },
     "keywords": [
@@ -51,5 +51,5 @@
         "typescript": "^5.4.3",
         "typescript-eslint": "^8.13.0"
     },
-    "packageManager": "pnpm@9.12.3"
+    "packageManager": "pnpm@9.15.4"
 }

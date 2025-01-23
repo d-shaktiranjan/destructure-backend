@@ -13,6 +13,6 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - MONGO_URI=mongodb://mongo:27017/destucture
+      - MONGO_URI=mongodb://mongo:27017/destructure
     depends_on:
       - mongo
