@@ -6,5 +6,11 @@
         "lefthook",
         "plaiceholder",
         "ranjan"
+    ],
+    "ignorePaths": [
+        "**/node_modules/**",
+        "**/dist/**",
+        "pnpm-lock.yaml",
+        "eslint.config.mjs"
     ]
 }

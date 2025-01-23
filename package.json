@@ -10,7 +10,7 @@
         "lint": "eslint ./src/",
         "format": "prettier ./src --write",
         "format_check": "prettier ./src --check",
-        "spell": "cspell lint ./src/",
+        "spell": "cspell lint .",
         "lefthook": "ts-node ./.git_hooks/commitMessage.ts"
     },
     "keywords": [
