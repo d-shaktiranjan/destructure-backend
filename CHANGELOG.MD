@@ -2,13 +2,29 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.0.2
+
+### Release Date- 28th Jan 25
+
+#### Added
+
+- `zod` validation.
+
+## 1.0.1
+
+### Release Date- 22th Dec 24
+
+#### Added
+
+- time stamp & time taken in logger.
+
 ## 1.0.0
 
 ### Release Date- 6th Nov 24
 
 #### Added
 
--   search feature.
+- search feature.
 
 ## 0.1.25
 
@@ -16,7 +32,7 @@ All notable changes to this project will be documented in this file.
 
 #### Added
 
--   multiple image upload support.
+- multiple image upload support.
 
 ## 0.1.24
 
@@ -24,15 +40,15 @@ All notable changes to this project will be documented in this file.
 
 #### Added
 
--   image list route.
+- image list route.
 
 #### Changed
 
--   upload image route.
+- upload image route.
 
 #### Fixed
 
--   route in logger.
+- route in logger.
 
 ## 0.1.23
 
@@ -40,9 +56,9 @@ All notable changes to this project will be documented in this file.
 
 #### Added
 
--   api logger.
--   env variable to control log to store in DB.
--   colors into api logging.
+- api logger.
+- env variable to control log to store in DB.
+- colors into api logging.
 
 ## 0.1.22
 
@@ -50,7 +66,7 @@ All notable changes to this project will be documented in this file.
 
 #### Removed
 
--   pagination support from blog list.
+- pagination support from blog list.
 
 ## 0.1.21
 
@@ -58,11 +74,11 @@ All notable changes to this project will be documented in this file.
 
 #### Refactor
 
--   `/admin` routes.
+- `/admin` routes.
 
 #### Fixed
 
--   `createBlog` controller.
+- `createBlog` controller.
 
 ## 0.1.20
 
@@ -70,7 +86,7 @@ All notable changes to this project will be documented in this file.
 
 #### Improved
 
--   error handing.
+- error handing.
 
 ## 0.1.19
 
@@ -78,9 +94,9 @@ All notable changes to this project will be documented in this file.
 
 #### Added
 
--   `isDeleted` field.
--   comment soft delete route & controller.
--   logic that soft deleted comment can't update.
+- `isDeleted` field.
+- comment soft delete route & controller.
+- logic that soft deleted comment can't update.
 
 ## 0.1.18
 
@@ -88,13 +104,13 @@ All notable changes to this project will be documented in this file.
 
 #### Removed
 
--   cookies support.
--   `logout` route & controller.
--   `userInfo` in google callback.
+- cookies support.
+- `logout` route & controller.
+- `userInfo` in google callback.
 
 #### Added
 
--   `picture` in JWT.
+- `picture` in JWT.
 
 ## 0.1.17
 
@@ -102,7 +118,7 @@ All notable changes to this project will be documented in this file.
 
 #### Added
 
--   individual reaction count in blog stats controller.
+- individual reaction count in blog stats controller.
 
 ## 0.1.16
 
@@ -110,7 +126,7 @@ All notable changes to this project will be documented in this file.
 
 #### Added
 
--   route & controller to get public blog's slug list.
+- route & controller to get public blog's slug list.
 
 ## 0.1.15
 
@@ -118,7 +134,7 @@ All notable changes to this project will be documented in this file.
 
 #### Added
 
--   route & controller to get blog stats(reaction, comment).
+- route & controller to get blog stats(reaction, comment).
 
 ## 0.1.14
 
@@ -126,12 +142,12 @@ All notable changes to this project will be documented in this file.
 
 #### Added
 
--   author info in details route.
--   reaction & comment info in details page.
+- author info in details route.
+- reaction & comment info in details page.
 
 #### Changed
 
--   fetch blog details by `slug`.
+- fetch blog details by `slug`.
 
 ## 0.1.13
 
@@ -139,12 +155,12 @@ All notable changes to this project will be documented in this file.
 
 #### Added
 
--   reaction status added in comment & reply list.
--   reaction lookup & addFields function to implement DRY.
+- reaction status added in comment & reply list.
+- reaction lookup & addFields function to implement DRY.
 
 #### Fixed
 
--   reaction status in blog list.
+- reaction status in blog list.
 
 ## 0.1.12
 
@@ -152,15 +168,15 @@ All notable changes to this project will be documented in this file.
 
 #### Added
 
--   reaction support for comment & reply.
+- reaction support for comment & reply.
 
 #### Fixed
 
--   reaction update issue.
+- reaction update issue.
 
 #### Changed
 
--   all documents into one file.
+- all documents into one file.
 
 ## 0.1.11
 
@@ -168,7 +184,7 @@ All notable changes to this project will be documented in this file.
 
 #### Added
 
--   route & controller to reply to a comment.
+- route & controller to reply to a comment.
 
 ## 0.1.10
 
@@ -176,11 +192,11 @@ All notable changes to this project will be documented in this file.
 
 #### Added
 
--   ownership status in comment & reply list.
+- ownership status in comment & reply list.
 
 #### Removed
 
--   `content` from blog list.
+- `content` from blog list.
 
 ## 0.1.9
 
@@ -188,7 +204,7 @@ All notable changes to this project will be documented in this file.
 
 #### Changed
 
--   user aggregate method.
+- user aggregate method.
 
 ## 0.1.8
 
@@ -196,8 +212,8 @@ All notable changes to this project will be documented in this file.
 
 #### Added
 
--   comment list route & controller.
--   reply list route & controller.
+- comment list route & controller.
+- reply list route & controller.
 
 ## 0.1.7
 
@@ -205,8 +221,8 @@ All notable changes to this project will be documented in this file.
 
 #### Added
 
--   unique slug checking route.
--   unique slug creating route.
+- unique slug checking route.
+- unique slug creating route.
 
 ## 0.1.6
 
@@ -214,7 +230,7 @@ All notable changes to this project will be documented in this file.
 
 #### Added
 
--   `totalCount` in blog list.
+- `totalCount` in blog list.
 
 ## 0.1.5
 
@@ -222,7 +238,7 @@ All notable changes to this project will be documented in this file.
 
 #### Added
 
--   `isAdmin` field in jwt.
+- `isAdmin` field in jwt.
 
 ## 0.1.4
 
@@ -230,12 +246,12 @@ All notable changes to this project will be documented in this file.
 
 #### Added
 
--   `isEdited` field in comment.
--   `updateComment` route & controller.
+- `isEdited` field in comment.
+- `updateComment` route & controller.
 
 #### Fixed
 
--   ownership checking issue in comment.
+- ownership checking issue in comment.
 
 ## 0.1.3
 
@@ -243,7 +259,7 @@ All notable changes to this project will be documented in this file.
 
 #### Added
 
--   sort by date & like feature.
+- sort by date & like feature.
 
 ## 0.1.2
 
@@ -251,7 +267,7 @@ All notable changes to this project will be documented in this file.
 
 #### Added
 
--   logic to remove file if it is not acceptable.
+- logic to remove file if it is not acceptable.
 
 ## 0.1.1
 
@@ -259,8 +275,8 @@ All notable changes to this project will be documented in this file.
 
 #### Added
 
--   serving static files logic.
--   file url after success upload.
+- serving static files logic.
+- file url after success upload.
 
 ## 0.1.0
 
@@ -268,9 +284,9 @@ All notable changes to this project will be documented in this file.
 
 #### Added
 
--   `coAuthor` field in blog model.
--   allow `coAuthor` field in create & update.
--   `coAuthor` in blog list.
+- `coAuthor` field in blog model.
+- allow `coAuthor` field in create & update.
+- `coAuthor` in blog list.
 
 ## 0.0.9
 
@@ -278,7 +294,7 @@ All notable changes to this project will be documented in this file.
 
 #### Fixed
 
--   dynamic redirectUri issue.
+- dynamic redirectUri issue.
 
 ## 0.0.8
 
@@ -286,12 +302,12 @@ All notable changes to this project will be documented in this file.
 
 #### Added
 
--   dynamic redirectUri after sign in.
+- dynamic redirectUri after sign in.
 
 #### Changed
 
--   constant.ts file.
--   packages to latest version.
+- constant.ts file.
+- packages to latest version.
 
 ## 0.0.7
 
@@ -299,8 +315,8 @@ All notable changes to this project will be documented in this file.
 
 #### Changed
 
--   response `messages` into a separate file.
--   some import statements.
+- response `messages` into a separate file.
+- some import statements.
 
 ## 0.0.6
 
@@ -308,7 +324,7 @@ All notable changes to this project will be documented in this file.
 
 #### Fixed
 
--   `cors` issues related to cookies.
+- `cors` issues related to cookies.
 
 ## 0.0.5
 
@@ -316,6 +332,6 @@ All notable changes to this project will be documented in this file.
 
 #### Added
 
--   `Comment` model & lib.
--   comment add & remove.
--   CHANGELOG.
+- `Comment` model & lib.
+- comment add & remove.
+- CHANGELOG.

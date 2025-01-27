@@ -1,4 +1,5 @@
 import { Response } from "express";
+import { GENERIC_MESSAGES } from "../config/messages";
 
 const apiResponse = (
     res: Response,
@@ -8,7 +9,7 @@ const apiResponse = (
     metaData: object | null = null,
     isSuccess: boolean = true,
     errors: Record<string, string[]> | null,
-): Response => {
+) => {
     const responseObject = {
         isSuccess,
         message,
@@ -16,7 +17,7 @@ const apiResponse = (
         ...(data && { data }),
         ...(errors && { errors }),
     };
-    return res.status(statusCode).json(responseObject);
+    res.status(statusCode).json(responseObject);
 };
 
 export const successResponse = (
@@ -25,12 +26,14 @@ export const successResponse = (
     statusCode: number = 200,
     data: object | null = null,
     metaData: object | null = null,
-): Response =>
-    apiResponse(res, message, statusCode, data, metaData, true, null);
+) => apiResponse(res, message, statusCode, data, metaData, true, null);
 
 export const errorResponse = (
     res: Response,
     message: string,
     statusCode: number = 400,
     errors: Record<string, string[]> | null = null,
-): Response => apiResponse(res, message, statusCode, null, null, false, errors);
+) => apiResponse(res, message, statusCode, null, null, false, errors);
+
+export const noContentResponse = (res: Response) =>
+    successResponse(res, GENERIC_MESSAGES.NO_CONTENT, 204);

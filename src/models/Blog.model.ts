@@ -1,5 +1,5 @@
-import { BlogDocument } from "../libs/Documents.lib";
 import { Schema, model } from "mongoose";
+import { BlogDocument } from "../libs/Documents.lib";
 
 const blogSchema = new Schema<BlogDocument>(
     {
@@ -12,6 +12,7 @@ const blogSchema = new Schema<BlogDocument>(
             type: String,
             required: true,
         },
+        banner: { type: String, required: true },
         slug: {
             type: String,
             required: true,

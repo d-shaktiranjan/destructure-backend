@@ -1,5 +1,7 @@
+import { readFileSync } from "fs";
 import { Response } from "express";
 import { Schema } from "mongoose";
+import { getPlaiceholder } from "plaiceholder";
 
 import Blog from "../models/Blog.model";
 import { BlogDocument } from "../libs/Documents.lib";
@@ -35,4 +37,10 @@ export const generateSlugUntil = async (title: string): Promise<string> => {
         count++;
     }
     return slug;
+};
+
+export const generateBase64 = async (imagePath: string): Promise<string> => {
+    const file = readFileSync(imagePath);
+    const { base64 } = await getPlaiceholder(file);
+    return base64;
 };

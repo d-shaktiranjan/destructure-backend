@@ -4,7 +4,7 @@ import { DB_MESSAGES } from "./messages";
 
 const connectToDB = () => {
     connect(MONGO_URI)
-        .then(() => console.log(DB_MESSAGES.CONNECTED, MONGO_URI))
+        .then(() => console.log(DB_MESSAGES.CONNECTED))
         .catch((error) => {
             console.log(DB_MESSAGES.FAILED);
             console.log(error);

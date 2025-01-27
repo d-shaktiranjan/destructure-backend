@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 import { sign } from "jsonwebtoken";
 import {
     JWT_SECRET,
-    AUTH_TOKEN_EXPIRY,
+    AUTH_TOKEN_EXPIRY_IN_DAYS,
     SEARCH_ARRAY_MAX_LENGTH,
 } from "../config/constants";
 import { SearchDocument, UserDocument } from "../libs/Documents.lib";
@@ -66,7 +66,7 @@ userSchema.methods.generateAuthToken = function () {
         },
         JWT_SECRET,
         {
-            expiresIn: AUTH_TOKEN_EXPIRY,
+            expiresIn: AUTH_TOKEN_EXPIRY_IN_DAYS,
         },
     );
 };

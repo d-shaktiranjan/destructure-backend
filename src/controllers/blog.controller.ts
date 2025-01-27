@@ -23,7 +23,11 @@ import {
 } from "../services/blog.service";
 
 // util
-import { errorResponse, successResponse } from "../utils/apiResponse.util";
+import {
+    errorResponse,
+    noContentResponse,
+    successResponse,
+} from "../utils/apiResponse.util";
 import nullChecker from "../utils/nullChecker.util";
 import { generateSlugUntil, isSlugUniqueUtil } from "../utils/blog.util";
 import {
@@ -34,8 +38,7 @@ import {
 
 export const createBlog = aw(async (req: AuthRequest, res: Response) => {
     // get values from request body & null check
-    const { title, description, slug, content, coAuthor } = req.body;
-    nullChecker({ title, description, slug, content });
+    const { title, description, slug, content, banner, coAuthor } = req.body;
 
     // fetch coAuthor
     if (coAuthor) {
@@ -62,6 +65,7 @@ export const createBlog = aw(async (req: AuthRequest, res: Response) => {
         slug,
         content,
         coAuthor,
+        banner,
         author: req?.user?._id,
     });
     await newBlog.save();
@@ -84,10 +88,6 @@ export const getBlogDetails = aw(async (req: AuthRequest, res: Response) => {
 
 export const updateBlog = aw(async (req: Request, res: Response) => {
     const { _id } = req.body;
-    nullChecker({ _id });
-
-    if (!isValidObjectId(_id))
-        return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
 
     // fetch blog in DB
     const blog = await Blog.findById(_id);
@@ -102,6 +102,7 @@ export const updateBlog = aw(async (req: Request, res: Response) => {
         "isPublic",
         "slug",
         "coAuthor",
+        "banner",
     ];
 
     // update fields
@@ -112,21 +113,17 @@ export const updateBlog = aw(async (req: Request, res: Response) => {
 
         const key = keyName as keyof BlogDocument;
         const value = req.body[key];
-        if (value === null) continue;
 
-        // isPublic type check
-        if (key === "isPublic" && typeof value != "boolean")
-            return errorResponse(res, BLOG_MESSAGES.IS_PUBLIC_TYPE);
-
+        if (!value) continue;
         // title unique checking
-        if (key === "title") {
+        else if (key === "title") {
             const existingBlog = await Blog.findOne({ title: value });
             if (existingBlog && existingBlog._id !== blog._id)
                 return errorResponse(res, BLOG_MESSAGES.UNIQUE_TITLE);
         }
 
         // handle coAuthor
-        if (key === "coAuthor") {
+        else if (key === "coAuthor") {
             if (!isValidObjectId(value))
                 return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
             const coAuthor = await User.findById(value);
@@ -152,6 +149,7 @@ export const coAuthorList = aw(async (req: AuthRequest, res: Response) => {
         isAdmin: true,
         _id: { $ne: req.user?._id },
     }).select("_id name picture");
+    if (adminList.length === 0) return noContentResponse(res);
 
     return successResponse(res, BLOG_MESSAGES.CO_AUTHOR_LIST, 200, adminList);
 });
@@ -205,11 +203,7 @@ export const slugList = aw(async (req: Request, res: Response) => {
     const slugList = (await Blog.find({ isPublic: true })).map(
         (blog) => blog.slug,
     );
+    if (slugList.length === 0) return noContentResponse(res);
 
-    return successResponse(
-        res,
-        BLOG_MESSAGES.SLUG_LIST_FETCHED,
-        slugList.length === 0 ? 204 : 200,
-        slugList,
-    );
+    return successResponse(res, BLOG_MESSAGES.SLUG_LIST_FETCHED, 200, slugList);
 });
