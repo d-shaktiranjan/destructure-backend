@@ -5,6 +5,7 @@ export const APP_MESSAGES = {
     RUNNING: `App is running on ${PORT}`,
     ERROR: "Some error occurred",
     MISSING: " is missing",
+    VALIDATION_ERROR: "Schema validation error",
 } as const;
 
 export enum AUTH_MESSAGES {
