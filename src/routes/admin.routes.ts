@@ -12,7 +12,7 @@ import { imageList, imageUpload } from "../controllers/images.controller";
 import { isAdmin, isAuthenticated } from "../middlewares/auth.middleware";
 import { upload } from "../middlewares/multer.middlewares";
 import zodValidator from "../middlewares/zodValidator.middleware";
-import { blogCreateSchema } from "../schemas/blog.schema";
+import { blogCreateSchema, blogUpdateSchema } from "../schemas/blog.schema";
 
 const router = Router();
 router.use(isAuthenticated, isAdmin);
@@ -22,7 +22,7 @@ router
     .route("/blog")
     .post(zodValidator(blogCreateSchema), createBlog)
     .get(getBlogListAdmin)
-    .put(updateBlog);
+    .put(zodValidator(blogUpdateSchema), updateBlog);
 
 // blog slug routes
 router.get("/slug/check", checkUniqueSlug);

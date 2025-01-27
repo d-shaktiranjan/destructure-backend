@@ -9,3 +9,8 @@ export const blogCreateSchema = z.object({
     banner: z.string().url(),
     coAuthor: z.string().refine((value) => isValidObjectId(value)),
 });
+
+export const blogUpdateSchema = blogCreateSchema.partial().extend({
+    _id: z.string().refine((value) => isValidObjectId(value)),
+    isPublic: z.boolean().optional(),
+});
