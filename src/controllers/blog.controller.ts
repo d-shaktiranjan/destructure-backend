@@ -39,7 +39,6 @@ import {
 export const createBlog = aw(async (req: AuthRequest, res: Response) => {
     // get values from request body & null check
     const { title, description, slug, content, banner, coAuthor } = req.body;
-    nullChecker({ title, description, slug, content, banner });
 
     // fetch coAuthor
     if (coAuthor) {
@@ -89,10 +88,6 @@ export const getBlogDetails = aw(async (req: AuthRequest, res: Response) => {
 
 export const updateBlog = aw(async (req: Request, res: Response) => {
     const { _id } = req.body;
-    nullChecker({ _id });
-
-    if (!isValidObjectId(_id))
-        return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
 
     // fetch blog in DB
     const blog = await Blog.findById(_id);
