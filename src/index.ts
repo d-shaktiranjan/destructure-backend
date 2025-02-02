@@ -1,9 +1,10 @@
 import "dotenv/config";
+import cors from "cors";
 import express, { Response, Request, json, static as static_ } from "express";
+import cookieParser from "cookie-parser";
+
 import { PORT, CORS_ORIGINS } from "./config/constants";
 import { APP_MESSAGES } from "./config/messages";
-import cookieParser from "cookie-parser";
-import cors from "cors";
 
 // connect to DB
 import connectToDB from "./config/db";
@@ -43,7 +44,7 @@ app.use("/api/search", searchRouter);
 app.get("/", (req: Request, res: Response) => {
     const host = req.protocol + "://" + req.get("host") + req.originalUrl;
     apiMetaData.host = host;
-    return res.json(apiMetaData);
+    res.json(apiMetaData);
 });
 
 app.listen(PORT, () => {

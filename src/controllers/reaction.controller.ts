@@ -1,5 +1,4 @@
 import { Response } from "express";
-import { isValidObjectId } from "mongoose";
 
 // model & lib
 import Blog from "../models/Blog.model";
@@ -9,31 +8,15 @@ import { AuthRequest } from "../libs/AuthRequest.lib";
 import { BlogDocument, CommentDocument } from "../libs/Documents.lib";
 
 // config
-import { REACTIONS } from "../config/constants";
-import {
-    GENERIC_MESSAGES,
-    REACTION_MESSAGES,
-    BLOG_MESSAGES,
-} from "../config/messages";
+import { REACTION_MESSAGES, BLOG_MESSAGES } from "../config/messages";
 
 // middleware, service & utils
 import aw from "../middlewares/asyncWrap.middleware";
-import nullChecker from "../utils/nullChecker.util";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
 
 export const reaction = aw(async (req: AuthRequest, res: Response) => {
-    const { _id, reaction, to } = req.body;
-    nullChecker({ _id, to });
-
-    // validate to
-    if (!["COMMENT", "BLOG"].includes(to)) return errorResponse(res, "");
-
-    if (!isValidObjectId(_id))
-        return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
-
-    // validate reaction
-    if (reaction && !Object.values(REACTIONS).includes(reaction))
-        return errorResponse(res, REACTION_MESSAGES.INVALID);
+    const { _id, reaction } = req.body;
+    const to: "COMMENT" | "BLOG" = req.body.to;
 
     // new way
     let content: BlogDocument | CommentDocument | null = null;

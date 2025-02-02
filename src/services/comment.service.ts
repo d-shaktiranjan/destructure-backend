@@ -5,7 +5,7 @@ import { COMMENT_MESSAGES } from "../config/messages";
 
 // model & lib imports
 import Comment from "../models/Comment.model";
-import { noContentResponse, successResponse } from "../utils/apiResponse.util";
+import { successResponse } from "../utils/apiResponse.util";
 import {
     userAggregateUtil,
     reactionLookup,
@@ -40,7 +40,6 @@ export const getCommentService = async (
             },
         },
     ]);
-    if (allComments.length === 0) return noContentResponse(res);
 
     return successResponse(res, responseMessage, 200, allComments);
 };
