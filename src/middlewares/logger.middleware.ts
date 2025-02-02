@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import Logger from "../models/Logger.model";
-import { IS_STORE_LOG } from "../config/constants";
+import { IS_STORE_API_LOG } from "../config/constants";
 import { colorize } from "../utils/logger.util";
 
 const logger = (req: Request, res: Response, next: NextFunction) => {
@@ -31,7 +31,7 @@ const logger = (req: Request, res: Response, next: NextFunction) => {
         else console.log(logMessage);
 
         // create log
-        if (IS_STORE_LOG) {
+        if (IS_STORE_API_LOG) {
             const log = new Logger({
                 route,
                 statusCode,
