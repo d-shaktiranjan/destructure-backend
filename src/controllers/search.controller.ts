@@ -26,12 +26,7 @@ export const search = aw(async (req: AuthRequest, res: Response) => {
 
     if (req.user) req.user.storeSearchResult(query);
 
-    return successResponse(
-        res,
-        SEARCH_MESSAGES.RESULT_FETCHED,
-        blogs.length > 0 ? 200 : 204,
-        blogs,
-    );
+    return successResponse(res, SEARCH_MESSAGES.RESULT_FETCHED, 200, blogs);
 });
 
 export const getSearchHistory = (req: AuthRequest, res: Response) => {

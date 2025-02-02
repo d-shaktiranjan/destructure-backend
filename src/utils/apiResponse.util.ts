@@ -1,5 +1,4 @@
 import { Response } from "express";
-import { GENERIC_MESSAGES } from "../config/messages";
 
 const apiResponse = (
     res: Response,
@@ -34,6 +33,3 @@ export const errorResponse = (
     statusCode: number = 400,
     errors: Record<string, string[]> | null = null,
 ) => apiResponse(res, message, statusCode, null, null, false, errors);
-
-export const noContentResponse = (res: Response) =>
-    successResponse(res, GENERIC_MESSAGES.NO_CONTENT, 204);
