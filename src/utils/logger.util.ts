@@ -1,4 +1,5 @@
 import { writeFile } from "fs/promises";
+import { IS_STORE_LOG_IN_FILE } from "../config/constants";
 
 export const colorize = (...args: Array<unknown>) => ({
     red: `\x1b[31m${args.join(" ")}\x1b[0m`,
@@ -38,8 +39,10 @@ function logger(
     color: keyof ReturnType<typeof colorize> = "cyan",
 ) {
     const timeStamp = new Date().toLocaleString("sv-SE");
-
     const logMessage = `[${timeStamp}] ${message}\n`;
+
     console.log(`[${timeStamp}]`, colorize(message)[color]);
-    writeFile(filePath, logMessage, { flag: "a" });
+
+    // store in to file
+    if (IS_STORE_LOG_IN_FILE) writeFile(filePath, logMessage, { flag: "a" });
 }

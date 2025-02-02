@@ -7,6 +7,7 @@ export const AUTH_TOKEN_EXPIRY_IN_DAYS: number = parseInt(
     process.env.AUTH_TOKEN_EXPIRY_IN_DAYS || "3",
 );
 export const IS_STORE_API_LOG = process.env.IS_STORE_API_LOG == "true";
+export const IS_STORE_LOG_IN_FILE = process.env.IS_STORE_LOG_IN_FILE == "true";
 
 // google oAuth constants
 export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_IßD;
