@@ -6,6 +6,7 @@ export const colorize = (...args: Array<unknown>) => ({
     green: `\x1b[32m${args.join(" ")}\x1b[0m`,
     cyan: `\x1b[36m${args.join(" ")}\x1b[0m`,
     bgRed: `\x1b[41m${args.join(" ")}\x1b[0m`,
+    default: `\x1b[0m${args.join(" ")}\x1b[0m`,
 });
 
 const LOG_RECORDS: Record<

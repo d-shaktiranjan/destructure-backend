@@ -22,13 +22,20 @@ const logger = (req: Request, res: Response, next: NextFunction) => {
 
         const endTime = Date.now();
         const timeStamp = new Date().toLocaleString("sv-SE");
-        const logMessage = `[${timeStamp}] ${req.protocol}: ${method} ${route} ${statusCode} (${endTime - startTime}ms)`;
+        const logMessage = `${req.protocol}: ${method} ${route} ${statusCode} (${endTime - startTime}ms)`;
 
-        if (statusCode >= 500) console.log(colorize(logMessage).bgRed);
-        else if (statusCode >= 400) console.log(colorize(logMessage).red);
-        else if (statusCode >= 300) console.log(colorize(logMessage).cyan);
-        else if (statusCode >= 200) console.log(colorize(logMessage).green);
-        else console.log(logMessage);
+        const color: keyof ReturnType<typeof colorize> =
+            statusCode >= 500
+                ? "bgRed"
+                : statusCode >= 400
+                  ? "red"
+                  : statusCode >= 300
+                    ? "cyan"
+                    : statusCode >= 200
+                      ? "green"
+                      : "default";
+
+        console.log(`[${timeStamp}]`, colorize(logMessage)[color]);
 
         // create log
         if (IS_STORE_API_LOG) {
