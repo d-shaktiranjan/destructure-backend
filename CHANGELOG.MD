@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.0.4
+
+### Release Date- 3rd Feb 25
+
+#### Fixed
+
+- slug creation of blog (Replace special char to `-`).
+
+## 1.0.3
+
+### Release Date- 2nd Feb 25
+
+#### Removed
+
+- `204` responses.
+
 ## 1.0.2
 
 ### Release Date- 28th Jan 25
