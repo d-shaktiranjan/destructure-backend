@@ -23,7 +23,11 @@ export const isSlugUniqueUtil = async (slug: string): Promise<boolean> => {
 };
 
 export const generateSlugUntil = async (title: string): Promise<string> => {
-    let slug = title.replaceAll(" ", "-").toLocaleLowerCase();
+    let slug = title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-") // replace special chars with "-"
+        .replace(/^-+|-+$/g, ""); // remove 1st & last "-"
+
     if (await isSlugUniqueUtil(slug)) return slug;
 
     let count = 2;
