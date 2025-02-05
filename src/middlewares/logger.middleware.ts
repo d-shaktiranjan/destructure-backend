@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import Logger from "../models/Logger.model";
 import { IS_STORE_API_LOG } from "../config/constants";
-import { colorize } from "../utils/logger.util";
+import { colorize, logger } from "../utils/logger.util";
 
-const logger = (req: Request, res: Response, next: NextFunction) => {
+const loggerMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const startTime = Date.now();
     const originalSend = res.send.bind(res);
 
@@ -21,7 +21,6 @@ const logger = (req: Request, res: Response, next: NextFunction) => {
         const statusCode = res.statusCode;
 
         const endTime = Date.now();
-        const timeStamp = new Date().toLocaleString("sv-SE");
         const logMessage = `${req.protocol}: ${method} ${route} ${statusCode} (${endTime - startTime}ms)`;
 
         const color: keyof ReturnType<typeof colorize> =
@@ -34,8 +33,7 @@ const logger = (req: Request, res: Response, next: NextFunction) => {
                     : statusCode >= 200
                       ? "green"
                       : "default";
-
-        console.log(`[${timeStamp}]`, colorize(logMessage)[color]);
+        logger(logMessage, ".logs/api.log", color);
 
         // create log
         if (IS_STORE_API_LOG) {
@@ -53,4 +51,4 @@ const logger = (req: Request, res: Response, next: NextFunction) => {
     });
 };
 
-export default logger;
+export default loggerMiddleware;

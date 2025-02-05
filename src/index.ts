@@ -20,7 +20,7 @@ import searchRouter from "./routes/search.routes";
 
 // util imports
 import apiMetaData from "./utils/apiMetaData.util";
-import logger from "./middlewares/logger.middleware";
+import loggerMiddleware from "./middlewares/logger.middleware";
 import { loggerTest } from "./utils/logger.util";
 
 const app = express();
@@ -31,7 +31,7 @@ app.use(json());
 app.use(cookieParser());
 app.use(static_("public"));
 
-app.use(logger);
+app.use(loggerMiddleware);
 
 // route usages
 app.use("/api/blogs", blogRouter);

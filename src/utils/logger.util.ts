@@ -34,7 +34,7 @@ export const loggerTest = (
     logger(message, LOG_RECORDS[logType].filePath, LOG_RECORDS[logType].color);
 };
 
-function logger(
+export function logger(
     message: unknown,
     filePath: string,
     color: keyof ReturnType<typeof colorize> = "cyan",
