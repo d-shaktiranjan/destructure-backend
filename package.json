@@ -11,7 +11,8 @@
         "format": "prettier ./src --write",
         "format_check": "prettier ./src --check",
         "spell": "cspell lint .",
-        "lefthook": "ts-node ./.git_hooks/commitMessage.ts"
+        "lefthook": "ts-node ./.git_hooks/commitMessage.ts",
+        "log.clean": "ts-node ./src/utils/cleaner.util.ts"
     },
     "keywords": [
         "NodeJS",
