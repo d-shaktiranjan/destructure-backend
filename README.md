@@ -49,7 +49,13 @@ And
 pnpm dev
 ```
 
-### API docs and figma design.
+## Docs
+
+[Code of conduct](./CODE_OF_CONDUCT.md)  
+[Git conduct](./docs/gitConduct.md)  
+[Logs clean](./docs/logsClean.md)
+
+## API docs and figma design.
 
 [https://postman.destructure.in](https://postman.destructure.in)
 
