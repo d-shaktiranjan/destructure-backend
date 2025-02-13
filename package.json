@@ -12,7 +12,7 @@
         "format_check": "prettier ./src --check",
         "spell": "cspell lint .",
         "lefthook": "ts-node ./.git_hooks/commitMessage.ts",
-        "log.clean": "ts-node ./src/utils/cleaner.util.ts"
+        "clean-logs": "ts-node ./src/utils/cleaner.util.ts"
     },
     "keywords": [
         "NodeJS",
