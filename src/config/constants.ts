@@ -10,7 +10,7 @@ export const IS_STORE_API_LOG = process.env.IS_STORE_API_LOG == "true";
 export const IS_STORE_LOG_IN_FILE = process.env.IS_STORE_LOG_IN_FILE == "true";
 
 // google oAuth constants
-export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_IßD;
+export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 export const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 export const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI;
 

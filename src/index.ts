@@ -41,7 +41,7 @@ app.use("/api/comment", commentRouter);
 app.use("/api/reaction", reactRouter);
 app.use("/api/search", searchRouter);
 
-app.get("/", (req: Request, res: Response) => {
+app.get("/api", (req: Request, res: Response) => {
     const host = req.protocol + "://" + req.get("host") + req.originalUrl;
     apiMetaData.host = host;
     res.json(apiMetaData);
