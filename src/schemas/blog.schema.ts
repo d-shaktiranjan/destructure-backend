@@ -7,7 +7,10 @@ export const blogCreateSchema = z.object({
     slug: z.string(),
     content: z.string(),
     banner: z.string().url(),
-    coAuthor: z.string().refine((value) => isValidObjectId(value)),
+    // coAuthor: z
+    //     .string()
+    //     .optional()
+    //     .refine((value) => isValidObjectId(value)),
 });
 
 export const blogUpdateSchema = blogCreateSchema.partial().extend({

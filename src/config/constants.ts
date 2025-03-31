@@ -9,7 +9,7 @@ export const AUTH_TOKEN_EXPIRY_IN_DAYS: number = parseInt(
 export const IS_STORE_LOG = process.env.IS_STORE_LOG == "true";
 
 // google oAuth constants
-export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_IßD;
+export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 export const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 export const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI;
 
