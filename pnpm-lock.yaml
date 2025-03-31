@@ -18,7 +18,7 @@ importers:
         specifier: ^16.4.7
         version: 16.4.7
       express:
-        specifier: ^5.0.1
+        specifier: ^5.1.0
         version: 5.1.0
       google-auth-library:
         specifier: ^9.15.1
@@ -27,11 +27,11 @@ importers:
         specifier: ^9.0.2
         version: 9.0.2
       mongoose:
-        specifier: ^8.9.6
+        specifier: ^8.13.1
         version: 8.13.1
       multer:
-        specifier: 1.4.5-lts.1
-        version: 1.4.5-lts.1
+        specifier: 1.4.5-lts.2
+        version: 1.4.5-lts.2
       plaiceholder:
         specifier: ^3.0.0
         version: 3.0.0(sharp@0.33.5)
@@ -39,11 +39,11 @@ importers:
         specifier: ^0.33.5
         version: 0.33.5
       zod:
-        specifier: ^3.24.1
+        specifier: ^3.24.2
         version: 3.24.2
     devDependencies:
       '@eslint/js':
-        specifier: ^9.19.0
+        specifier: ^9.23.0
         version: 9.23.0
       '@types/cookie-parser':
         specifier: ^1.4.8
@@ -52,46 +52,46 @@ importers:
         specifier: ^2.8.17
         version: 2.8.17
       '@types/express':
-        specifier: ^5.0.0
+        specifier: ^5.0.1
         version: 5.0.1
       '@types/jsonwebtoken':
-        specifier: ^9.0.8
+        specifier: ^9.0.9
         version: 9.0.9
       '@types/multer':
         specifier: ^1.4.12
         version: 1.4.12
       '@typescript-eslint/eslint-plugin':
-        specifier: ^8.22.0
+        specifier: ^8.28.0
         version: 8.28.0(@typescript-eslint/parser@8.28.0(eslint@9.23.0)(typescript@5.8.2))(eslint@9.23.0)(typescript@5.8.2)
       '@typescript-eslint/parser':
-        specifier: ^8.22.0
+        specifier: ^8.28.0
         version: 8.28.0(eslint@9.23.0)(typescript@5.8.2)
       cspell:
-        specifier: ^8.17.3
+        specifier: ^8.18.1
         version: 8.18.1
       eslint:
-        specifier: ^9.19.0
+        specifier: ^9.23.0
         version: 9.23.0
       globals:
-        specifier: ^15.14.0
-        version: 15.15.0
+        specifier: ^16.0.0
+        version: 16.0.0
       lefthook:
-        specifier: ^1.10.10
+        specifier: ^1.11.6
         version: 1.11.6
       nodemon:
         specifier: ^3.1.9
         version: 3.1.9
       prettier:
-        specifier: ^3.4.2
+        specifier: ^3.5.3
         version: 3.5.3
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@22.13.14)(typescript@5.8.2)
       typescript:
-        specifier: ^5.7.3
+        specifier: ^5.8.2
         version: 5.8.2
       typescript-eslint:
-        specifier: ^8.22.0
+        specifier: ^8.28.0
         version: 8.28.0(eslint@9.23.0)(typescript@5.8.2)
 
 packages:
@@ -1096,8 +1096,8 @@ packages:
     resolution: {integrity: sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==}
     engines: {node: '>=18'}
 
-  globals@15.15.0:
-    resolution: {integrity: sha512-7ACyT3wmyp3I61S4fG682L0VA2RGD9otkqGJIwNUMF1SWUombIIk+af1unuDYgMm082aHYwD+mzJvv9Iu8dsgg==}
+  globals@16.0.0:
+    resolution: {integrity: sha512-iInW14XItCXET01CQFqudPOWP2jYMl7T+QRQT+UNcR/iQncN/F0UNpgd76iFkBPgNQb4+X3LV9tLJYzwh+Gl3A==}
     engines: {node: '>=18'}
 
   google-auth-library@9.15.1:
@@ -1442,8 +1442,8 @@ packages:
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
 
-  multer@1.4.5-lts.1:
-    resolution: {integrity: sha512-ywPWvcDMeH+z9gQq5qYHCCy+ethsk4goepZ45GLD63fOu0YcNecQxi64nDs3qluZB+murG3/D4dJ7+dGctcCQQ==}
+  multer@1.4.5-lts.2:
+    resolution: {integrity: sha512-VzGiVigcG9zUAoCNU+xShztrlr1auZOlurXynNvO9GiWD1/mTBbUljOKY+qMeazBqXgRnjzeEgJI/wyjJUHg9A==}
     engines: {node: '>= 6.0.0'}
 
   natural-compare@1.4.0:
@@ -2947,7 +2947,7 @@ snapshots:
 
   globals@14.0.0: {}
 
-  globals@15.15.0: {}
+  globals@16.0.0: {}
 
   google-auth-library@9.15.1:
     dependencies:
@@ -3255,7 +3255,7 @@ snapshots:
 
   ms@2.1.3: {}
 
-  multer@1.4.5-lts.1:
+  multer@1.4.5-lts.2:
     dependencies:
       append-field: 1.0.0
       busboy: 1.6.0
