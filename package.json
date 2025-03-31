@@ -1,6 +1,6 @@
 {
     "name": "destructure-backend",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "Destructure app backend",
     "main": "src/index.ts",
     "scripts": {
@@ -24,33 +24,33 @@
         "cookie-parser": "^1.4.7",
         "cors": "^2.8.5",
         "dotenv": "^16.4.7",
-        "express": "^4.21.2",
+        "express": "^5.1.0",
         "google-auth-library": "^9.15.1",
         "jsonwebtoken": "^9.0.2",
-        "mongoose": "^8.9.6",
-        "multer": "1.4.5-lts.1",
+        "mongoose": "^8.13.1",
+        "multer": "1.4.5-lts.2",
         "plaiceholder": "^3.0.0",
         "sharp": "^0.33.5",
-        "zod": "^3.24.1"
+        "zod": "^3.24.2"
     },
     "devDependencies": {
-        "@eslint/js": "^9.19.0",
+        "@eslint/js": "^9.23.0",
         "@types/cookie-parser": "^1.4.8",
         "@types/cors": "^2.8.17",
-        "@types/express": "^5.0.0",
-        "@types/jsonwebtoken": "^9.0.8",
+        "@types/express": "^5.0.1",
+        "@types/jsonwebtoken": "^9.0.9",
         "@types/multer": "^1.4.12",
-        "@typescript-eslint/eslint-plugin": "^8.22.0",
-        "@typescript-eslint/parser": "^8.22.0",
-        "cspell": "^8.17.3",
-        "eslint": "^9.19.0",
-        "globals": "^15.14.0",
-        "lefthook": "^1.10.10",
+        "@typescript-eslint/eslint-plugin": "^8.28.0",
+        "@typescript-eslint/parser": "^8.28.0",
+        "cspell": "^8.18.1",
+        "eslint": "^9.23.0",
+        "globals": "^16.0.0",
+        "lefthook": "^1.11.6",
         "nodemon": "^3.1.9",
-        "prettier": "^3.4.2",
+        "prettier": "^3.5.3",
         "ts-node": "^10.9.2",
-        "typescript": "^5.7.3",
-        "typescript-eslint": "^8.22.0"
+        "typescript": "^5.8.2",
+        "typescript-eslint": "^8.28.0"
     },
-    "packageManager": "pnpm@9.15.4"
+    "packageManager": "pnpm@10.7.0"
 }
