@@ -2,9 +2,10 @@ import "dotenv/config";
 import cors from "cors";
 import express, { Response, Request, json, static as static_ } from "express";
 import cookieParser from "cookie-parser";
+import { loggerMiddleware, logger } from "lorin";
 
 // middlewares imports
-import logger from "./middlewares/logger.middleware";
+import dbLogger from "./middlewares/logger.middleware";
 import requestBodyMiddleware from "./middlewares/body.middleware";
 
 // config & utils imports
@@ -32,7 +33,8 @@ app.use(json());
 app.use(cookieParser());
 app.use(static_("public"));
 app.use(requestBodyMiddleware);
-app.use(logger);
+app.use(loggerMiddleware);
+app.use(dbLogger);
 
 // route usages
 app.use("/api/blogs", blogRouter);
@@ -49,5 +51,5 @@ app.get("/api", (req: Request, res: Response) => {
 });
 
 app.listen(PORT, () => {
-    console.log(APP_MESSAGES.RUNNING);
+    logger.success(APP_MESSAGES.RUNNING);
 });

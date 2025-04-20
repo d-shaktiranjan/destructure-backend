@@ -1,37 +1,57 @@
-name: ESLint, format & spell checker
+name: Code quality checker & publish
 
 on:
-  - push
-  - pull_request
+  push:
+  pull_request:
 
 jobs:
-  cache-and-install:
+  checker:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout the repository
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Install Node.js
+      # Set up Node.js with the specified version from .nvmrc
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version-file: .nvmrc
 
+      # Cache pnpm dependencies to speed up future runs
+      - name: Cache pnpm dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      # Install pnpm via corepack
       - name: Install pnpm
         run: corepack enable pnpm
 
+      # Install project dependencies using pnpm
       - name: Install dependencies
         run: |
-          pnpm i && echo "All dependency installed successfully ✅"
+          pnpm install
+          echo "All dependencies installed successfully ✅"
 
+      # Format checking (runs Prettier or any other formatting tool)
       - name: Format Checking
         run: |
-          pnpm format_check && echo "Congrats your code is well formatted 🌸"
+          pnpm format.check
+          echo "Congrats! Your code is well formatted 🌸"
 
+      # Spell checking (checks spelling in comments, variable names, etc.)
       - name: Spell Checking
         run: |
-          pnpm spell && echo "Congrats no spelling mistake in your code 😊"
+          pnpm spell
+          echo "Congrats! No spelling mistakes in your code 😊"
 
+      # ESLint checking (runs linting to ensure code quality)
       - name: ESLint Checking
         run: |
-          pnpm lint && echo "Congrats your code passes the ESLint check 👍"
+          pnpm lint
+          echo "Congrats! Your code passes the ESLint check 👍"

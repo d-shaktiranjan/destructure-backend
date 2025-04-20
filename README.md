@@ -56,5 +56,3 @@ pnpm dev
 [https://figma.destructure.in](https://figma.destructure.in)
 
 (We don’t implement this design on our site for specific reasons, but feel free to take a look.)
-
-#### You can also check out the [bun version](https://github.com/d-shaktiranjan/destructure-backend/tree/main-bun).
