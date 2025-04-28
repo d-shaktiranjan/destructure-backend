@@ -17,9 +17,9 @@ import {
 
 const router = Router();
 
+// protected routes to interact with comments & replies
 const protectedRouter = Router();
 protectedRouter.use(isAuthenticated);
-
 protectedRouter
     .route("/")
     .post(addComment)
@@ -29,6 +29,7 @@ protectedRouter.post("/reply", addReply);
 
 protectedRouter.use(isAdmin).route("/soft").delete(softDelete);
 
+// public routes to view comments & replies
 router.get("/", allowBoth, getComments);
 router.get("/reply", allowBoth, getReplyList);
 
