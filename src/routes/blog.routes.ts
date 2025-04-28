@@ -17,8 +17,9 @@ const router = Router();
 router.use(allowBoth);
 
 router.get("/", getBlogList);
+router.get("/:slug", getBlogDetails);
+
 router.get("/author", isAuthenticated, isAdmin, coAuthorList);
-router.get("/details", getBlogDetails);
 router.get("/stats", blogStats);
 router.get("/slugs", slugList);
 
