@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
     checkUniqueSlug,
+    coAuthorList,
     createBlog,
     generateSlug,
     getBlogListAdmin,
@@ -27,6 +28,9 @@ router
 // blog slug routes
 router.get("/slug/check", checkUniqueSlug);
 router.get("/slug/generate", generateSlug);
+
+// author routes
+router.get("/author", coAuthorList);
 
 // image routes
 router

@@ -1,12 +1,7 @@
 import { Router } from "express";
 
+import { allowBoth } from "../middlewares/auth.middleware";
 import {
-    allowBoth,
-    isAdmin,
-    isAuthenticated,
-} from "../middlewares/auth.middleware";
-import {
-    coAuthorList,
     getBlogDetails,
     getBlogList,
     blogStats,
@@ -18,7 +13,6 @@ router.use(allowBoth);
 router.get("/", getBlogList);
 router.get("/:slug", getBlogDetails);
 
-router.get("/author", isAuthenticated, isAdmin, coAuthorList);
 router.get("/stats", blogStats);
 
 export default router;
