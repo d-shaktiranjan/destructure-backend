@@ -193,11 +193,3 @@ export const blogStats = aw(async (req: Request, res: Response) => {
 
     return successResponse(res, BLOG_MESSAGES.STATS_FETCHED, 200, blog[0]);
 });
-
-export const slugList = aw(async (req: Request, res: Response) => {
-    const slugList = (await Blog.find({ isPublic: true })).map(
-        (blog) => blog.slug,
-    );
-
-    return successResponse(res, BLOG_MESSAGES.SLUG_LIST_FETCHED, 200, slugList);
-});
