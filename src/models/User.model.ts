@@ -56,19 +56,17 @@ const userSchema = new Schema<UserDocument>(
 );
 
 userSchema.methods.generateAuthToken = function () {
-    return sign(
-        {
-            _id: this._id,
-            email: this.email,
-            name: this.name,
-            isAdmin: this.isAdmin,
-            picture: this.picture,
-        },
-        JWT_SECRET,
-        {
-            expiresIn: `${AUTH_TOKEN_EXPIRY_IN_DAYS}d`,
-        },
-    );
+    const payload = {
+        _id: this._id,
+        email: this.email,
+        name: this.name,
+        isAdmin: this.isAdmin,
+        picture: this.picture,
+    };
+
+    return sign(payload, JWT_SECRET, {
+        expiresIn: `${AUTH_TOKEN_EXPIRY_IN_DAYS}d`,
+    });
 };
 
 userSchema.methods.storeSearchResult = function (query: string) {
