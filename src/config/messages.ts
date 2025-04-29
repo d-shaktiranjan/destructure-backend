@@ -1,10 +1,8 @@
 import { PORT } from "./constants";
 
 export const APP_MESSAGES = {
-    HELLO: "Hello from Express",
     RUNNING: `App is running on ${PORT}`,
     ERROR: "Some error occurred",
-    MISSING: " is missing",
     VALIDATION_ERROR: "Schema validation error",
 } as const;
 
@@ -29,10 +27,8 @@ export enum BLOG_MESSAGES {
     ALREADY_EXITS = "Blog already exits.",
     ALL_FETCHED = "All Blog fetched.",
     BLOG_FETCHED = "Blog details fetched",
-    SLUG_MISSING = "Blog slug missing",
     BLOG_NOT_FOUND = "Blog not found",
     KEY_NOT_ALLOWED = " key is not allowed to update.",
-    IS_PUBLIC_TYPE = "isPublic must be a bool value",
     UNIQUE_TITLE = "Title must be unique",
     UPDATED = "Blog updated successfully",
     AUTHORSHIP = "Author & co-author must be different",
@@ -41,14 +37,11 @@ export enum BLOG_MESSAGES {
     SLUG_UNIQUE = "Slug is unique",
     SLUG_NOT_UNIQUE = "Slug is not unique",
     SLUG_GENERATED = "Unique slug generated",
-    STATS_FETCHED = "Blog stats fetched",
-    SLUG_LIST_FETCHED = "Slug list fetched",
 }
 
 export enum REACTION_MESSAGES {
     ADDED = "Reaction added",
     REMOVED = "Reaction removed",
-    INVALID = "Invalid reaction",
     UPDATED = "Reaction updated",
 }
 
