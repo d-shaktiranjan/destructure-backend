@@ -66,7 +66,7 @@ userSchema.methods.generateAuthToken = function () {
         },
         JWT_SECRET,
         {
-            expiresIn: AUTH_TOKEN_EXPIRY_IN_DAYS,
+            expiresIn: `${AUTH_TOKEN_EXPIRY_IN_DAYS}d`,
         },
     );
 };
