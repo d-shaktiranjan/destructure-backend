@@ -4,7 +4,7 @@ export const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017";
 export const DEBUG: boolean = process.env.DEBUG === "true";
 export const JWT_SECRET: string = process.env.JWT_SECRET || "";
 export const AUTH_TOKEN_EXPIRY_IN_DAYS: number = parseInt(
-    process.env.AUTH_TOKEN_EXPIRY_IN_DAYS || "3",
+    process.env.AUTH_TOKEN_EXPIRY_IN_DAYS || "30",
 );
 export const IS_STORE_LOG = process.env.IS_STORE_LOG == "true";
 
