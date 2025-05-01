@@ -83,3 +83,11 @@ export enum IMAGE_MESSAGES {
     IMAGE_UPLOADED = "Images uploaded successfully",
     IMAGE_ONLY = "This file format is not acceptable",
 }
+
+export enum ADMIN_MESSAGES {
+    LIST = "Admin list fetched",
+    ADDED = "User added as admin",
+    REMOVED = "User removed as admin",
+    NOT_FOUND = "Admin not found",
+    ALREADY_EXISTS = "User is already an admin",
+}

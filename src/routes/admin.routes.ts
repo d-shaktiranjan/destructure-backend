@@ -14,9 +14,17 @@ import { isAdmin, isAuthenticated } from "../middlewares/auth.middleware";
 import { upload } from "../middlewares/multer.middlewares";
 import zodValidator from "../middlewares/zodValidator.middleware";
 import { blogCreateSchema, blogUpdateSchema } from "../schemas/blog.schema";
+import {
+    addAdmin,
+    getAdminList,
+    removeAdmin,
+} from "../controllers/admin.controller";
 
 const router = Router();
 router.use(isAuthenticated, isAdmin);
+
+// admin routes
+router.route("/").get(getAdminList).post(addAdmin).delete(removeAdmin);
 
 // blog routes
 router
