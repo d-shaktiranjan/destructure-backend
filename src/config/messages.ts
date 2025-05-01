@@ -32,7 +32,6 @@ export enum BLOG_MESSAGES {
     UNIQUE_TITLE = "Title must be unique",
     UPDATED = "Blog updated successfully",
     AUTHORSHIP = "Author & co-author must be different",
-    CO_AUTHOR_LIST = "Co-author list fetched",
     CO_AUTHOR_ADD_FAILED = "Unable to set co-author",
     SLUG_UNIQUE = "Slug is unique",
     SLUG_NOT_UNIQUE = "Slug is not unique",
