@@ -18,12 +18,17 @@ import {
     getAdminList,
     removeAdmin,
 } from "../controllers/admin.controller";
+import { adminAddSchema } from "../schemas/admin.schema";
 
 const router = Router();
 router.use(isAuthenticated, isAdmin);
 
 // admin routes
-router.route("/").get(getAdminList).post(addAdmin).delete(removeAdmin);
+router
+    .route("/")
+    .get(getAdminList)
+    .post(zodValidator(adminAddSchema), addAdmin)
+    .delete(removeAdmin);
 
 // blog routes
 router

@@ -8,6 +8,7 @@ import User from "../models/User.model";
 // configs & utils
 import { ADMIN_MESSAGES } from "../config/messages";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
+import nullChecker from "../utils/nullChecker.util";
 
 export const getAdminList = aw(async (req: AuthRequest, res: Response) => {
     const adminList = await User.find({
@@ -19,14 +20,21 @@ export const getAdminList = aw(async (req: AuthRequest, res: Response) => {
 });
 
 export const addAdmin = aw(async (req: Request, res: Response) => {
-    const email = req.params.email;
+    const email = req.body.email;
 
     const user = await User.findOne({ email });
-    if (user && user.isAdmin)
-        return errorResponse(res, ADMIN_MESSAGES.ALREADY_EXISTS, 409);
-    if (!user) {
-        const newUser = new User({ email, isAdmin: true });
-        await newUser.save();
+
+    if (user) {
+        // if user is already an admin
+        if (user.isAdmin)
+            return errorResponse(res, ADMIN_MESSAGES.ALREADY_EXISTS, 409);
+
+        // if user is not an admin
+        user.isAdmin = true;
+        await user.save();
+    } else {
+        // if user does not exist
+        await new User({ email, name: email, isAdmin: true }).save();
     }
 
     return successResponse(res, ADMIN_MESSAGES.ADDED, 201);
@@ -34,6 +42,7 @@ export const addAdmin = aw(async (req: Request, res: Response) => {
 
 export const removeAdmin = aw(async (req: Request, res: Response) => {
     const email = req.params.email;
+    nullChecker({ email });
 
     const admin = await User.findOne({ email, isAdmin: true });
     if (!admin) return errorResponse(res, ADMIN_MESSAGES.NOT_FOUND, 409);
