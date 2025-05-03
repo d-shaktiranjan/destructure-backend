@@ -1,7 +1,6 @@
 import { Router } from "express";
 import {
     checkUniqueSlug,
-    coAuthorList,
     createBlog,
     generateSlug,
     getBlogListAdmin,
@@ -14,9 +13,22 @@ import { isAdmin, isAuthenticated } from "../middlewares/auth.middleware";
 import { upload } from "../middlewares/multer.middlewares";
 import zodValidator from "../middlewares/zodValidator.middleware";
 import { blogCreateSchema, blogUpdateSchema } from "../schemas/blog.schema";
+import {
+    addAdmin,
+    getAdminList,
+    removeAdmin,
+} from "../controllers/admin.controller";
+import { adminAddSchema } from "../schemas/admin.schema";
 
 const router = Router();
 router.use(isAuthenticated, isAdmin);
+
+// admin routes
+router
+    .route("/")
+    .get(getAdminList)
+    .post(zodValidator(adminAddSchema), addAdmin)
+    .delete(removeAdmin);
 
 // blog routes
 router
@@ -28,9 +40,6 @@ router
 // blog slug routes
 router.get("/slug/check", checkUniqueSlug);
 router.get("/slug/generate", generateSlug);
-
-// author routes
-router.get("/author", coAuthorList);
 
 // image routes
 router

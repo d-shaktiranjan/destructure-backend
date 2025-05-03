@@ -32,7 +32,6 @@ export enum BLOG_MESSAGES {
     UNIQUE_TITLE = "Title must be unique",
     UPDATED = "Blog updated successfully",
     AUTHORSHIP = "Author & co-author must be different",
-    CO_AUTHOR_LIST = "Co-author list fetched",
     CO_AUTHOR_ADD_FAILED = "Unable to set co-author",
     SLUG_UNIQUE = "Slug is unique",
     SLUG_NOT_UNIQUE = "Slug is not unique",
@@ -82,4 +81,12 @@ export enum IMAGE_MESSAGES {
     IMAGE_REQUIRED = "Image required",
     IMAGE_UPLOADED = "Images uploaded successfully",
     IMAGE_ONLY = "This file format is not acceptable",
+}
+
+export enum ADMIN_MESSAGES {
+    LIST = "Admin list fetched",
+    ADDED = "User added as admin",
+    REMOVED = "User removed as admin",
+    NOT_FOUND = "Admin not found",
+    ALREADY_EXISTS = "User is already an admin",
 }
