@@ -20,7 +20,7 @@ export const getAdminList = aw(async (req: AuthRequest, res: Response) => {
 });
 
 export const addAdmin = aw(async (req: Request, res: Response) => {
-    const email = req.body.email;
+    const email = req.body.email as string;
 
     const user = await User.findOne({ email });
 
@@ -34,7 +34,11 @@ export const addAdmin = aw(async (req: Request, res: Response) => {
         await user.save();
     } else {
         // if user does not exist
-        await new User({ email, name: email, isAdmin: true }).save();
+        await new User({
+            email,
+            name: email.split("@")[0],
+            isAdmin: true,
+        }).save();
     }
 
     return successResponse(res, ADMIN_MESSAGES.ADDED, 201);
