@@ -29,20 +29,18 @@ export const allowBoth = aw(
     },
 );
 
-export const isAdmin = (
-    req: AuthRequest,
-    res: Response,
-    next: NextFunction,
-) => {
-    const user = req.user;
-    // check login status
-    if (!user) throw new ApiError(AUTH_MESSAGES.NOT_AUTHENTICATED, 401);
+export const isAdmin = aw(
+    async (req: AuthRequest, res: Response, next: NextFunction) => {
+        const user = req.user;
+        // check login status
+        if (!user) throw new ApiError(AUTH_MESSAGES.NOT_AUTHENTICATED, 401);
 
-    // check admin status
-    if (!user.isAdmin) throw new ApiError(AUTH_MESSAGES.NOT_ADMIN, 401);
+        // check admin status
+        if (!user.isAdmin) throw new ApiError(AUTH_MESSAGES.NOT_ADMIN, 401);
 
-    next();
-};
+        next();
+    },
+);
 
 async function decodeToken(req: AuthRequest) {
     // collect JWT from header
