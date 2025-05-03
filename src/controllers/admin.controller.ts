@@ -45,11 +45,13 @@ export const addAdmin = aw(async (req: Request, res: Response) => {
 });
 
 export const removeAdmin = aw(async (req: Request, res: Response) => {
-    const email = req.params.email;
+    const email = req.query.email;
     nullChecker({ email });
 
     const admin = await User.findOne({ email, isAdmin: true });
     if (!admin) return errorResponse(res, ADMIN_MESSAGES.NOT_FOUND, 409);
+
+    await admin.deleteOne();
 
     return successResponse(res, ADMIN_MESSAGES.REMOVED);
 });
