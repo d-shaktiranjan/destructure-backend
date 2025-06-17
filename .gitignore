@@ -3,6 +3,7 @@ node_modules/
 
 # Ignore build
 dist/
+build-info.json
 
 # Ignore environment variables file
 .env

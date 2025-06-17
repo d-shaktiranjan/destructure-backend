@@ -30,11 +30,21 @@ const getCurrentGitBranchInfo = () => {
     return data;
 };
 
+const getBuildInfo = () => {
+    try {
+        const buildInfo = readFileSync("build-info.json", "utf8");
+        return JSON.parse(buildInfo);
+    } catch {
+        return {};
+    }
+};
+
 const apiMetaData = {
     ...getMetaDataFromPackage(),
     environment: ENVIRONMENT,
     host: "",
     ...getCurrentGitBranchInfo(),
+    ...getBuildInfo(),
     documentation: "https://postman.destructure.in",
     license: "CC BY-NC-ND 4.0",
 };
