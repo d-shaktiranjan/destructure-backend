@@ -1,6 +1,8 @@
 import { readFileSync } from "fs";
 import { logger } from "lorin";
 
+import { ENVIRONMENT } from "../config/constants";
+
 const getMetaDataFromPackage = () => {
     const packageJson = readFileSync("package.json", "utf8");
     const { name, version, description } = JSON.parse(packageJson);
@@ -30,7 +32,7 @@ const getCurrentGitBranchInfo = () => {
 
 const apiMetaData = {
     ...getMetaDataFromPackage(),
-    tag: process.env.TAG,
+    environment: ENVIRONMENT,
     host: "",
     ...getCurrentGitBranchInfo(),
     documentation: "https://postman.destructure.in",
