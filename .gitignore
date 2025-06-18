@@ -3,6 +3,7 @@ node_modules/
 
 # Ignore build
 dist/
+build-info.json
 
 # Ignore environment variables file
 .env
@@ -17,6 +18,7 @@ public/images/*
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
+!.vscode/settings.json
 
 # Ignore macOS system files
 .DS_Store

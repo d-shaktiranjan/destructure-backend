@@ -1,4 +1,7 @@
 import { readFileSync } from "fs";
+import { logger } from "lorin";
+
+import { ENVIRONMENT } from "../config/constants";
 
 const getMetaDataFromPackage = () => {
     const packageJson = readFileSync("package.json", "utf8");
@@ -6,21 +9,42 @@ const getMetaDataFromPackage = () => {
     return { name, description, version };
 };
 
-const getRunningBranch = (): string => {
+const getCurrentGitBranchInfo = () => {
+    const data = {
+        runningBranch: "unknown",
+        commitHash: "unknown",
+    };
     try {
-        const file = readFileSync(".git/HEAD", "utf8");
-        return file.replace("ref: refs/heads/", "").replaceAll("\n", "");
-    } catch (error) {
-        if (error instanceof Error) return error.message;
-        return "Error";
+        const commitFile = readFileSync(".git/HEAD", "utf8");
+        const branchName = commitFile
+            .replace("ref: refs/heads/", "")
+            .replaceAll("\n", "");
+        const hashFile = readFileSync(".git/refs/heads/" + branchName, "utf8");
+        data.runningBranch = branchName;
+        data.commitHash = hashFile.replaceAll("\n", "");
+    } catch {
+        logger.error(
+            "Failed to read git branch or commit hash. Running in a non-git environment.",
+        );
+    }
+    return data;
+};
+
+const getBuildInfo = () => {
+    try {
+        const buildInfo = readFileSync("build-info.json", "utf8");
+        return JSON.parse(buildInfo);
+    } catch {
+        return {};
     }
 };
 
 const apiMetaData = {
     ...getMetaDataFromPackage(),
-    tag: process.env.TAG,
+    environment: ENVIRONMENT,
     host: "",
-    runningBranch: getRunningBranch(),
+    ...getCurrentGitBranchInfo(),
+    ...getBuildInfo(),
     documentation: "https://postman.destructure.in",
     license: "CC BY-NC-ND 4.0",
 };

@@ -1,7 +1,9 @@
 // ########## start environment variables ##########
 export const PORT = process.env.PORT || 8000;
-export const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017";
 export const DEBUG: boolean = process.env.DEBUG === "true";
+export const ENVIRONMENT: string = process.env.ENVIRONMENT || "local";
+// environment
+export const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017";
 export const JWT_SECRET: string = process.env.JWT_SECRET || "";
 export const AUTH_TOKEN_EXPIRY_IN_DAYS: number = parseInt(
     process.env.AUTH_TOKEN_EXPIRY_IN_DAYS || "30",
