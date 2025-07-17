@@ -1,8 +1,8 @@
 import { Response } from "express";
 
 // middleware, model & lib imports
-import aw from "../middlewares/asyncWrap.middleware";
 import { AuthRequest } from "../libs/AuthRequest.lib";
+import aw from "../middlewares/asyncWrap.middleware";
 import Blog from "../models/Blog.model";
 
 // config & utils import
@@ -26,16 +26,15 @@ export const search = aw(async (req: AuthRequest, res: Response) => {
 
     if (req.user) req.user.storeSearchResult(query);
 
-    return successResponse(res, SEARCH_MESSAGES.RESULT_FETCHED, 200, blogs);
+    return successResponse(res, SEARCH_MESSAGES.RESULT_FETCHED, {
+        data: blogs,
+    });
 });
 
 export const getSearchHistory = (req: AuthRequest, res: Response) => {
-    return successResponse(
-        res,
-        SEARCH_MESSAGES.HISTORY_FETCHED,
-        200,
-        req.user?.searches,
-    );
+    return successResponse(res, SEARCH_MESSAGES.HISTORY_FETCHED, {
+        data: req.user?.searches,
+    });
 };
 
 export const deleteSearchHistory = (req: AuthRequest, res: Response) => {
