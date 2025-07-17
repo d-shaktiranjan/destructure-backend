@@ -4,14 +4,14 @@
     "description": "Destructure app backend",
     "main": "src/index.ts",
     "scripts": {
-        "build": "tsc && ts-node ./src/utils/build.util.ts",
+        "build": "tsc && tsx ./src/utils/build.util.ts",
         "start": "node dist/index.js",
-        "dev": "nodemon --exec ts-node src/index.ts",
+        "dev": "tsx watch src/index.ts",
         "lint": "eslint ./src/",
         "format": "prettier ./src --write",
         "format.check": "prettier ./src --check",
         "spell": "cspell lint .",
-        "lefthook": "ts-node ./.git_hooks/commitMessage.ts"
+        "lefthook": "tsx ./.git_hooks/commitMessage.ts"
     },
     "keywords": [
         "NodeJS",
@@ -47,9 +47,8 @@
         "eslint": "^9.25.1",
         "globals": "^16.0.0",
         "lefthook": "^1.11.12",
-        "nodemon": "^3.1.10",
         "prettier": "^3.5.3",
-        "ts-node": "^10.9.2",
+        "tsx": "^4.20.3",
         "typescript": "^5.8.3",
         "typescript-eslint": "^8.31.1"
     },
