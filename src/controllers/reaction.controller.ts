@@ -1,14 +1,14 @@
 import { Response } from "express";
 
 // model & lib
-import Blog from "../models/Blog.model";
-import Reaction from "../models/Reaction.model";
-import Comment from "../models/Comment.model";
 import { AuthRequest } from "../libs/AuthRequest.lib";
 import { BlogDocument, CommentDocument } from "../libs/Documents.lib";
+import Blog from "../models/Blog.model";
+import Comment from "../models/Comment.model";
+import Reaction from "../models/Reaction.model";
 
 // config
-import { REACTION_MESSAGES, BLOG_MESSAGES } from "../config/messages";
+import { BLOG_MESSAGES, REACTION_MESSAGES } from "../config/messages";
 
 // middleware, service & utils
 import aw from "../middlewares/asyncWrap.middleware";
@@ -23,7 +23,10 @@ export const reaction = aw(async (req: AuthRequest, res: Response) => {
     if (to === "BLOG") content = await Blog.findById(_id);
     else content = await Comment.findById(_id);
 
-    if (!content) return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND, 404);
+    if (!content)
+        return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND, {
+            statusCode: 404,
+        });
 
     // check for existing reaction
     const existingReaction = await Reaction.findOne({
@@ -34,7 +37,9 @@ export const reaction = aw(async (req: AuthRequest, res: Response) => {
     // remove reaction object if user request the same reaction
     if (existingReaction && existingReaction.reaction === reaction) {
         await existingReaction.deleteOne();
-        return successResponse(res, REACTION_MESSAGES.REMOVED, 202);
+        return successResponse(res, REACTION_MESSAGES.REMOVED, {
+            statusCode: 202,
+        });
     }
 
     const message = existingReaction
@@ -46,7 +51,7 @@ export const reaction = aw(async (req: AuthRequest, res: Response) => {
     if (existingReaction) {
         existingReaction.reaction = reaction;
         await existingReaction.save();
-        return successResponse(res, message, statusCode);
+        return successResponse(res, message, { statusCode });
     }
 
     // create new reaction
@@ -56,5 +61,5 @@ export const reaction = aw(async (req: AuthRequest, res: Response) => {
         reaction,
     }).save();
 
-    return successResponse(res, message, statusCode);
+    return successResponse(res, message, { statusCode });
 });

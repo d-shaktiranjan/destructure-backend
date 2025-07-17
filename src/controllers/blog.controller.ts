@@ -12,9 +12,9 @@ import {
 } from "../config/messages";
 
 // model & lib imports
-import Blog from "../models/Blog.model";
 import { AuthRequest } from "../libs/AuthRequest.lib";
 import { BlogDocument } from "../libs/Documents.lib";
+import Blog from "../models/Blog.model";
 import User from "../models/User.model";
 
 import {
@@ -24,8 +24,8 @@ import {
 
 // util
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
-import nullChecker from "../utils/nullChecker.util";
 import { generateSlugUntil, isSlugUniqueUtil } from "../utils/blog.util";
+import nullChecker from "../utils/nullChecker.util";
 
 export const createBlog = aw(async (req: AuthRequest, res: Response) => {
     // get values from request body & null check
@@ -61,7 +61,10 @@ export const createBlog = aw(async (req: AuthRequest, res: Response) => {
     });
     await newBlog.save();
 
-    return successResponse(res, BLOG_MESSAGES.CREATED, 201, newBlog);
+    return successResponse(res, BLOG_MESSAGES.CREATED, {
+        statusCode: 201,
+        data: newBlog,
+    });
 });
 
 export const getBlogList = aw(async (req: Request, res: Response) =>
@@ -132,7 +135,10 @@ export const updateBlog = aw(async (req: Request, res: Response) => {
     }
     await blog.save();
 
-    return successResponse(res, BLOG_MESSAGES.UPDATED, 202, blog);
+    return successResponse(res, BLOG_MESSAGES.UPDATED, {
+        statusCode: 202,
+        data: blog,
+    });
 });
 
 export const checkUniqueSlug = aw(async (req: Request, res: Response) => {
@@ -140,18 +146,24 @@ export const checkUniqueSlug = aw(async (req: Request, res: Response) => {
     nullChecker({ slug });
 
     if (await isSlugUniqueUtil(slug))
-        return successResponse(res, BLOG_MESSAGES.SLUG_UNIQUE, 200, {
-            isUnique: true,
+        return successResponse(res, BLOG_MESSAGES.SLUG_UNIQUE, {
+            data: {
+                isUnique: true,
+            },
         });
 
-    return errorResponse(res, BLOG_MESSAGES.SLUG_NOT_UNIQUE, 409);
+    return errorResponse(res, BLOG_MESSAGES.SLUG_NOT_UNIQUE, {
+        statusCode: 409,
+    });
 });
 
 export const generateSlug = aw(async (req: Request, res: Response) => {
     const title = req.query.title as string;
     nullChecker({ title });
 
-    return successResponse(res, BLOG_MESSAGES.SLUG_GENERATED, 200, {
-        slug: await generateSlugUntil(title),
+    return successResponse(res, BLOG_MESSAGES.SLUG_GENERATED, {
+        data: {
+            slug: await generateSlugUntil(title),
+        },
     });
 });

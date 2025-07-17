@@ -2,16 +2,16 @@ import { Request, Response } from "express";
 import { isValidObjectId, Types } from "mongoose";
 
 // lib, model & lib
+import { AuthRequest } from "../libs/AuthRequest.lib";
 import aw from "../middlewares/asyncWrap.middleware";
 import Comment from "../models/Comment.model";
-import { AuthRequest } from "../libs/AuthRequest.lib";
 
 // utils & config
-import { errorResponse, successResponse } from "../utils/apiResponse.util";
-import nullChecker from "../utils/nullChecker.util";
-import { getBlogById } from "../utils/blog.util";
 import { COMMENT_MESSAGES, GENERIC_MESSAGES } from "../config/messages";
 import { getCommentService } from "../services/comment.service";
+import { errorResponse, successResponse } from "../utils/apiResponse.util";
+import { getBlogById } from "../utils/blog.util";
+import nullChecker from "../utils/nullChecker.util";
 
 export const addComment = aw(async (req: AuthRequest, res: Response) => {
     const { blog, content } = req.body;
@@ -28,7 +28,7 @@ export const addComment = aw(async (req: AuthRequest, res: Response) => {
     });
     await comment.save();
 
-    return successResponse(res, COMMENT_MESSAGES.ADDED, 201);
+    return successResponse(res, COMMENT_MESSAGES.ADDED, { statusCode: 201 });
 });
 
 export const removeComment = aw(async (req: AuthRequest, res: Response) => {
@@ -41,11 +41,13 @@ export const removeComment = aw(async (req: AuthRequest, res: Response) => {
 
     // check ownership
     if (String(comment.user) !== String(req.user?._id))
-        return errorResponse(res, GENERIC_MESSAGES.NOT_ALLOWED, 401);
+        return errorResponse(res, GENERIC_MESSAGES.NOT_ALLOWED, {
+            statusCode: 401,
+        });
 
     // delete the comment
     await comment.deleteOne();
-    return successResponse(res, COMMENT_MESSAGES.DELETED, 202);
+    return successResponse(res, COMMENT_MESSAGES.DELETED, { statusCode: 202 });
 });
 
 export const updateComment = aw(async (req: AuthRequest, res: Response) => {
@@ -61,18 +63,22 @@ export const updateComment = aw(async (req: AuthRequest, res: Response) => {
 
     // check for admin soft delete
     if (comment.isDeleted)
-        return errorResponse(res, COMMENT_MESSAGES.UNABLE_TO_UPDATE, 406);
+        return errorResponse(res, COMMENT_MESSAGES.UNABLE_TO_UPDATE, {
+            statusCode: 406,
+        });
 
     // check ownership
     if (String(comment.user) !== String(req.user?._id))
-        return errorResponse(res, GENERIC_MESSAGES.NOT_ALLOWED, 401);
+        return errorResponse(res, GENERIC_MESSAGES.NOT_ALLOWED, {
+            statusCode: 401,
+        });
 
     // update comment
     comment.content = content as string;
     comment.isEdited = true;
     await comment.save();
 
-    return successResponse(res, COMMENT_MESSAGES.UPDATED, 202);
+    return successResponse(res, COMMENT_MESSAGES.UPDATED, { statusCode: 202 });
 });
 
 export const getComments = aw(async (req: AuthRequest, res: Response) => {

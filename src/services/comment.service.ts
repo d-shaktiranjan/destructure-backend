@@ -4,14 +4,14 @@ import { Response } from "express";
 import { COMMENT_MESSAGES } from "../config/messages";
 
 // model & lib imports
-import Comment from "../models/Comment.model";
-import { successResponse } from "../utils/apiResponse.util";
-import {
-    userAggregateUtil,
-    reactionLookup,
-    reactionAddField,
-} from "../utils/aggregate.util";
 import { AuthRequest } from "../libs/AuthRequest.lib";
+import Comment from "../models/Comment.model";
+import {
+    reactionAddField,
+    reactionLookup,
+    userAggregateUtil,
+} from "../utils/aggregate.util";
+import { successResponse } from "../utils/apiResponse.util";
 
 export const getCommentService = async (
     req: AuthRequest,
@@ -41,5 +41,5 @@ export const getCommentService = async (
         },
     ]);
 
-    return successResponse(res, responseMessage, 200, allComments);
+    return successResponse(res, responseMessage, { data: allComments });
 };

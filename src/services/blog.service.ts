@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
 
-import Blog from "../models/Blog.model";
 import { AuthRequest } from "../libs/AuthRequest.lib";
+import Blog from "../models/Blog.model";
 
 import { BLOG_MESSAGES } from "../config/messages";
+import {
+    commentLookup,
+    reactionAddField,
+    reactionLookup,
+    userAggregateUtil,
+} from "../utils/aggregate.util";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
 import nullChecker from "../utils/nullChecker.util";
-import {
-    reactionLookup,
-    reactionAddField,
-    userAggregateUtil,
-    commentLookup,
-} from "../utils/aggregate.util";
 
 export const getBlogListService = async (
     req: AuthRequest,
@@ -65,7 +65,7 @@ export const getBlogListService = async (
         },
     ]).sort(sort);
 
-    return successResponse(res, BLOG_MESSAGES.ALL_FETCHED, 200, allBlogs);
+    return successResponse(res, BLOG_MESSAGES.ALL_FETCHED, { data: allBlogs });
 };
 
 export const getBlogDetailsService = async (
@@ -120,7 +120,9 @@ export const getBlogDetailsService = async (
         },
     ]);
     if (blog.length === 0)
-        return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND, 404);
+        return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND, {
+            statusCode: 404,
+        });
 
-    return successResponse(res, BLOG_MESSAGES.BLOG_FETCHED, 200, blog[0]);
+    return successResponse(res, BLOG_MESSAGES.BLOG_FETCHED, { data: blog[0] });
 };

@@ -16,7 +16,10 @@ export const getAdminList = aw(async (req: AuthRequest, res: Response) => {
         _id: { $ne: req.user?._id },
     }).select("_id name picture");
 
-    return successResponse(res, ADMIN_MESSAGES.LIST, 200, adminList);
+    return successResponse(res, ADMIN_MESSAGES.LIST, {
+        statusCode: 200,
+        data: adminList,
+    });
 });
 
 export const addAdmin = aw(async (req: Request, res: Response) => {
@@ -27,7 +30,9 @@ export const addAdmin = aw(async (req: Request, res: Response) => {
     if (user) {
         // if user is already an admin
         if (user.isAdmin)
-            return errorResponse(res, ADMIN_MESSAGES.ALREADY_EXISTS, 409);
+            return errorResponse(res, ADMIN_MESSAGES.ALREADY_EXISTS, {
+                statusCode: 409,
+            });
 
         // if user is not an admin
         user.isAdmin = true;
@@ -41,7 +46,7 @@ export const addAdmin = aw(async (req: Request, res: Response) => {
         }).save();
     }
 
-    return successResponse(res, ADMIN_MESSAGES.ADDED, 201);
+    return successResponse(res, ADMIN_MESSAGES.ADDED, { statusCode: 201 });
 });
 
 export const removeAdmin = aw(async (req: Request, res: Response) => {
@@ -49,7 +54,10 @@ export const removeAdmin = aw(async (req: Request, res: Response) => {
     nullChecker({ email });
 
     const admin = await User.findOne({ email, isAdmin: true });
-    if (!admin) return errorResponse(res, ADMIN_MESSAGES.NOT_FOUND, 409);
+    if (!admin)
+        return errorResponse(res, ADMIN_MESSAGES.NOT_FOUND, {
+            statusCode: 409,
+        });
 
     await admin.deleteOne();
 
