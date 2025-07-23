@@ -1,16 +1,18 @@
-import "dotenv/config";
-import cors from "cors";
-import express, { Response, Request, json, static as static_ } from "express";
 import cookieParser from "cookie-parser";
-import { loggerMiddleware, logger } from "lorin";
+import cors from "cors";
+import "dotenv/config";
+import express, { Request, Response, json, static as static_ } from "express";
+import { logger, loggerMiddleware } from "lorin";
+import swaggerUi from "swagger-ui-express";
 
 // middlewares imports
-import dbLogger from "./middlewares/logger.middleware";
 import requestBodyMiddleware from "./middlewares/body.middleware";
+import dbLogger from "./middlewares/logger.middleware";
 
 // config & utils imports
-import { PORT, CORS_ORIGINS } from "./config/constants";
+import { CORS_ORIGINS, PORT } from "./config/constants";
 import { APP_MESSAGES } from "./config/messages";
+import swaggerDocument, { swaggerOptions } from "./config/swagger";
 import apiMetaData from "./utils/apiMetaData.util";
 
 // connect to DB
@@ -18,9 +20,9 @@ import connectToDB from "./config/db";
 connectToDB();
 
 // route imports
-import blogRouter from "./routes/blog.routes";
-import authRouter from "./routes/auth.routes";
 import adminRouter from "./routes/admin.routes";
+import authRouter from "./routes/auth.routes";
+import blogRouter from "./routes/blog.routes";
 import commentRouter from "./routes/comment.routes";
 import reactRouter from "./routes/react.routes";
 import searchRouter from "./routes/search.routes";
@@ -49,6 +51,12 @@ app.get("/api", (req: Request, res: Response) => {
     apiMetaData.host = host;
     res.json(apiMetaData);
 });
+
+app.use(
+    "/docs",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerDocument, swaggerOptions),
+);
 
 app.listen(PORT, () => {
     logger.success(APP_MESSAGES.RUNNING);
