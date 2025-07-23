@@ -7,6 +7,7 @@ import User from "../models/User.model";
 
 // configs & utils
 import { ADMIN_MESSAGES } from "../config/messages";
+import { AdminAddSchema } from "../schemas/admin.schema";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
 import nullChecker from "../utils/nullChecker.util";
 
@@ -23,7 +24,7 @@ export const getAdminList = aw(async (req: AuthRequest, res: Response) => {
 });
 
 export const addAdmin = aw(async (req: Request, res: Response) => {
-    const email = req.body.email as string;
+    const email = (req.body as AdminAddSchema).email;
 
     const user = await User.findOne({ email });
 
