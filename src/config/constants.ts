@@ -29,6 +29,11 @@ export enum REACTIONS {
     DISLIKE = "DISLIKE",
 }
 
+export enum REACTION_TO {
+    COMMENT = "COMMENT",
+    BLOG = "BLOG",
+}
+
 export const ALLOWED_IMAGE_MIMETYPE: readonly string[] = [
     "image/jpeg",
     "image/png",

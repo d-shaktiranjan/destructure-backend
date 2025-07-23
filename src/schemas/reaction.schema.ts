@@ -1,13 +1,18 @@
-import { z } from "zod";
 import { isValidObjectId } from "mongoose";
-import { REACTIONS } from "../config/constants";
+import { z } from "zod";
+import { REACTION_TO, REACTIONS } from "../config/constants";
 
 export const reactionSchema = z.object({
     _id: z.string().refine((value) => isValidObjectId(value)),
-    to: z.enum(["COMMENT", "BLOG"], { message: "Invalid value" }),
+    to: z.enum(REACTION_TO, {
+        message: `Invalid value, possible values:- ${Object.values(REACTION_TO).join(", ")}`,
+    }),
     reaction: z
-        .enum(Object.values(REACTIONS) as [string, ...string[]], {
-            message: "Invalid value",
+        .enum(REACTIONS, {
+            message: `Invalid value, possible values:- ${Object.values(REACTIONS).join(", ")}`,
         })
-        .optional(),
+        .optional()
+        .default(REACTIONS.LIKE),
 });
+
+export type ReactionType = z.infer<typeof reactionSchema>;

@@ -11,16 +11,17 @@ import Reaction from "../models/Reaction.model";
 import { BLOG_MESSAGES, REACTION_MESSAGES } from "../config/messages";
 
 // middleware, service & utils
+import { REACTION_TO } from "../config/constants";
 import aw from "../middlewares/asyncWrap.middleware";
+import { ReactionType } from "../schemas/reaction.schema";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
 
 export const reaction = aw(async (req: AuthRequest, res: Response) => {
-    const { _id, reaction } = req.body;
-    const to: "COMMENT" | "BLOG" = req.body.to;
+    const { _id, reaction, to } = req.body as ReactionType;
 
     // new way
     let content: BlogDocument | CommentDocument | null = null;
-    if (to === "BLOG") content = await Blog.findById(_id);
+    if (to === REACTION_TO.BLOG) content = await Blog.findById(_id);
     else content = await Comment.findById(_id);
 
     if (!content)
