@@ -1,10 +1,10 @@
-import { readdir, unlink } from "fs/promises";
 import { Request, Response } from "express";
+import { readdir, unlink } from "fs/promises";
 
+import { ALLOWED_IMAGE_MIMETYPE } from "../config/constants";
+import { IMAGE_MESSAGES } from "../config/messages";
 import aw from "../middlewares/asyncWrap.middleware";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
-import { IMAGE_MESSAGES } from "../config/messages";
-import { ALLOWED_IMAGE_MIMETYPE } from "../config/constants";
 import { generateBase64 } from "../utils/blog.util";
 
 export const imageList = aw(async (req: Request, res: Response) => {
@@ -14,7 +14,7 @@ export const imageList = aw(async (req: Request, res: Response) => {
         .filter((item) => item != ".gitkeep")
         .map((item) => host + item);
 
-    return successResponse(res, IMAGE_MESSAGES.LIST_FETCHED, 200, dirList);
+    return successResponse(res, IMAGE_MESSAGES.LIST_FETCHED, { data: dirList });
 });
 
 export const imageUpload = aw(async (req: Request, res: Response) => {
@@ -29,7 +29,9 @@ export const imageUpload = aw(async (req: Request, res: Response) => {
         // allow only images
         if (!ALLOWED_IMAGE_MIMETYPE.includes(file.mimetype)) {
             unlink(file.path);
-            return errorResponse(res, IMAGE_MESSAGES.IMAGE_ONLY, 406);
+            return errorResponse(res, IMAGE_MESSAGES.IMAGE_ONLY, {
+                statusCode: 406,
+            });
         }
 
         // generate url & base64
@@ -38,5 +40,8 @@ export const imageUpload = aw(async (req: Request, res: Response) => {
         urls.push(`${url}?blurDataURL=${base}`);
     }
 
-    return successResponse(res, IMAGE_MESSAGES.IMAGE_UPLOADED, 201, urls);
+    return successResponse(res, IMAGE_MESSAGES.IMAGE_UPLOADED, {
+        data: urls,
+        statusCode: 201,
+    });
 });

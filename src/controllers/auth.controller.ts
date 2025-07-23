@@ -2,17 +2,17 @@
 import { Request, Response } from "express";
 
 // config imports
-import { GOOGLE_CLIENT_ID, CORS_ORIGINS } from "../config/constants";
+import { CORS_ORIGINS, GOOGLE_CLIENT_ID } from "../config/constants";
 import { AUTH_MESSAGES } from "../config/messages";
 
 // model & libs imports
-import User from "../models/User.model";
 import { AuthRequest } from "../libs/AuthRequest.lib";
+import User from "../models/User.model";
 
 // util & middlewares imports
 import aw from "../middlewares/asyncWrap.middleware";
-import { errorResponse, successResponse } from "../utils/apiResponse.util";
 import { getOAuth2Client } from "../services/auth.service";
+import { errorResponse, successResponse } from "../utils/apiResponse.util";
 
 let oAuth2Client = getOAuth2Client();
 
@@ -20,7 +20,9 @@ export const googleLogin = aw(async (req: Request, res: Response) => {
     // check origin
     const requestOrigin = req.headers.referer;
     if (!requestOrigin || !CORS_ORIGINS.includes(requestOrigin))
-        return errorResponse(res, AUTH_MESSAGES.UNABLE_TO_LOGIN, 406);
+        return errorResponse(res, AUTH_MESSAGES.UNABLE_TO_LOGIN, {
+            statusCode: 406,
+        });
 
     // update oAuth client based on origin
     oAuth2Client = getOAuth2Client(`${requestOrigin}api/auth`);
@@ -59,11 +61,13 @@ export const googleCallback = aw(async (req: Request, res: Response) => {
     await userObject.save();
     const jwt = userObject.generateAuthToken();
 
-    return successResponse(res, AUTH_MESSAGES.LOGIN, 200, {
-        jwt,
+    return successResponse(res, AUTH_MESSAGES.LOGIN, {
+        data: {
+            jwt,
+        },
     });
 });
 
 export const profile = aw(async (req: AuthRequest, res: Response) => {
-    return successResponse(res, AUTH_MESSAGES.PROFILE, 200, req.user);
+    return successResponse(res, AUTH_MESSAGES.PROFILE, { data: req.user });
 });

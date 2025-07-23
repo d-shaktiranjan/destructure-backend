@@ -2,6 +2,8 @@ name: Code quality checker & publish
 
 on:
   push:
+    branches:
+      - main
   pull_request:
 
 jobs:
