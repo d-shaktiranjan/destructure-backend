@@ -1,7 +1,7 @@
 import { Router } from "express";
 
-import { allowBoth } from "../middlewares/auth.middleware";
 import { getBlogDetails, getBlogList } from "../controllers/blog.controller";
+import { allowBoth } from "../middlewares/auth.middleware";
 
 const router = Router();
 router.use(allowBoth);
