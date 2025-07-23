@@ -1,0 +1,382 @@
+openapi: 3.0.3
+info:
+  title: Destructure API
+  description: REST API for blog, user, admin, comments, reactions, and search features.
+  version: 1.0.0
+  contact:
+    name: Shakti Ranjan Debata
+    url: https://shakti.destructure.in/
+
+servers:
+  - url: http://localhost:8000/api
+    description: Local Development
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Blog:
+      type: object
+      properties:
+        title: { type: string }
+        description: { type: string }
+        slug: { type: string }
+        banner: { type: string }
+        content: { type: string }
+
+    Reaction:
+      type: object
+      properties:
+        _id: { type: string }
+        to: { type: string, enum: [BLOG, COMMENT] }
+        reaction: { type: string }
+
+    Comment:
+      type: object
+      properties:
+        blog: { type: string }
+        content: { type: string }
+
+paths:
+  # --- Auth ---
+  /auth/login:
+    get:
+      summary: Initiate Google login
+      tags: [Auth]
+      responses:
+        302:
+          description: Redirect to Google OAuth
+
+  /auth/google/callback:
+    get:
+      summary: Google OAuth callback
+      tags: [Auth]
+      responses:
+        200:
+          description: Login successful
+
+  /auth/profile:
+    get:
+      summary: Get user profile
+      tags: [Auth]
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Profile data
+
+  # --- Blog (public) ---
+  /blogs:
+    get:
+      summary: Get public blogs
+      tags: [Blog]
+      parameters:
+        - in: query
+          name: sort
+          schema:
+            type: string
+            enum: [latest, oldest, mostLiked]
+      responses:
+        200:
+          description: Blog list
+
+  /blogs/{slug}:
+    get:
+      summary: Get blog by slug
+      tags: [Blog]
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema: { type: string }
+      responses:
+        200:
+          description: Blog details
+
+  # --- Admin (Protected) ---
+  /admin:
+    get:
+      summary: Get admin users
+      tags: [Admin]
+      security: [{ bearerAuth: [] }]
+      responses:
+        200:
+          description: Admin list
+
+    post:
+      summary: Add admin by email
+      tags: [Admin]
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email: { type: string }
+      responses:
+        201:
+          description: Admin added
+
+    delete:
+      summary: Remove admin by email
+      tags: [Admin]
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: query
+          name: email
+          required: true
+          schema: { type: string }
+      responses:
+        200:
+          description: Admin removed
+
+  /admin/blog:
+    get:
+      summary: Get blog list (admin view)
+      tags: [Admin]
+      security: [{ bearerAuth: [] }]
+      responses:
+        200:
+          description: List of blogs
+
+    post:
+      summary: Create blog
+      tags: [Admin]
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/Blog" }
+      responses:
+        201:
+          description: Blog created
+
+    put:
+      summary: Update blog
+      tags: [Admin]
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/Blog" }
+      responses:
+        200:
+          description: Blog updated
+
+  /admin/slug/check:
+    get:
+      summary: Check if slug is unique
+      tags: [Admin]
+      security: [{ bearerAuth: [] }]
+      responses:
+        200:
+          description: Slug status
+
+  /admin/slug/generate:
+    get:
+      summary: Generate a unique slug
+      tags: [Admin]
+      security: [{ bearerAuth: [] }]
+      responses:
+        200:
+          description: Slug generated
+
+  /admin/images:
+    get:
+      summary: List uploaded images
+      tags: [Admin]
+      security: [{ bearerAuth: [] }]
+      responses:
+        200:
+          description: Image URLs
+
+    post:
+      summary: Upload image(s)
+      tags: [Admin]
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        201:
+          description: Images uploaded
+
+  # --- Comment ---
+  /comment:
+    get:
+      summary: Get comments for blog
+      tags: [Comment]
+      parameters:
+        - in: query
+          name: blog
+          schema: { type: string }
+      responses:
+        200:
+          description: Comments fetched
+
+    post:
+      summary: Add a comment
+      tags: [Comment]
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/Comment" }
+      responses:
+        201:
+          description: Comment created
+
+    put:
+      summary: Update a comment
+      tags: [Comment]
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                _id: { type: string }
+                content: { type: string }
+      responses:
+        202:
+          description: Comment updated
+
+    delete:
+      summary: Delete a comment
+      tags: [Comment]
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: query
+          name: _id
+          schema: { type: string }
+      responses:
+        202:
+          description: Comment deleted
+
+  /comment/reply:
+    get:
+      summary: Get replies for a comment
+      tags: [Comment]
+      parameters:
+        - in: query
+          name: _id
+          schema: { type: string }
+      responses:
+        200:
+          description: Replies fetched
+
+    post:
+      summary: Add reply to a comment
+      tags: [Comment]
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                _id: { type: string }
+                content: { type: string }
+      responses:
+        201:
+          description: Reply added
+
+  /comment/soft:
+    delete:
+      summary: Soft delete a comment (admin)
+      tags: [Comment]
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: query
+          name: _id
+          schema: { type: string }
+      responses:
+        200:
+          description: Comment soft-deleted
+
+  # --- Reaction ---
+  /reaction:
+    post:
+      summary: React to blog or comment
+      tags: [Reaction]
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/Reaction" }
+      responses:
+        201:
+          description: Reaction saved
+
+  # --- Search ---
+  /search:
+    get:
+      summary: Search blogs
+      tags: [Search]
+      parameters:
+        - in: query
+          name: query
+          required: true
+          schema: { type: string }
+      responses:
+        200:
+          description: Search results
+
+  /search/history:
+    get:
+      summary: Get search history
+      tags: [Search]
+      security: [{ bearerAuth: [] }]
+      responses:
+        200:
+          description: History
+
+    delete:
+      summary: Delete a search history entry
+      tags: [Search]
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: query
+          name: _id
+          schema: { type: string }
+      responses:
+        200:
+          description: Entry deleted
+
+    patch:
+      summary: Link blog with a search query
+      tags: [Search]
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                _id: { type: string }
+                blog: { type: string }
+      responses:
+        200:
+          description: Linked
+
+  # --- API Metadata ---
+  /:
+    get:
+      summary: Get API metadata
+      tags: [Meta]
+      responses:
+        200:
+          description: Metadata including version, environment, git info, etc.
