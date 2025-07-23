@@ -1,4 +1,5 @@
 import { Response } from "express";
+import { APP_MESSAGES } from "../config/messages";
 
 export const successResponse = (
     res: Response,
@@ -10,6 +11,9 @@ export const successResponse = (
     } = {},
 ): void => {
     if (!options.statusCode) options.statusCode = 200;
+    if (options.statusCode < 200 || options.statusCode >= 300)
+        throw new Error(APP_MESSAGES.INVALID_SUCCESS_CODE);
+
     return apiResponse(res, true, message, options as ApiResponseOptions);
 };
 
@@ -22,6 +26,9 @@ export const errorResponse = (
     } = {},
 ): void => {
     if (!options.statusCode) options.statusCode = 400;
+    if (options.statusCode < 400 || options.statusCode >= 600)
+        throw new Error(APP_MESSAGES.INVALID_ERROR_CODE);
+
     return apiResponse(res, false, message, options as ApiResponseOptions);
 };
 

@@ -4,6 +4,10 @@ export const APP_MESSAGES = {
     RUNNING: `App is running on ${PORT}`,
     ERROR: "Some error occurred",
     VALIDATION_ERROR: "Schema validation error",
+    INVALID_SUCCESS_CODE:
+        "Status code for success response must be in the 2xx range.",
+    INVALID_ERROR_CODE:
+        "Status code for error response must be in the 4xx or 5xx range.",
 } as const;
 
 export enum AUTH_MESSAGES {
