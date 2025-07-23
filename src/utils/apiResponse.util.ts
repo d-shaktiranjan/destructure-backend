@@ -14,7 +14,11 @@ export const successResponse = (
     if (options.statusCode < 200 || options.statusCode >= 300)
         throw new Error(APP_MESSAGES.INVALID_SUCCESS_CODE);
 
-    return apiResponse(res, true, message, options as ApiResponseOptions);
+    return apiResponse(res, true, message, {
+        statusCode: options.statusCode,
+        data: options.data || null,
+        meta: options.meta || null,
+    });
 };
 
 export const errorResponse = (
@@ -29,14 +33,17 @@ export const errorResponse = (
     if (options.statusCode < 400 || options.statusCode >= 600)
         throw new Error(APP_MESSAGES.INVALID_ERROR_CODE);
 
-    return apiResponse(res, false, message, options as ApiResponseOptions);
+    return apiResponse(res, false, message, {
+        statusCode: options.statusCode,
+        errors: options.errors || null,
+    });
 };
 
 interface ApiResponseOptions {
     statusCode: number;
-    data?: object;
-    meta?: object;
-    errors?: Record<string, string[]>;
+    data?: object | null;
+    meta?: object | null;
+    errors?: Record<string, string[]> | null;
 }
 
 function apiResponse(

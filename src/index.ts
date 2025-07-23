@@ -26,7 +26,6 @@ import blogRouter from "./routes/blog.routes";
 import commentRouter from "./routes/comment.routes";
 import reactRouter from "./routes/react.routes";
 import searchRouter from "./routes/search.routes";
-import { successResponse } from "./utils/apiResponse.util";
 
 const app = express();
 
@@ -50,11 +49,7 @@ app.use("/api/search", searchRouter);
 app.get("/api", (req: Request, res: Response) => {
     const host = req.protocol + "://" + req.get("host") + req.originalUrl;
     apiMetaData.host = host;
-    // res.json(apiMetaData);
-    return successResponse(res, "API metadata fetched successfully", {
-        data: apiMetaData,
-        statusCode: 400,
-    });
+    res.json(apiMetaData);
 });
 
 app.use(
