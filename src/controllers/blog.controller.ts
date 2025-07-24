@@ -13,7 +13,6 @@ import {
 
 // model & lib imports
 import { AuthRequest } from "../libs/AuthRequest.lib";
-import { BlogDocument } from "../libs/Documents.lib";
 import Blog from "../models/Blog.model";
 import User from "../models/User.model";
 
@@ -23,13 +22,16 @@ import {
 } from "../services/blog.service";
 
 // util
+import { BlogDocument } from "../libs/Documents.lib";
+import { BlogCreateType, BlogUpdateType } from "../schemas/blog.schema";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
 import { generateSlugUntil, isSlugUniqueUtil } from "../utils/blog.util";
 import nullChecker from "../utils/nullChecker.util";
 
 export const createBlog = aw(async (req: AuthRequest, res: Response) => {
     // get values from request body & null check
-    const { title, description, slug, content, banner, coAuthor } = req.body;
+    const { title, description, slug, content, banner, coAuthor } =
+        req.body as BlogCreateType;
 
     // fetch coAuthor
     if (coAuthor) {
@@ -81,7 +83,8 @@ export const getBlogDetails = aw(async (req: AuthRequest, res: Response) => {
 });
 
 export const updateBlog = aw(async (req: Request, res: Response) => {
-    const { _id } = req.body;
+    const body = req.body as BlogUpdateType;
+    const { _id } = body;
 
     // fetch blog in DB
     const blog = await Blog.findById(_id);
@@ -100,14 +103,12 @@ export const updateBlog = aw(async (req: Request, res: Response) => {
     ];
 
     // update fields
-    for (const keyName in req.body) {
-        if (!allowedKeys.includes(keyName))
-            return errorResponse(res, keyName + BLOG_MESSAGES.KEY_NOT_ALLOWED);
-        if (keyName === "_id") continue;
+    for (const key in body) {
+        if (!allowedKeys.includes(key))
+            return errorResponse(res, key + BLOG_MESSAGES.KEY_NOT_ALLOWED);
+        if (key === "_id") continue;
 
-        const key = keyName as keyof BlogDocument;
-        const value = req.body[key];
-
+        const value = body[key as keyof BlogUpdateType];
         if (!value) continue;
         // title unique checking
         else if (key === "title") {
@@ -131,7 +132,7 @@ export const updateBlog = aw(async (req: Request, res: Response) => {
         }
 
         // update fields
-        blog[key] = value as never;
+        blog[key as keyof BlogDocument] = value as never;
     }
     await blog.save();
 

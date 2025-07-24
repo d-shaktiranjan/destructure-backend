@@ -9,16 +9,16 @@ import {
 import { imageList, imageUpload } from "../controllers/images.controller";
 
 // middleware imports
-import { isAdmin, isAuthenticated } from "../middlewares/auth.middleware";
-import { upload } from "../middlewares/multer.middlewares";
-import zodValidator from "../middlewares/zodValidator.middleware";
-import { blogCreateSchema, blogUpdateSchema } from "../schemas/blog.schema";
 import {
     addAdmin,
     getAdminList,
     removeAdmin,
 } from "../controllers/admin.controller";
+import { isAdmin, isAuthenticated } from "../middlewares/auth.middleware";
+import { upload } from "../middlewares/multer.middlewares";
+import zodValidator from "../middlewares/zodValidator.middleware";
 import { adminAddSchema } from "../schemas/admin.schema";
+import { blogCreateSchema, blogUpdateSchema } from "../schemas/blog.schema";
 
 const router = Router();
 router.use(isAuthenticated, isAdmin);
