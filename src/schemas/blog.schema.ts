@@ -2,10 +2,10 @@ import { isValidObjectId } from "mongoose";
 import { z } from "zod";
 
 export const blogCreateSchema = z.object({
-    title: z.string(),
-    description: z.string(),
-    slug: z.string(),
-    content: z.string(),
+    title: z.string().trim(),
+    description: z.string().trim(),
+    slug: z.string().trim().toLowerCase(),
+    content: z.string().trim(),
     banner: z.url(),
     coAuthor: z
         .string()

@@ -40,10 +40,16 @@ jobs:
           pnpm install
           echo "All dependencies installed successfully ✅"
 
+      # Type checking
+      - name: Type Checking
+        run: |
+          pnpm type-check
+          echo "Congrats! Your code is type-safe 🛡️"
+
       # Format checking (runs Prettier or any other formatting tool)
       - name: Format Checking
         run: |
-          pnpm format.check
+          pnpm format:check
           echo "Congrats! Your code is well formatted 🌸"
 
       # Spell checking (checks spelling in comments, variable names, etc.)
