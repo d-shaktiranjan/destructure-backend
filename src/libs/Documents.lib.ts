@@ -1,24 +1,24 @@
-import { Document, Schema } from "mongoose";
+import { Document, Types } from "mongoose";
 import { REACTIONS } from "../config/constants";
 
 export interface BlogDocument extends Document {
-    readonly _id: Schema.Types.ObjectId;
+    readonly _id: Types.ObjectId;
     title: string;
     description: string;
     banner: string;
     slug: string;
     content: string;
-    author: Schema.Types.ObjectId;
-    coAuthor: Schema.Types.ObjectId;
+    author: Types.ObjectId;
+    coAuthor: Types.ObjectId;
     isPublic: boolean;
 }
 
 export interface CommentDocument extends Document {
-    readonly _id: Schema.Types.ObjectId;
-    user: Schema.Types.ObjectId;
-    blog: Schema.Types.ObjectId;
+    readonly _id: Types.ObjectId;
+    user: Types.ObjectId;
+    blog: Types.ObjectId;
     content: string;
-    parent?: Schema.Types.ObjectId;
+    parent?: Types.ObjectId;
     isEdited?: boolean;
     isDeleted?: boolean;
     createdAt: Date;
@@ -26,15 +26,15 @@ export interface CommentDocument extends Document {
 }
 
 export interface ReactionDocument extends Document {
-    readonly _id: Schema.Types.ObjectId;
-    blog?: Schema.Types.ObjectId;
-    comment?: Schema.Types.ObjectId;
-    user: Schema.Types.ObjectId;
+    readonly _id: Types.ObjectId;
+    blog?: Types.ObjectId;
+    comment?: Types.ObjectId;
+    user: Types.ObjectId;
     reaction: REACTIONS;
 }
 
 export interface UserDocument extends Document {
-    readonly _id: Schema.Types.ObjectId;
+    readonly _id: Types.ObjectId;
     name: string;
     email: string;
     picture?: string;
@@ -45,14 +45,14 @@ export interface UserDocument extends Document {
 }
 
 export interface SearchDocument extends Document {
-    readonly _id: Schema.Types.ObjectId;
+    readonly _id: Types.ObjectId;
     query: string;
-    blog?: Schema.Types.ObjectId;
+    blog?: Types.ObjectId;
     createdAt: Date;
 }
 
 export interface LoggerDocument extends Document {
-    readonly _id: Schema.Types.ObjectId;
+    readonly _id: Types.ObjectId;
     method: string;
     route: string;
     statusCode: number;

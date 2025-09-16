@@ -1,16 +1,16 @@
-import { readFileSync } from "fs";
 import { Response } from "express";
-import { Schema } from "mongoose";
+import { readFileSync } from "fs";
+import { Types } from "mongoose";
 import { getPlaiceholder } from "plaiceholder";
 
-import Blog from "../models/Blog.model";
-import { BlogDocument } from "../libs/Documents.lib";
 import { BLOG_MESSAGES } from "../config/messages";
 import ApiError from "../libs/ApiError.lib";
+import { BlogDocument } from "../libs/Documents.lib";
+import Blog from "../models/Blog.model";
 
 export const getBlogById = async (
     res: Response,
-    _id: Schema.Types.ObjectId,
+    _id: Types.ObjectId,
 ): Promise<BlogDocument> => {
     const blog = await Blog.findById(_id);
     if (!blog) throw new ApiError(BLOG_MESSAGES.BLOG_NOT_FOUND);
