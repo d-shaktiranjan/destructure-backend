@@ -1,5 +1,6 @@
-import { connect } from "mongoose";
 import { logger } from "lorin";
+import { connect } from "mongoose";
+
 import { MONGO_URI } from "./constants";
 import { DB_MESSAGES } from "./messages";
 
@@ -8,7 +9,7 @@ const connectToDB = () => {
         .then(() => logger.success(DB_MESSAGES.CONNECTED))
         .catch((error) => {
             logger.error(`${DB_MESSAGES.FAILED} ${error}`);
-            process.exit();
+            process.exit(1);
         });
 };
 export default connectToDB;
