@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
     checkUniqueSlug,
     createBlog,
+    deleteBlog,
     generateSlug,
     getBlogListAdmin,
     updateBlog,
@@ -36,7 +37,10 @@ router
     .post(zodValidator(blogCreateSchema), createBlog)
     .get(getBlogListAdmin);
 
-router.route("/blog/:id").put(zodValidator(blogUpdateSchema), updateBlog);
+router
+    .route("/blog/:id")
+    .put(zodValidator(blogUpdateSchema), updateBlog)
+    .delete(deleteBlog);
 
 // blog slug routes
 router.get("/slug/check", checkUniqueSlug);
