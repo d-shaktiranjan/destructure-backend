@@ -22,7 +22,6 @@ import {
 } from "../services/blog.service";
 
 // util
-import { BlogDocument } from "../libs/Documents.lib";
 import { BlogCreateType, BlogUpdateType } from "../schemas/blog.schema";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
 import { generateSlugUntil, isSlugUniqueUtil } from "../utils/blog.util";
@@ -87,54 +86,8 @@ export const updateBlog = aw(async (req: Request, res: Response) => {
     const { _id } = body;
 
     // fetch blog in DB
-    const blog = await Blog.findById(_id);
+    const blog = await Blog.findByIdAndUpdate(_id, body);
     if (!blog) return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND);
-
-    // validate request body data
-    const allowedKeys = [
-        "_id",
-        "title",
-        "description",
-        "content",
-        "isPublic",
-        "slug",
-        "coAuthor",
-        "banner",
-    ];
-
-    // update fields
-    for (const key in body) {
-        if (!allowedKeys.includes(key))
-            return errorResponse(res, key + BLOG_MESSAGES.KEY_NOT_ALLOWED);
-        if (key === "_id") continue;
-
-        const value = body[key as keyof BlogUpdateType];
-        if (!value) continue;
-        // title unique checking
-        else if (key === "title") {
-            const existingBlog = await Blog.findOne({ title: value });
-            if (existingBlog && existingBlog._id !== blog._id)
-                return errorResponse(res, BLOG_MESSAGES.UNIQUE_TITLE);
-        }
-
-        // handle coAuthor
-        else if (key === "coAuthor") {
-            if (!isValidObjectId(value))
-                return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
-            const coAuthor = await User.findById(value);
-            if (!coAuthor) return errorResponse(res, USER_MESSAGES.NOT_FOUND);
-
-            if (!coAuthor.isAdmin)
-                return errorResponse(res, BLOG_MESSAGES.CO_AUTHOR_ADD_FAILED);
-
-            if (coAuthor._id === blog.author)
-                return errorResponse(res, BLOG_MESSAGES.AUTHORSHIP);
-        }
-
-        // update fields
-        blog[key as keyof BlogDocument] = value as never;
-    }
-    await blog.save();
 
     return successResponse(res, BLOG_MESSAGES.UPDATED, {
         statusCode: 202,

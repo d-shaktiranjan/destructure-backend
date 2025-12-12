@@ -1,3 +1,4 @@
+import "dotenv/config";
 // ########## start environment variables ##########
 export const PORT = process.env.PORT || 8000;
 export const DEBUG: boolean = process.env.DEBUG === "true";

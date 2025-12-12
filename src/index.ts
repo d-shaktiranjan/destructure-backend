@@ -1,6 +1,5 @@
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import "dotenv/config";
 import express, { Request, Response, json, static as static_ } from "express";
 import { logger, loggerMiddleware } from "lorin";
 import swaggerUi from "swagger-ui-express";
