@@ -34,8 +34,9 @@ router
 router
     .route("/blog")
     .post(zodValidator(blogCreateSchema), createBlog)
-    .get(getBlogListAdmin)
-    .put(zodValidator(blogUpdateSchema), updateBlog);
+    .get(getBlogListAdmin);
+
+router.route("/blog/:id").put(zodValidator(blogUpdateSchema), updateBlog);
 
 // blog slug routes
 router.get("/slug/check", checkUniqueSlug);

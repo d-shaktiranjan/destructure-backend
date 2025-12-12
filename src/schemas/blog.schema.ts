@@ -14,7 +14,6 @@ export const blogCreateSchema = z.object({
 });
 
 export const blogUpdateSchema = blogCreateSchema.partial().extend({
-    _id: z.string().refine((value) => isValidObjectId(value)),
     isPublic: z.boolean().optional(),
 });
 
