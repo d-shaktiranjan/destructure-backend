@@ -1,4 +1,3 @@
-import { isValidObjectId } from "mongoose";
 import { z } from "zod";
 
 export const blogCreateSchema = z.object({
@@ -7,10 +6,7 @@ export const blogCreateSchema = z.object({
     slug: z.string().trim().toLowerCase(),
     content: z.string().trim(),
     banner: z.url(),
-    coAuthor: z
-        .string()
-        .optional()
-        .refine((value) => isValidObjectId(value)),
+    coAuthor: z.string().optional(),
 });
 
 export const blogUpdateSchema = blogCreateSchema.partial().extend({
