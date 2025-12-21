@@ -2,7 +2,11 @@
 import { Request, Response } from "express";
 
 // config imports
-import { CORS_ORIGINS, GOOGLE_CLIENT_ID } from "../config/constants";
+import {
+    COOKIE_OPTIONS,
+    CORS_ORIGINS,
+    GOOGLE_CLIENT_ID,
+} from "../config/constants";
 import { AUTH_MESSAGES } from "../config/messages";
 
 // model & libs imports
@@ -60,6 +64,8 @@ export const googleCallback = aw(async (req: Request, res: Response) => {
     }
     await userObject.save();
     const jwt = userObject.generateAuthToken();
+
+    res.cookie("token", jwt, COOKIE_OPTIONS);
 
     return successResponse(res, AUTH_MESSAGES.LOGIN, {
         data: {

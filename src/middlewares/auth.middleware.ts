@@ -1,5 +1,5 @@
 // package imports
-import { Response, NextFunction } from "express";
+import { NextFunction, Response } from "express";
 import { verify } from "jsonwebtoken";
 
 import User from "../models/User.model";
@@ -7,9 +7,9 @@ import aw from "./asyncWrap.middleware";
 
 import { JWT_SECRET } from "../config/constants";
 import { AUTH_MESSAGES } from "../config/messages";
+import ApiError from "../libs/ApiError.lib";
 import { AuthRequest } from "../libs/AuthRequest.lib";
 import { UserDocument } from "../libs/Documents.lib";
-import ApiError from "../libs/ApiError.lib";
 
 export const isAuthenticated = aw(
     async (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -44,7 +44,9 @@ export const isAdmin = aw(
 
 async function decodeToken(req: AuthRequest) {
     // collect JWT from header
-    const authToken = req.header("Authorization")?.replace("Bearer ", "");
+    const authToken =
+        req.cookies.token ||
+        req.header("Authorization")?.replace("Bearer ", "");
     if (!authToken) return null;
 
     try {
