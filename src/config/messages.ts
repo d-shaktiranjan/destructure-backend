@@ -19,6 +19,7 @@ export enum AUTH_MESSAGES {
     NOT_AUTHENTICATED = "Login to continue",
     NOT_ADMIN = "You are not allowed to do this",
     UNABLE_TO_LOGIN = "Unable to login due to mismatch origin.",
+    LOGOUT_SUCCESS = "Logout successful",
 }
 
 export enum DB_MESSAGES {
