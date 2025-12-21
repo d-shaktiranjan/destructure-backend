@@ -36,6 +36,7 @@ app.use(static_("public"));
 app.use(requestBodyMiddleware);
 app.use(loggerMiddleware);
 app.use(dbLogger);
+app.set("trust proxy", true);
 
 // route usages
 app.use("/api/blogs", blogRouter);
