@@ -1,9 +1,12 @@
 import "dotenv/config";
+import { CookieOptions } from "express";
+
 // ########## start environment variables ##########
 export const PORT = process.env.PORT || 8000;
 export const DEBUG: boolean = process.env.DEBUG === "true";
 export const ENVIRONMENT: string = process.env.ENVIRONMENT || "local";
 // environment
+export const DOMAIN = process.env.DOMAIN || "";
 export const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017";
 export const JWT_SECRET: string = process.env.JWT_SECRET || "";
 export const AUTH_TOKEN_EXPIRY_IN_DAYS: number = parseInt(
@@ -42,3 +45,13 @@ export const ALLOWED_IMAGE_MIMETYPE: readonly string[] = [
 ];
 
 export const SEARCH_ARRAY_MAX_LENGTH = 5;
+
+export const COOKIE_OPTIONS: CookieOptions = {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    expires: new Date(
+        Date.now() + 1000 * 60 * 60 * 24 * AUTH_TOKEN_EXPIRY_IN_DAYS,
+    ),
+    domain: ENVIRONMENT === "local" ? undefined : DOMAIN,
+} as const;
