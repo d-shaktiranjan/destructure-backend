@@ -77,3 +77,8 @@ export const googleCallback = aw(async (req: Request, res: Response) => {
 export const profile = aw(async (req: AuthRequest, res: Response) => {
     return successResponse(res, AUTH_MESSAGES.PROFILE, { data: req.user });
 });
+
+export const logout = (req: Request, res: Response) => {
+    res.clearCookie("token", COOKIE_OPTIONS);
+    return successResponse(res, AUTH_MESSAGES.LOGOUT_SUCCESS);
+};
