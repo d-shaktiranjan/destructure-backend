@@ -38,9 +38,19 @@ export const googleLogin = aw(async (req: Request, res: Response) => {
 });
 
 export const googleCallback = aw(async (req: Request, res: Response) => {
-    const { code } = req.query;
+    let code = req.query.code as string;
+    if (!code) return errorResponse(res, AUTH_MESSAGES.FAILED);
 
-    const { tokens } = await oAuth2Client.getToken(code as string);
+    // ensure code is encoded
+    try {
+        if (decodeURIComponent(code) === code) {
+            code = encodeURIComponent(code);
+        }
+    } catch {
+        code = encodeURIComponent(code);
+    }
+
+    const { tokens } = await oAuth2Client.getToken(code);
     oAuth2Client.setCredentials(tokens);
 
     const user = await oAuth2Client.verifyIdToken({
