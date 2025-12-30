@@ -5,7 +5,7 @@ export const blogCreateSchema = z.object({
     description: z.string().trim(),
     slug: z.string().trim().toLowerCase(),
     content: z.string().trim(),
-    banner: z.url(),
+    banner: z.url().optional(),
     coAuthor: z.string().optional(),
 });
 
