@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const blogCreateSchema = z.object({
     title: z.string().trim(),
-    description: z.string().trim(),
+    description: z.string().trim().optional(),
     slug: z.string().trim().toLowerCase(),
     content: z.string().trim(),
     banner: z.url().optional(),

@@ -10,7 +10,7 @@ const blogSchema = new Schema<BlogDocument>(
         },
         description: {
             type: String,
-            required: true,
+            required: false,
         },
         banner: { type: String, required: false, default: null },
         slug: {
