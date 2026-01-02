@@ -4,10 +4,17 @@ import { z, ZodError } from "zod";
 import { APP_MESSAGES } from "../config/messages";
 import { errorResponse } from "../utils/apiResponse.util";
 
+type DataPickFrom = "body" | "query" | "params";
 const zodValidator =
-    (schema: z.Schema) => (req: Request, res: Response, next: NextFunction) => {
+    (schema: z.Schema, dataPickFrom: DataPickFrom = "body") =>
+    (req: Request, res: Response, next: NextFunction) => {
         try {
-            req.body = schema.parse(req.body);
+            if (dataPickFrom === "body") req.body = schema.parse(req.body);
+            else if (dataPickFrom === "query")
+                req.query = schema.parse(req.query) as Request["query"];
+            else if (dataPickFrom === "params")
+                req.params = schema.parse(req.params) as Request["params"];
+            else throw new Error("Invalid dataPickFrom value");
             next();
         } catch (error) {
             if (error instanceof ZodError) {

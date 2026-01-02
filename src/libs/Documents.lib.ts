@@ -4,7 +4,7 @@ import { REACTIONS } from "../config/constants";
 export interface BlogDocument extends Document {
     readonly _id: Types.ObjectId;
     title: string;
-    description: string;
+    description?: string;
     banner: string;
     slug: string;
     content: string;

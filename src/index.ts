@@ -36,6 +36,7 @@ app.use(static_("public"));
 app.use(requestBodyMiddleware);
 app.use(loggerMiddleware);
 app.use(dbLogger);
+app.set("trust proxy", true);
 
 // route usages
 app.use("/api/blogs", blogRouter);
@@ -46,7 +47,7 @@ app.use("/api/reaction", reactRouter);
 app.use("/api/search", searchRouter);
 
 app.get("/api", (req: Request, res: Response) => {
-    const host = req.protocol + "://" + req.get("host") + req.originalUrl;
+    const host = req.protocol + "://" + req.get("host");
     apiMetaData.host = host;
     res.json(apiMetaData);
 });

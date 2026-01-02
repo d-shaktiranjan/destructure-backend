@@ -82,11 +82,13 @@ export const getBlogDetails = aw(async (req: AuthRequest, res: Response) => {
 });
 
 export const updateBlog = aw(async (req: Request, res: Response) => {
+    const slug = req.params.slug;
+    nullChecker({ slug });
+
     const body = req.body as BlogUpdateType;
-    const { _id } = body;
 
     // fetch blog in DB
-    const blog = await Blog.findByIdAndUpdate(_id, body);
+    const blog = await Blog.findOneAndUpdate({ slug }, body);
     if (!blog) return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND);
 
     return successResponse(res, BLOG_MESSAGES.UPDATED, {
@@ -120,4 +122,14 @@ export const generateSlug = aw(async (req: Request, res: Response) => {
             slug: await generateSlugUntil(title),
         },
     });
+});
+
+export const deleteBlog = aw(async (req: Request, res: Response) => {
+    const slug = req.params.slug;
+    nullChecker({ slug });
+
+    const blog = await Blog.findOneAndDelete({ slug });
+    if (!blog) return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND);
+
+    return successResponse(res, BLOG_MESSAGES.DELETED);
 });
