@@ -9,9 +9,12 @@ export const blogCreateSchema = z.object({
     coAuthor: z.string().optional(),
 });
 
-export const blogUpdateSchema = blogCreateSchema.partial().extend({
-    isPublic: z.boolean().optional(),
-});
+export const blogUpdateSchema = blogCreateSchema
+    .omit({ slug: true })
+    .partial()
+    .extend({
+        isPublic: z.boolean().optional(),
+    });
 
 export type BlogCreateType = z.infer<typeof blogCreateSchema>;
 export type BlogUpdateType = z.infer<typeof blogUpdateSchema>;

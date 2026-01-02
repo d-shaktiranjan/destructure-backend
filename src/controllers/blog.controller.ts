@@ -82,14 +82,13 @@ export const getBlogDetails = aw(async (req: AuthRequest, res: Response) => {
 });
 
 export const updateBlog = aw(async (req: Request, res: Response) => {
-    const _id = req.params._id;
-    if (!_id || !isValidObjectId(_id))
-        return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
+    const slug = req.params.slug;
+    nullChecker({ slug });
 
     const body = req.body as BlogUpdateType;
 
     // fetch blog in DB
-    const blog = await Blog.findByIdAndUpdate(_id, body);
+    const blog = await Blog.findOneAndUpdate({ slug }, body);
     if (!blog) return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND);
 
     return successResponse(res, BLOG_MESSAGES.UPDATED, {
