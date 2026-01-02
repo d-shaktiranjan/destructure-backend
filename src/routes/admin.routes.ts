@@ -10,7 +10,6 @@ import {
 import { imageList, imageUpload } from "../controllers/images.controller";
 
 // middleware imports
-import { ObjectIdParamSchema } from "@/schemas/global.schema";
 import {
     addAdmin,
     getAdminList,
@@ -39,13 +38,9 @@ router
     .get(getBlogListAdmin);
 
 router
-    .route("/blog/:_id")
-    .put(
-        zodValidator(ObjectIdParamSchema, "params"),
-        zodValidator(blogUpdateSchema),
-        updateBlog,
-    )
-    .delete(zodValidator(ObjectIdParamSchema, "params"), deleteBlog);
+    .route("/blog/:slug")
+    .put(zodValidator(blogUpdateSchema), updateBlog)
+    .delete(deleteBlog);
 
 // blog slug routes
 router.get("/slug/check", checkUniqueSlug);
