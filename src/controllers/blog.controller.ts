@@ -125,11 +125,10 @@ export const generateSlug = aw(async (req: Request, res: Response) => {
 });
 
 export const deleteBlog = aw(async (req: Request, res: Response) => {
-    const _id = req.params._id;
-    if (!_id || !isValidObjectId(_id))
-        return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
+    const slug = req.params.slug;
+    nullChecker({ slug });
 
-    const blog = await Blog.findByIdAndDelete(_id);
+    const blog = await Blog.findOneAndDelete({ slug });
     if (!blog) return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND);
 
     return successResponse(res, BLOG_MESSAGES.DELETED);
