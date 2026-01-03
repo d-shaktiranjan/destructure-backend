@@ -11,9 +11,16 @@ import { generateBase64 } from "../utils/blog.util";
 export const imageList = aw(async (req: Request, res: Response) => {
     const host = req.protocol + "://" + req.get("host") + "/images/";
 
-    const dirList = (await readdir("public/images"))
-        .filter((item) => item != ".gitkeep")
-        .map((item) => host + item);
+    const files = (await readdir("public/images")).filter(
+        (item) => item !== ".gitkeep",
+    );
+
+    const dirList = await Promise.all(
+        files.map(async (item) => {
+            const blurDataURL = await generateBase64("public/images/" + item);
+            return `${host}${item}?blurDataURL=${blurDataURL}`;
+        }),
+    );
 
     return successResponse(res, IMAGE_MESSAGES.LIST_FETCHED, { data: dirList });
 });
