@@ -8,7 +8,7 @@ import Media from "@/models/Media.model";
 
 // config & schemas
 import { ALLOWED_MEDIA_MIMETYPE, MEDIA_TYPE } from "@/config/constants";
-import { IMAGE_MESSAGES } from "@/config/messages";
+import { MEDIA_MESSAGES } from "@/config/messages";
 import { MediaQueryType } from "@/schemas/media.schema";
 
 // utils
@@ -36,7 +36,7 @@ export const mediaList = aw(async (req: Request, res: Response) => {
         return url;
     });
 
-    return successResponse(res, IMAGE_MESSAGES.LIST_FETCHED, {
+    return successResponse(res, MEDIA_MESSAGES.LIST_FETCHED, {
         data: mediaUrls,
     });
 });
@@ -44,7 +44,7 @@ export const mediaList = aw(async (req: Request, res: Response) => {
 export const mediaUpload = aw(async (req: Request, res: Response) => {
     const files = req.files;
     if (!files || !Array.isArray(files) || files.length == 0)
-        return errorResponse(res, IMAGE_MESSAGES.IMAGE_REQUIRED);
+        return errorResponse(res, MEDIA_MESSAGES.NO_FILES);
 
     const urls: string[] = [];
     const host = req.protocol + "://" + req.get("host");
@@ -55,7 +55,7 @@ export const mediaUpload = aw(async (req: Request, res: Response) => {
         // allow only images
         if (!ALLOWED_MEDIA_MIMETYPE.includes(file.mimetype)) {
             unlink(file.path);
-            return errorResponse(res, IMAGE_MESSAGES.IMAGE_ONLY, {
+            return errorResponse(res, MEDIA_MESSAGES.INVALID_FILE_FORMAT, {
                 statusCode: 406,
             });
         }
@@ -105,7 +105,7 @@ export const mediaUpload = aw(async (req: Request, res: Response) => {
 
     await Media.insertMany(mediaRecords);
 
-    return successResponse(res, IMAGE_MESSAGES.IMAGE_UPLOADED, {
+    return successResponse(res, MEDIA_MESSAGES.MEDIA_UPLOADED, {
         data: urls,
         statusCode: 201,
     });

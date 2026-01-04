@@ -82,11 +82,11 @@ export enum SEARCH_MESSAGES {
     LINK_BLOG_IN_QUERY = "Blog linked with the query",
 }
 
-export enum IMAGE_MESSAGES {
-    LIST_FETCHED = "Image list fetched",
-    IMAGE_REQUIRED = "Image required",
-    IMAGE_UPLOADED = "Images uploaded successfully",
-    IMAGE_ONLY = "This file format is not acceptable",
+export enum MEDIA_MESSAGES {
+    LIST_FETCHED = "Media list fetched",
+    MEDIA_UPLOADED = "Files uploaded successfully",
+    NO_FILES = "No files uploaded",
+    INVALID_FILE_FORMAT = "Invalid file format",
 }
 
 export enum ADMIN_MESSAGES {
