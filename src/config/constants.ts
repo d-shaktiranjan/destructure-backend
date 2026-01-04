@@ -61,6 +61,8 @@ export const ALLOWED_MEDIA_MIMETYPE: readonly string[] = [
     // cspell:enable
 ];
 
+export const MEDIA_UPLOAD_PATH = "public/media";
+
 export const SEARCH_ARRAY_MAX_LENGTH = 5;
 
 export const COOKIE_OPTIONS: CookieOptions = {

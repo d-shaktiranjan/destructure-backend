@@ -12,8 +12,8 @@ build-info.json
 temp/*
 
 # Public dir
-public/images/*
-!public/images/.gitkeep
+public/media/*
+!public/media/.gitkeep
 
 # Editor directories and files
 .vscode/*

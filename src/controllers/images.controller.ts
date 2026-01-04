@@ -2,22 +2,24 @@ import { Request, Response } from "express";
 import { readdir, unlink } from "fs/promises";
 
 import { compressImage } from "@/utils/image.util";
-import { ALLOWED_MEDIA_MIMETYPE } from "../config/constants";
+import { ALLOWED_MEDIA_MIMETYPE, MEDIA_UPLOAD_PATH } from "../config/constants";
 import { IMAGE_MESSAGES } from "../config/messages";
 import aw from "../middlewares/asyncWrap.middleware";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
 import { generateBase64 } from "../utils/blog.util";
 
 export const imageList = aw(async (req: Request, res: Response) => {
-    const host = req.protocol + "://" + req.get("host") + "/images/";
+    const host = req.protocol + "://" + req.get("host") + "/media/";
 
-    const files = (await readdir("public/images")).filter(
+    const files = (await readdir(MEDIA_UPLOAD_PATH)).filter(
         (item) => item !== ".gitkeep",
     );
 
     const dirList = await Promise.all(
         files.map(async (item) => {
-            const blurDataURL = await generateBase64("public/images/" + item);
+            const blurDataURL = await generateBase64(
+                MEDIA_UPLOAD_PATH + "/" + item,
+            );
             return `${host}${item}?blurDataURL=${blurDataURL}`;
         }),
     );
