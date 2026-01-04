@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { readdir, unlink } from "fs/promises";
 
+import { compressImage } from "@/utils/image.util";
 import { ALLOWED_IMAGE_MIMETYPE } from "../config/constants";
 import { IMAGE_MESSAGES } from "../config/messages";
 import aw from "../middlewares/asyncWrap.middleware";
@@ -10,9 +11,16 @@ import { generateBase64 } from "../utils/blog.util";
 export const imageList = aw(async (req: Request, res: Response) => {
     const host = req.protocol + "://" + req.get("host") + "/images/";
 
-    const dirList = (await readdir("public/images"))
-        .filter((item) => item != ".gitkeep")
-        .map((item) => host + item);
+    const files = (await readdir("public/images")).filter(
+        (item) => item !== ".gitkeep",
+    );
+
+    const dirList = await Promise.all(
+        files.map(async (item) => {
+            const blurDataURL = await generateBase64("public/images/" + item);
+            return `${host}${item}?blurDataURL=${blurDataURL}`;
+        }),
+    );
 
     return successResponse(res, IMAGE_MESSAGES.LIST_FETCHED, { data: dirList });
 });
@@ -34,9 +42,20 @@ export const imageUpload = aw(async (req: Request, res: Response) => {
             });
         }
 
+        // compress image
+        const fileExtension = file.originalname.split(".").pop();
+        const compressImagePath = file.path.replace(
+            `.${fileExtension}`,
+            `.webp`,
+        );
+        await compressImage(file.path, compressImagePath);
+
+        // remove original uploaded image
+        unlink(file.path);
+
         // generate url & base64
-        const url = `${host}/${file.path.replace("public/", "")}`;
-        const base = await generateBase64(file.path);
+        const url = `${host}/${compressImagePath.replace("public/", "")}`;
+        const base = await generateBase64(compressImagePath);
         urls.push(`${url}?blurDataURL=${base}`);
     }
 
