@@ -12,7 +12,7 @@ import {
 } from "../config/messages";
 
 // model & lib imports
-import { AuthRequest } from "../libs/AuthRequest.lib";
+import { AuthRequest } from "../libs/CustomInterface.lib";
 import Blog from "../models/Blog.model";
 import User from "../models/User.model";
 

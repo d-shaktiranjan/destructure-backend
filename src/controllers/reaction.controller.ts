@@ -1,7 +1,7 @@
 import { Response } from "express";
 
 // model & lib
-import { AuthRequest } from "../libs/AuthRequest.lib";
+import { AuthRequest } from "../libs/CustomInterface.lib";
 import { BlogDocument, CommentDocument } from "../libs/Documents.lib";
 import Blog from "../models/Blog.model";
 import Comment from "../models/Comment.model";

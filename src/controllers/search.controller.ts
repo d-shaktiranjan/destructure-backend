@@ -1,7 +1,7 @@
 import { Response } from "express";
 
 // middleware, model & lib imports
-import { AuthRequest } from "../libs/AuthRequest.lib";
+import { AuthRequest } from "../libs/CustomInterface.lib";
 import aw from "../middlewares/asyncWrap.middleware";
 import Blog from "../models/Blog.model";
 

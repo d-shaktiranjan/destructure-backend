@@ -1,5 +1,5 @@
-import { AuthRequest } from "../libs/AuthRequest.lib";
 import { REACTIONS } from "../config/constants";
+import { AuthRequest } from "../libs/CustomInterface.lib";
 
 export const userAggregateUtil = (localField: string) => {
     return {
