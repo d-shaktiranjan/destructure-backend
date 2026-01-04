@@ -20,6 +20,10 @@ export const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 export const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI;
 
 export const CORS_ORIGINS: string[] = eval(process.env.CORS_ORIGINS || "");
+
+export const MULTER_FILE_SIZE_LIMIT: number = parseInt(
+    process.env.MULTER_FILE_SIZE_LIMIT || "1",
+);
 // ########## end environment variables ##########
 
 // reactions
