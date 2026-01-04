@@ -11,7 +11,7 @@ export const compressImage = async (
             withoutEnlargement: true,
         })
         .webp({
-            quality: 85,
+            quality: 100,
             effort: 3,
         })
         .toFile(outputPath);
