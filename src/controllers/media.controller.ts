@@ -1,43 +1,32 @@
 import { Request, Response } from "express";
-import { fileTypeFromFile } from "file-type";
-import { readdir, unlink } from "fs/promises";
+import { unlink } from "fs/promises";
 
 import { MediaDocument } from "@/libs/Documents.lib";
 import Media from "@/models/Media.model";
 import { compressImage } from "@/utils/image.util";
 import { calculateFileHash } from "@/utils/media.util";
-import {
-    ALLOWED_MEDIA_MIMETYPE,
-    MEDIA_TYPE,
-    MEDIA_UPLOAD_PATH,
-} from "../config/constants";
+import { ALLOWED_MEDIA_MIMETYPE, MEDIA_TYPE } from "../config/constants";
 import { IMAGE_MESSAGES } from "../config/messages";
 import aw from "../middlewares/asyncWrap.middleware";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
 import { generateBase64 } from "../utils/blog.util";
 
 export const mediaList = aw(async (req: Request, res: Response) => {
-    const host = req.protocol + "://" + req.get("host") + "/media/";
+    const host = req.protocol + "://" + req.get("host");
 
-    const files = (await readdir(MEDIA_UPLOAD_PATH)).filter(
-        (item) => item !== ".gitkeep",
-    );
+    const records = await Media.find().sort({ createdAt: -1 });
 
-    const dirList = await Promise.all(
-        files.map(async (item) => {
-            const file = await fileTypeFromFile(MEDIA_UPLOAD_PATH + "/" + item);
+    const mediaUrls = records.map((record) => {
+        let url = host + record.filePath.replace("public/", "/");
+        if (record.blurDataURL) {
+            url += `?blurDataURL=${record.blurDataURL}`;
+        }
+        return url;
+    });
 
-            if (file && file.mime.startsWith("image/")) {
-                const blurDataURL = await generateBase64(
-                    MEDIA_UPLOAD_PATH + "/" + item,
-                );
-                return `${host}${item}?blurDataURL=${blurDataURL}`;
-            }
-            return `${host}${item}`;
-        }),
-    );
-
-    return successResponse(res, IMAGE_MESSAGES.LIST_FETCHED, { data: dirList });
+    return successResponse(res, IMAGE_MESSAGES.LIST_FETCHED, {
+        data: mediaUrls,
+    });
 });
 
 export const mediaUpload = aw(async (req: Request, res: Response) => {
