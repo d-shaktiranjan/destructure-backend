@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { fileTypeFromFile } from "file-type";
 import { readdir, unlink } from "fs/promises";
 
 import { compressImage } from "@/utils/image.util";
@@ -17,10 +18,15 @@ export const imageList = aw(async (req: Request, res: Response) => {
 
     const dirList = await Promise.all(
         files.map(async (item) => {
-            const blurDataURL = await generateBase64(
-                MEDIA_UPLOAD_PATH + "/" + item,
-            );
-            return `${host}${item}?blurDataURL=${blurDataURL}`;
+            const file = await fileTypeFromFile(MEDIA_UPLOAD_PATH + "/" + item);
+
+            if (file && file.mime.startsWith("image/")) {
+                const blurDataURL = await generateBase64(
+                    MEDIA_UPLOAD_PATH + "/" + item,
+                );
+                return `${host}${item}?blurDataURL=${blurDataURL}`;
+            }
+            return `${host}${item}`;
         }),
     );
 

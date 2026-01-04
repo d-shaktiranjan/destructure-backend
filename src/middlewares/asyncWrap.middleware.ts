@@ -8,6 +8,7 @@ const asyncWrapper = (requestHandler: RequestHandler) => {
     return (req: Request, res: Response, next: NextFunction) => {
         Promise.resolve(requestHandler(req, res, next)).catch(
             (error: ApiError) => {
+                console.log(error);
                 const message = DEBUG ? error.message : APP_MESSAGES.ERROR;
                 return errorResponse(res, message, {
                     statusCode: error.statusCode || 500,
