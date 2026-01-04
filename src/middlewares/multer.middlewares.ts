@@ -1,9 +1,11 @@
+import { existsSync, mkdirSync } from "fs";
 import multer, { diskStorage } from "multer";
-import { mkdirSync, existsSync } from "fs";
+
+import { MEDIA_UPLOAD_PATH, MULTER_FILE_SIZE_LIMIT } from "@/config/constants";
 
 const storage = diskStorage({
     destination: (req, file, cb) => {
-        const path = "./public/images";
+        const path = MEDIA_UPLOAD_PATH;
         if (!existsSync(path)) mkdirSync(path);
         cb(null, path);
     },
@@ -24,6 +26,6 @@ const storage = diskStorage({
 export const upload = multer({
     storage,
     limits: {
-        fileSize: 1 * 1000 * 1000, // 1 MB file size limit
+        fileSize: MULTER_FILE_SIZE_LIMIT * 1000 * 1000,
     },
 });

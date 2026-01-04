@@ -20,6 +20,10 @@ export const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 export const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI;
 
 export const CORS_ORIGINS: string[] = eval(process.env.CORS_ORIGINS || "");
+
+export const MULTER_FILE_SIZE_LIMIT: number = parseInt(
+    process.env.MULTER_FILE_SIZE_LIMIT || "1",
+);
 // ########## end environment variables ##########
 
 // reactions
@@ -38,11 +42,26 @@ export enum REACTION_TO {
     BLOG = "BLOG",
 }
 
-export const ALLOWED_IMAGE_MIMETYPE: readonly string[] = [
+export const ALLOWED_MEDIA_MIMETYPE: readonly string[] = [
+    // cspell:disable
+
+    // image formats
     "image/jpeg",
     "image/png",
     "image/gif",
+    "image/webp",
+
+    // video formats
+    "video/mp4",
+    "video/webm",
+    "video/quicktime",
+    "video/x-matroska",
+    "video/x-msvideo",
+
+    // cspell:enable
 ];
+
+export const MEDIA_UPLOAD_PATH = "public/media";
 
 export const SEARCH_ARRAY_MAX_LENGTH = 5;
 
