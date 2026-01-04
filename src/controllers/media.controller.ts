@@ -9,7 +9,7 @@ import aw from "../middlewares/asyncWrap.middleware";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
 import { generateBase64 } from "../utils/blog.util";
 
-export const imageList = aw(async (req: Request, res: Response) => {
+export const mediaList = aw(async (req: Request, res: Response) => {
     const host = req.protocol + "://" + req.get("host") + "/media/";
 
     const files = (await readdir(MEDIA_UPLOAD_PATH)).filter(
@@ -33,7 +33,7 @@ export const imageList = aw(async (req: Request, res: Response) => {
     return successResponse(res, IMAGE_MESSAGES.LIST_FETCHED, { data: dirList });
 });
 
-export const imageUpload = aw(async (req: Request, res: Response) => {
+export const mediaUpload = aw(async (req: Request, res: Response) => {
     const files = req.files;
     if (!files || !Array.isArray(files) || files.length == 0)
         return errorResponse(res, IMAGE_MESSAGES.IMAGE_REQUIRED);

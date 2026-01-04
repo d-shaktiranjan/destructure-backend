@@ -7,7 +7,7 @@ import {
     getBlogListAdmin,
     updateBlog,
 } from "../controllers/blog.controller";
-import { imageList, imageUpload } from "../controllers/images.controller";
+import { mediaList, mediaUpload } from "../controllers/media.controller";
 
 // middleware imports
 import {
@@ -46,10 +46,7 @@ router
 router.get("/slug/check", checkUniqueSlug);
 router.get("/slug/generate", generateSlug);
 
-// image routes
-router
-    .route("/images")
-    .get(imageList)
-    .post(upload.array("images"), imageUpload);
+// media routes
+router.route("/media").get(mediaList).post(upload.array("media"), mediaUpload);
 
 export default router;
