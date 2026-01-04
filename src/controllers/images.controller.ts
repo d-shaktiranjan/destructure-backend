@@ -42,21 +42,26 @@ export const imageUpload = aw(async (req: Request, res: Response) => {
             });
         }
 
+        let mediaOutputPath = file.path;
+
         // compress image
-        const fileExtension = file.originalname.split(".").pop();
-        const compressImagePath = file.path.replace(
-            `.${fileExtension}`,
-            `.webp`,
-        );
-        await compressImage(file.path, compressImagePath);
+        if (file.mimetype.startsWith("image/")) {
+            const fileExtension = file.originalname.split(".").pop();
+            mediaOutputPath = file.path.replace(`.${fileExtension}`, `.webp`);
+            await compressImage(file.path, mediaOutputPath);
 
-        // remove original uploaded image
-        unlink(file.path);
+            // remove original uploaded image
+            unlink(file.path);
+        }
 
-        // generate url & base64
-        const url = `${host}/${compressImagePath.replace("public/", "")}`;
-        const base = await generateBase64(compressImagePath);
-        urls.push(`${url}?blurDataURL=${base}`);
+        // generate url
+        const url = `${host}/${mediaOutputPath.replace("public/", "")}`;
+
+        // include base64 for images
+        if (file.mimetype.startsWith("image/")) {
+            const base = await generateBase64(mediaOutputPath);
+            urls.push(`${url}?blurDataURL=${base}`);
+        } else urls.push(url);
     }
 
     return successResponse(res, IMAGE_MESSAGES.IMAGE_UPLOADED, {
