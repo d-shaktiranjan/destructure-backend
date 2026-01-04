@@ -3,6 +3,7 @@ import { unlink } from "fs/promises";
 
 import { MediaDocument } from "@/libs/Documents.lib";
 import Media from "@/models/Media.model";
+import { MediaQueryType } from "@/schemas/media.schema";
 import { compressImage } from "@/utils/image.util";
 import { calculateFileHash } from "@/utils/media.util";
 import { ALLOWED_MEDIA_MIMETYPE, MEDIA_TYPE } from "../config/constants";
@@ -14,7 +15,13 @@ import { generateBase64 } from "../utils/blog.util";
 export const mediaList = aw(async (req: Request, res: Response) => {
     const host = req.protocol + "://" + req.get("host");
 
-    const records = await Media.find().sort({ createdAt: -1 });
+    const query = req.query as unknown as MediaQueryType;
+    const filter: Record<string, unknown> = {};
+    if (query.type && query.type !== "ALL") {
+        filter["type"] = query.type;
+    }
+
+    const records = await Media.find(filter).sort({ createdAt: -1 });
 
     const mediaUrls = records.map((record) => {
         let url = host + record.filePath.replace("public/", "/");
