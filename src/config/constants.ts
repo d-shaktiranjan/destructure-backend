@@ -38,10 +38,23 @@ export enum REACTION_TO {
     BLOG = "BLOG",
 }
 
-export const ALLOWED_IMAGE_MIMETYPE: readonly string[] = [
+export const ALLOWED_MEDIA_MIMETYPE: readonly string[] = [
+    // cspell:disable
+
+    // image formats
     "image/jpeg",
     "image/png",
     "image/gif",
+    "image/webp",
+
+    // video formats
+    "video/mp4",
+    "video/webm",
+    "video/quicktime",
+    "video/x-matroska",
+    "video/x-msvideo",
+
+    // cspell:enable
 ];
 
 export const SEARCH_ARRAY_MAX_LENGTH = 5;

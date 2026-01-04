@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { readdir, unlink } from "fs/promises";
 
 import { compressImage } from "@/utils/image.util";
-import { ALLOWED_IMAGE_MIMETYPE } from "../config/constants";
+import { ALLOWED_MEDIA_MIMETYPE } from "../config/constants";
 import { IMAGE_MESSAGES } from "../config/messages";
 import aw from "../middlewares/asyncWrap.middleware";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
@@ -35,7 +35,7 @@ export const imageUpload = aw(async (req: Request, res: Response) => {
 
     for (const file of files) {
         // allow only images
-        if (!ALLOWED_IMAGE_MIMETYPE.includes(file.mimetype)) {
+        if (!ALLOWED_MEDIA_MIMETYPE.includes(file.mimetype)) {
             unlink(file.path);
             return errorResponse(res, IMAGE_MESSAGES.IMAGE_ONLY, {
                 statusCode: 406,
