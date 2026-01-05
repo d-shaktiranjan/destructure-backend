@@ -1,5 +1,10 @@
 import { Document, Types } from "mongoose";
-import { REACTIONS } from "../config/constants";
+
+import {
+    ALLOWED_MEDIA_MIMETYPE,
+    MEDIA_TYPE,
+    REACTIONS,
+} from "@/config/constants";
 
 export interface BlogDocument extends Document {
     readonly _id: Types.ObjectId;
@@ -60,5 +65,17 @@ export interface LoggerDocument extends Document {
     query: Record<string, unknown>;
     body: Record<string, unknown>;
     response: Record<string, unknown>;
+    createdAt: Date;
+}
+
+export interface MediaDocument extends Document {
+    readonly _id: Types.ObjectId;
+    filePath: string;
+    fileHash: string;
+    type: MEDIA_TYPE;
+    mimetype: (typeof ALLOWED_MEDIA_MIMETYPE)[number];
+    blurDataURL?: string;
+    width?: number;
+    height?: number;
     createdAt: Date;
 }

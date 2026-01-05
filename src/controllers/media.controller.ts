@@ -1,78 +1,127 @@
 import { Request, Response } from "express";
-import { fileTypeFromFile } from "file-type";
-import { readdir, unlink } from "fs/promises";
+import { unlink } from "fs/promises";
 
-import { compressImage } from "@/utils/image.util";
-import { ALLOWED_MEDIA_MIMETYPE, MEDIA_UPLOAD_PATH } from "../config/constants";
-import { IMAGE_MESSAGES } from "../config/messages";
-import aw from "../middlewares/asyncWrap.middleware";
-import { errorResponse, successResponse } from "../utils/apiResponse.util";
-import { generateBase64 } from "../utils/blog.util";
+// lib, middlewares & models
+import { MediaDocument } from "@/libs/Documents.lib";
+import aw from "@/middlewares/asyncWrap.middleware";
+import Media from "@/models/Media.model";
+
+// config & schemas
+import { ALLOWED_MEDIA_MIMETYPE, MEDIA_TYPE } from "@/config/constants";
+import { MEDIA_MESSAGES } from "@/config/messages";
+import { MediaQueryType } from "@/schemas/media.schema";
+
+// utils
+import { errorResponse, successResponse } from "@/utils/apiResponse.util";
+import { generateBase64 } from "@/utils/blog.util";
+import {
+    calculateFileHash,
+    compressImage,
+    createUrlFromRecord,
+    getVideoDimensions,
+} from "@/utils/media.util";
 
 export const mediaList = aw(async (req: Request, res: Response) => {
-    const host = req.protocol + "://" + req.get("host") + "/media/";
+    const host = req.protocol + "://" + req.get("host");
 
-    const files = (await readdir(MEDIA_UPLOAD_PATH)).filter(
-        (item) => item !== ".gitkeep",
-    );
+    const query = req.query as unknown as MediaQueryType;
+    const filter: Record<string, unknown> = {};
+    if (query.type && query.type !== "ALL") {
+        filter["type"] = query.type;
+    }
 
-    const dirList = await Promise.all(
-        files.map(async (item) => {
-            const file = await fileTypeFromFile(MEDIA_UPLOAD_PATH + "/" + item);
+    const records = await Media.find(filter).sort({ createdAt: -1 });
 
-            if (file && file.mime.startsWith("image/")) {
-                const blurDataURL = await generateBase64(
-                    MEDIA_UPLOAD_PATH + "/" + item,
-                );
-                return `${host}${item}?blurDataURL=${blurDataURL}`;
-            }
-            return `${host}${item}`;
-        }),
-    );
+    const mediaUrls = records.map((record) => {
+        return createUrlFromRecord(host, record);
+    });
 
-    return successResponse(res, IMAGE_MESSAGES.LIST_FETCHED, { data: dirList });
+    return successResponse(res, MEDIA_MESSAGES.LIST_FETCHED, {
+        data: mediaUrls,
+    });
 });
 
 export const mediaUpload = aw(async (req: Request, res: Response) => {
     const files = req.files;
     if (!files || !Array.isArray(files) || files.length == 0)
-        return errorResponse(res, IMAGE_MESSAGES.IMAGE_REQUIRED);
+        return errorResponse(res, MEDIA_MESSAGES.NO_FILES);
 
     const urls: string[] = [];
     const host = req.protocol + "://" + req.get("host");
+
+    const mediaRecords: MediaDocument[] = [];
 
     for (const file of files) {
         // allow only images
         if (!ALLOWED_MEDIA_MIMETYPE.includes(file.mimetype)) {
             unlink(file.path);
-            return errorResponse(res, IMAGE_MESSAGES.IMAGE_ONLY, {
+            return errorResponse(res, MEDIA_MESSAGES.INVALID_FILE_FORMAT, {
                 statusCode: 406,
             });
         }
 
-        let mediaOutputPath = file.path;
+        // check for duplicates
+        const fileHash = calculateFileHash(file.path);
+        const existingMedia = await Media.findOne({ fileHash });
+        if (existingMedia) {
+            unlink(file.path);
+            urls.push(createUrlFromRecord(host, existingMedia));
+            continue;
+        }
 
-        // compress image
+        let mediaOutputPath = file.path;
+        const mediaType = file.mimetype.startsWith("image/")
+            ? MEDIA_TYPE.IMAGE
+            : MEDIA_TYPE.VIDEO;
+        const mediaRecord: MediaDocument = new Media({
+            filePath: mediaOutputPath,
+            fileHash,
+            type: mediaType,
+            mimetype: file.mimetype,
+        });
+
+        let url = `${host}/${mediaOutputPath.replace("public/", "")}`;
+
+        // handle image
         if (file.mimetype.startsWith("image/")) {
             const fileExtension = file.originalname.split(".").pop();
             mediaOutputPath = file.path.replace(`.${fileExtension}`, `.webp`);
-            await compressImage(file.path, mediaOutputPath);
+            const { width, height } = await compressImage(
+                file.path,
+                mediaOutputPath,
+            );
 
             // remove original uploaded image
             unlink(file.path);
+
+            const base = await generateBase64(mediaOutputPath);
+
+            url = `${host}/${mediaOutputPath.replace("public/", "")}`;
+            urls.push(
+                `${url}?width=${width}&height=${height}&blurDataURL=${base}`,
+            );
+
+            mediaRecord.mimetype = "image/webp";
+            mediaRecord.filePath = mediaOutputPath;
+            mediaRecord.blurDataURL = base;
+            mediaRecord.width = width;
+            mediaRecord.height = height;
         }
 
-        // generate url
-        const url = `${host}/${mediaOutputPath.replace("public/", "")}`;
-
-        // include base64 for images
-        if (file.mimetype.startsWith("image/")) {
-            const base = await generateBase64(mediaOutputPath);
-            urls.push(`${url}?blurDataURL=${base}`);
+        // handle video
+        else if (file.mimetype.startsWith("video/")) {
+            const { width, height } = await getVideoDimensions(file.path);
+            mediaRecord.width = width;
+            mediaRecord.height = height;
+            urls.push(`${url}?width=${width}&height=${height}`);
         } else urls.push(url);
+
+        mediaRecords.push(mediaRecord);
     }
 
-    return successResponse(res, IMAGE_MESSAGES.IMAGE_UPLOADED, {
+    await Media.insertMany(mediaRecords);
+
+    return successResponse(res, MEDIA_MESSAGES.MEDIA_UPLOADED, {
         data: urls,
         statusCode: 201,
     });

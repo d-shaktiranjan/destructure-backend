@@ -8,7 +8,7 @@ import aw from "./asyncWrap.middleware";
 import { JWT_SECRET } from "../config/constants";
 import { AUTH_MESSAGES } from "../config/messages";
 import ApiError from "../libs/ApiError.lib";
-import { AuthRequest } from "../libs/AuthRequest.lib";
+import { AuthRequest } from "../libs/CustomInterface.lib";
 import { UserDocument } from "../libs/Documents.lib";
 
 export const isAuthenticated = aw(

@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { isValidObjectId, Types } from "mongoose";
 
 // lib, model & lib
-import { AuthRequest } from "../libs/AuthRequest.lib";
+import { AuthRequest } from "../libs/CustomInterface.lib";
 import aw from "../middlewares/asyncWrap.middleware";
 import Comment from "../models/Comment.model";
 

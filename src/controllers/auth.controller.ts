@@ -10,7 +10,7 @@ import {
 import { AUTH_MESSAGES } from "../config/messages";
 
 // model & libs imports
-import { AuthRequest } from "../libs/AuthRequest.lib";
+import { AuthRequest } from "../libs/CustomInterface.lib";
 import User from "../models/User.model";
 
 // util & middlewares imports

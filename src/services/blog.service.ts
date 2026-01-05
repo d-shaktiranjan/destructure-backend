@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-import { AuthRequest } from "../libs/AuthRequest.lib";
+import { AuthRequest } from "../libs/CustomInterface.lib";
 import Blog from "../models/Blog.model";
 
 import { BLOG_MESSAGES } from "../config/messages";

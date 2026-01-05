@@ -12,7 +12,7 @@ import {
 } from "../config/messages";
 
 // model & lib imports
-import { AuthRequest } from "../libs/AuthRequest.lib";
+import { AuthRequest } from "../libs/CustomInterface.lib";
 import Blog from "../models/Blog.model";
 import User from "../models/User.model";
 
@@ -46,7 +46,7 @@ export const createBlog = aw(async (req: AuthRequest, res: Response) => {
 
     // check existing blogObject
     const existingBlog = await Blog.findOne({
-        $or: [{ title }, { slug }, { description }],
+        $or: [{ title }, { slug }],
     });
     if (existingBlog) return errorResponse(res, BLOG_MESSAGES.ALREADY_EXITS);
 

@@ -4,7 +4,7 @@ import { Response } from "express";
 import { COMMENT_MESSAGES } from "../config/messages";
 
 // model & lib imports
-import { AuthRequest } from "../libs/AuthRequest.lib";
+import { AuthRequest } from "../libs/CustomInterface.lib";
 import Comment from "../models/Comment.model";
 import {
     reactionAddField,

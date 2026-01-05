@@ -10,6 +10,7 @@ import {
 import { mediaList, mediaUpload } from "../controllers/media.controller";
 
 // middleware imports
+import { MediaQuerySchema } from "@/schemas/media.schema";
 import {
     addAdmin,
     getAdminList,
@@ -47,6 +48,9 @@ router.get("/slug/check", checkUniqueSlug);
 router.get("/slug/generate", generateSlug);
 
 // media routes
-router.route("/media").get(mediaList).post(upload.array("media"), mediaUpload);
+router
+    .route("/media")
+    .get(zodValidator(MediaQuerySchema, "query"), mediaList)
+    .post(upload.array("media"), mediaUpload);
 
 export default router;

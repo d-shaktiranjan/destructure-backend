@@ -10,9 +10,15 @@ const zodValidator =
     (req: Request, res: Response, next: NextFunction) => {
         try {
             if (dataPickFrom === "body") req.body = schema.parse(req.body);
-            else if (dataPickFrom === "query")
+            else if (dataPickFrom === "query") {
+                // enable rewriting req.query
+                Object.defineProperty(req, "query", {
+                    ...Object.getOwnPropertyDescriptor(req, "query"),
+                    value: req.query,
+                    writable: true,
+                });
                 req.query = schema.parse(req.query) as Request["query"];
-            else if (dataPickFrom === "params")
+            } else if (dataPickFrom === "params")
                 req.params = schema.parse(req.params) as Request["params"];
             else throw new Error("Invalid dataPickFrom value");
             next();
