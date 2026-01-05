@@ -46,7 +46,7 @@ export const createBlog = aw(async (req: AuthRequest, res: Response) => {
 
     // check existing blogObject
     const existingBlog = await Blog.findOne({
-        $or: [{ title }, { slug }, { description }],
+        $or: [{ title }, { slug }],
     });
     if (existingBlog) return errorResponse(res, BLOG_MESSAGES.ALREADY_EXITS);
 
