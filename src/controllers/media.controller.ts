@@ -14,7 +14,11 @@ import { MediaQueryType } from "@/schemas/media.schema";
 // utils
 import { errorResponse, successResponse } from "@/utils/apiResponse.util";
 import { generateBase64 } from "@/utils/blog.util";
-import { calculateFileHash, compressImage } from "@/utils/media.util";
+import {
+    calculateFileHash,
+    compressImage,
+    getVideoDimensions,
+} from "@/utils/media.util";
 
 export const mediaList = aw(async (req: Request, res: Response) => {
     const host = req.protocol + "://" + req.get("host");
@@ -28,11 +32,24 @@ export const mediaList = aw(async (req: Request, res: Response) => {
     const records = await Media.find(filter).sort({ createdAt: -1 });
 
     const mediaUrls = records.map((record) => {
-        let url = host + record.filePath.replace("public/", "/");
-        if (record.blurDataURL) {
-            url += `?width=${record.width}&height=${record.height}&wiBlurDataURL=${record.blurDataURL}`;
+        // normalize path (remove leading "public/")
+        const pathname = record.filePath.replace(/^public\//, "/");
+
+        const url = new URL(pathname, host);
+
+        if (record.width) {
+            url.searchParams.set("width", String(record.width));
         }
-        return url;
+
+        if (record.height) {
+            url.searchParams.set("height", String(record.height));
+        }
+
+        if (record.blurDataURL) {
+            url.searchParams.set("blurDataURL", record.blurDataURL);
+        }
+
+        return url.toString();
     });
 
     return successResponse(res, MEDIA_MESSAGES.LIST_FETCHED, {
@@ -80,7 +97,7 @@ export const mediaUpload = aw(async (req: Request, res: Response) => {
 
         let url = `${host}/${mediaOutputPath.replace("public/", "")}`;
 
-        // compress image
+        // handle image
         if (file.mimetype.startsWith("image/")) {
             const fileExtension = file.originalname.split(".").pop();
             mediaOutputPath = file.path.replace(`.${fileExtension}`, `.webp`);
@@ -103,6 +120,14 @@ export const mediaUpload = aw(async (req: Request, res: Response) => {
             mediaRecord.blurDataURL = base;
             mediaRecord.width = width;
             mediaRecord.height = height;
+        }
+
+        // handle video
+        else if (file.mimetype.startsWith("video/")) {
+            const { width, height } = await getVideoDimensions(file.path);
+            mediaRecord.width = width;
+            mediaRecord.height = height;
+            urls.push(`${url}?width=${width}&height=${height}`);
         } else urls.push(url);
 
         mediaRecords.push(mediaRecord);
