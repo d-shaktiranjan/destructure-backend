@@ -117,6 +117,7 @@ export const mediaUpload = aw(async (req: Request, res: Response) => {
             );
 
             mediaRecord.mimetype = "image/webp";
+            mediaRecord.filePath = mediaOutputPath;
             mediaRecord.blurDataURL = base;
             mediaRecord.width = width;
             mediaRecord.height = height;
