@@ -75,5 +75,7 @@ export interface MediaDocument extends Document {
     type: MEDIA_TYPE;
     mimetype: (typeof ALLOWED_MEDIA_MIMETYPE)[number];
     blurDataURL?: string;
+    width?: number;
+    height?: number;
     createdAt: Date;
 }

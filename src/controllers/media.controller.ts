@@ -14,8 +14,7 @@ import { MediaQueryType } from "@/schemas/media.schema";
 // utils
 import { errorResponse, successResponse } from "@/utils/apiResponse.util";
 import { generateBase64 } from "@/utils/blog.util";
-import { compressImage } from "@/utils/image.util";
-import { calculateFileHash } from "@/utils/media.util";
+import { calculateFileHash, compressImage } from "@/utils/media.util";
 
 export const mediaList = aw(async (req: Request, res: Response) => {
     const host = req.protocol + "://" + req.get("host");
@@ -31,7 +30,7 @@ export const mediaList = aw(async (req: Request, res: Response) => {
     const mediaUrls = records.map((record) => {
         let url = host + record.filePath.replace("public/", "/");
         if (record.blurDataURL) {
-            url += `?blurDataURL=${record.blurDataURL}`;
+            url += `?width=${record.width}&height=${record.height}&wiBlurDataURL=${record.blurDataURL}`;
         }
         return url;
     });
@@ -69,23 +68,9 @@ export const mediaUpload = aw(async (req: Request, res: Response) => {
         }
 
         let mediaOutputPath = file.path;
-
-        // compress image
-        if (file.mimetype.startsWith("image/")) {
-            const fileExtension = file.originalname.split(".").pop();
-            mediaOutputPath = file.path.replace(`.${fileExtension}`, `.webp`);
-            await compressImage(file.path, mediaOutputPath);
-
-            // remove original uploaded image
-            unlink(file.path);
-        }
-
         const mediaType = file.mimetype.startsWith("image/")
             ? MEDIA_TYPE.IMAGE
             : MEDIA_TYPE.VIDEO;
-
-        // generate url & media record
-        const url = `${host}/${mediaOutputPath.replace("public/", "")}`;
         const mediaRecord: MediaDocument = new Media({
             filePath: mediaOutputPath,
             fileHash,
@@ -93,11 +78,28 @@ export const mediaUpload = aw(async (req: Request, res: Response) => {
             mimetype: file.mimetype,
         });
 
-        // include base64 for images
+        const url = `${host}/${mediaOutputPath.replace("public/", "")}`;
+
+        // compress image
         if (file.mimetype.startsWith("image/")) {
+            const fileExtension = file.originalname.split(".").pop();
+            mediaOutputPath = file.path.replace(`.${fileExtension}`, `.webp`);
+            const { width, height } = await compressImage(
+                file.path,
+                mediaOutputPath,
+            );
+
+            // remove original uploaded image
+            unlink(file.path);
+
             const base = await generateBase64(mediaOutputPath);
-            urls.push(`${url}?blurDataURL=${base}`);
+            urls.push(
+                `${url}?width=${width}&height=${height}&blurDataURL=${base}`,
+            );
+
             mediaRecord.blurDataURL = base;
+            mediaRecord.width = width;
+            mediaRecord.height = height;
         } else urls.push(url);
 
         mediaRecords.push(mediaRecord);

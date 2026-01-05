@@ -27,6 +27,12 @@ const mediaSchema = new Schema<MediaDocument>({
     blurDataURL: {
         type: String,
     },
+    width: {
+        type: Number,
+    },
+    height: {
+        type: Number,
+    },
     createdAt: {
         type: Date,
         default: Date.now,
