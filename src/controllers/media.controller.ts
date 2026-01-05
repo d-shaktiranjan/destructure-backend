@@ -78,7 +78,7 @@ export const mediaUpload = aw(async (req: Request, res: Response) => {
             mimetype: file.mimetype,
         });
 
-        const url = `${host}/${mediaOutputPath.replace("public/", "")}`;
+        let url = `${host}/${mediaOutputPath.replace("public/", "")}`;
 
         // compress image
         if (file.mimetype.startsWith("image/")) {
@@ -93,10 +93,13 @@ export const mediaUpload = aw(async (req: Request, res: Response) => {
             unlink(file.path);
 
             const base = await generateBase64(mediaOutputPath);
+
+            url = `${host}/${mediaOutputPath.replace("public/", "")}`;
             urls.push(
                 `${url}?width=${width}&height=${height}&blurDataURL=${base}`,
             );
 
+            mediaRecord.mimetype = "image/webp";
             mediaRecord.blurDataURL = base;
             mediaRecord.width = width;
             mediaRecord.height = height;
