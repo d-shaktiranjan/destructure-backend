@@ -1,3 +1,4 @@
+import { MediaDocument } from "@/libs/Documents.lib";
 import { exec } from "child_process";
 import { createHash } from "crypto";
 import { readFileSync } from "fs";
@@ -55,4 +56,26 @@ export const getVideoDimensions = async (
         width: stream.width,
         height: stream.height,
     };
+};
+
+export const createUrlFromRecord = (
+    host: string,
+    record: MediaDocument,
+): string => {
+    // normalize path (remove leading "public/")
+    const pathname = record.filePath.replace(/^public\//, "/");
+
+    const url = new URL(pathname, host);
+
+    if (record.width) {
+        url.searchParams.set("width", String(record.width));
+    }
+    if (record.height) {
+        url.searchParams.set("height", String(record.height));
+    }
+    if (record.blurDataURL) {
+        url.searchParams.set("blurDataURL", record.blurDataURL);
+    }
+
+    return url.toString();
 };

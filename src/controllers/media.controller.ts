@@ -17,6 +17,7 @@ import { generateBase64 } from "@/utils/blog.util";
 import {
     calculateFileHash,
     compressImage,
+    createUrlFromRecord,
     getVideoDimensions,
 } from "@/utils/media.util";
 
@@ -32,24 +33,7 @@ export const mediaList = aw(async (req: Request, res: Response) => {
     const records = await Media.find(filter).sort({ createdAt: -1 });
 
     const mediaUrls = records.map((record) => {
-        // normalize path (remove leading "public/")
-        const pathname = record.filePath.replace(/^public\//, "/");
-
-        const url = new URL(pathname, host);
-
-        if (record.width) {
-            url.searchParams.set("width", String(record.width));
-        }
-
-        if (record.height) {
-            url.searchParams.set("height", String(record.height));
-        }
-
-        if (record.blurDataURL) {
-            url.searchParams.set("blurDataURL", record.blurDataURL);
-        }
-
-        return url.toString();
+        return createUrlFromRecord(host, record);
     });
 
     return successResponse(res, MEDIA_MESSAGES.LIST_FETCHED, {
@@ -81,6 +65,7 @@ export const mediaUpload = aw(async (req: Request, res: Response) => {
         const existingMedia = await Media.findOne({ fileHash });
         if (existingMedia) {
             unlink(file.path);
+            urls.push(createUrlFromRecord(host, existingMedia));
             continue;
         }
 
