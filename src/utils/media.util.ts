@@ -1,9 +1,11 @@
-import { MediaDocument } from "@/libs/Documents.lib";
 import { exec } from "child_process";
 import { createHash } from "crypto";
 import { readFileSync } from "fs";
+import { unlink } from "fs/promises";
 import sharp from "sharp";
 import { promisify } from "util";
+
+import { MediaDocument } from "@/libs/Documents.lib";
 
 export const calculateFileHash = (filePath: string): string => {
     const fileBuffer = readFileSync(filePath);
@@ -18,6 +20,14 @@ export const compressImage = async (
     outputPath: string,
     width: number = 1200,
 ): Promise<Dimensions> => {
+    if (inputPath === outputPath) {
+        const image = await sharp(inputPath).metadata();
+        return {
+            width: image.width,
+            height: image.height,
+        };
+    }
+
     const image = await sharp(inputPath)
         .resize({
             width,
@@ -28,6 +38,10 @@ export const compressImage = async (
             effort: 3,
         })
         .toFile(outputPath);
+
+    // delete original file
+    unlink(inputPath);
+
     return { width: image.width, height: image.height };
 };
 
