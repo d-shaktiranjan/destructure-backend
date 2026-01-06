@@ -54,7 +54,6 @@ export const ALLOWED_MEDIA_MIMETYPE: readonly string[] = [
     // video formats
     "video/mp4",
     "video/webm",
-    "video/quicktime",
     "video/x-matroska",
     "video/x-msvideo",
 
