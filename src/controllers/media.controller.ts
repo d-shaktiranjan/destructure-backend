@@ -90,10 +90,6 @@ export const mediaUpload = aw(async (req: Request, res: Response) => {
                 file.path,
                 mediaOutputPath,
             );
-
-            // remove original uploaded image
-            unlink(file.path);
-
             const base = await generateBase64(mediaOutputPath);
 
             url = `${host}/${mediaOutputPath.replace("public/", "")}`;
