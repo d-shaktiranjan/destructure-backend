@@ -22,6 +22,7 @@ let oAuth2Client = getOAuth2Client();
 
 export const googleLogin = aw(async (req: Request, res: Response) => {
     // check origin
+    const state = (req.query.state as string) || "/";
     const requestOrigin = req.headers.referer;
     if (!requestOrigin || !CORS_ORIGINS.includes(requestOrigin))
         return errorResponse(res, AUTH_MESSAGES.UNABLE_TO_LOGIN, {
@@ -33,6 +34,7 @@ export const googleLogin = aw(async (req: Request, res: Response) => {
 
     const redirectUrl = oAuth2Client.generateAuthUrl({
         scope: ["profile", "email"],
+        state,
     });
     res.redirect(redirectUrl);
 });
