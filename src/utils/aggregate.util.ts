@@ -17,14 +17,3 @@ export const userAggregateUtil = (localField: string) => {
         },
     };
 };
-
-export const reactionLookup = (foreignField: "comment" | "blog") => {
-    return {
-        $lookup: {
-            from: "reactions",
-            localField: "_id",
-            foreignField,
-            as: "reactions",
-        },
-    };
-};

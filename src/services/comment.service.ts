@@ -7,7 +7,7 @@ import { COMMENT_MESSAGES } from "../config/messages";
 import { formatReactionsUtil } from "@/utils/reaction.util";
 import { AuthRequest } from "../libs/CustomInterface.lib";
 import Comment from "../models/Comment.model";
-import { reactionLookup, userAggregateUtil } from "../utils/aggregate.util";
+import { userAggregateUtil } from "../utils/aggregate.util";
 import { successResponse } from "../utils/apiResponse.util";
 
 export const getCommentService = async (
@@ -19,12 +19,30 @@ export const getCommentService = async (
     const comments = await Comment.aggregate([
         { $match: matchQuery },
         userAggregateUtil("user"),
-        reactionLookup("comment"),
+        {
+            $lookup: {
+                from: "reactions",
+                localField: "_id",
+                foreignField: "comment",
+                as: "reactions",
+            },
+        },
+        {
+            $lookup: {
+                from: "comments",
+                localField: "_id",
+                foreignField: "parent",
+                as: "replies",
+            },
+        },
         {
             $addFields: {
                 user: { $first: "$user" },
                 isCommentOwner: {
                     $eq: [{ $first: "$user._id" }, req.user?._id],
+                },
+                replies: {
+                    $size: { $ifNull: ["$replies", []] },
                 },
             },
         },
