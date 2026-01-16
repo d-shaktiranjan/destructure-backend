@@ -6,7 +6,7 @@ export const getReactionsUtil = (
     req: AuthRequest,
     reactions: ReactionDocument[],
 ) => {
-    const counts = Object.values(REACTIONS).reduce(
+    const count = Object.values(REACTIONS).reduce(
         (acc, reaction) => {
             acc[reaction] = 0;
             return acc;
@@ -17,18 +17,15 @@ export const getReactionsUtil = (
     let givenReaction: ReactionDocument | null = null;
 
     for (const r of reactions) {
-        counts[r.reaction]++;
+        count[r.reaction]++;
         if (r.user.toString() === req.user?._id.toString()) {
             givenReaction = r;
         }
     }
 
     const data = {
-        own: {
-            isGiven: Boolean(givenReaction),
-            reaction: givenReaction?.reaction ?? null,
-        },
-        reactions: counts,
+        givenStatus: givenReaction?.reaction ?? null,
+        count,
     };
 
     return data;
