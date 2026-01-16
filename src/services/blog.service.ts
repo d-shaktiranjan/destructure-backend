@@ -52,7 +52,6 @@ export const getBlogListService = async (
                         else: null,
                     },
                 },
-                comments: { $size: "$comments" },
             },
         },
     ]).sort(sort);
@@ -83,14 +82,6 @@ export const getBlogDetailsService = async (
         userAggregateUtil("author"),
         userAggregateUtil("coAuthor"),
         {
-            $lookup: {
-                from: "comments",
-                localField: "_id",
-                foreignField: "blog",
-                as: "comments",
-            },
-        },
-        {
             $project: {
                 __v: 0,
             },
@@ -105,7 +96,6 @@ export const getBlogDetailsService = async (
                         else: null,
                     },
                 },
-                comments: { $size: "$comments" },
             },
         },
     ]);
