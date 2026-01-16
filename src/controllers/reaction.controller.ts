@@ -19,12 +19,13 @@ import { ReactionType } from "../schemas/reaction.schema";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
 
 export const reaction = aw(async (req: AuthRequest, res: Response) => {
-    const { _id, reaction, to } = req.body as ReactionType;
+    const { identifier, reaction, to } = req.body as ReactionType;
 
     // new way
     let content: BlogDocument | CommentDocument | null = null;
-    if (to === REACTION_TO.BLOG) content = await Blog.findById(_id);
-    else content = await Comment.findById(_id);
+    if (to === REACTION_TO.BLOG)
+        content = await Blog.findOne({ slug: identifier });
+    else content = await Comment.findById(identifier);
 
     if (!content)
         return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND, {
