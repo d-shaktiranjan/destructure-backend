@@ -13,7 +13,6 @@ import { BLOG_MESSAGES, REACTION_MESSAGES } from "../config/messages";
 // middleware, service & utils
 import nullChecker from "@/utils/nullChecker.util";
 import { formatReactionsUtil } from "@/utils/reaction.util";
-import { Types } from "mongoose";
 import { REACTION_TO } from "../config/constants";
 import aw from "../middlewares/asyncWrap.middleware";
 import { ReactionType } from "../schemas/reaction.schema";
@@ -69,13 +68,20 @@ export const reaction = aw(async (req: AuthRequest, res: Response) => {
 });
 
 export const getReactions = aw(async (req: AuthRequest, res: Response) => {
-    const { blog } = req.params;
-    nullChecker({ blog });
+    const { slug } = req.params;
+    nullChecker({ slug });
 
     const userId = req.user?._id;
 
+    // fetch blog _id
+    const blog = await Blog.findOne({ slug });
+    if (!blog)
+        return errorResponse(res, BLOG_MESSAGES.BLOG_NOT_FOUND, {
+            statusCode: 404,
+        });
+
     const reactions = await Reaction.find({
-        blog: new Types.ObjectId(blog),
+        blog: blog._id,
     });
 
     const data = formatReactionsUtil(reactions, userId);
