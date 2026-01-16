@@ -75,7 +75,6 @@ export const updateComment = aw(async (req: AuthRequest, res: Response) => {
 
     // update comment
     comment.content = content as string;
-    comment.isEdited = true;
     await comment.save();
 
     return successResponse(res, COMMENT_MESSAGES.UPDATED, { statusCode: 202 });
