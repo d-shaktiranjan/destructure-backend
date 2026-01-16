@@ -10,15 +10,16 @@ import Comment from "../models/Comment.model";
 import { COMMENT_MESSAGES, GENERIC_MESSAGES } from "../config/messages";
 import { getCommentService } from "../services/comment.service";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
-import { getBlogById } from "../utils/blog.util";
+import { getBlogBySlug } from "../utils/blog.util";
 import nullChecker from "../utils/nullChecker.util";
 
 export const addComment = aw(async (req: AuthRequest, res: Response) => {
-    const { blog, content } = req.body;
-    nullChecker({ blog, content });
+    const { content } = req.body;
+    const slug = req.params.slug as string;
+    nullChecker({ content, slug });
 
     // fetch blog
-    const blogObject = await getBlogById(res, blog);
+    const blogObject = await getBlogBySlug(res, slug);
 
     // create a new object on DB
     const comment = new Comment({
@@ -75,13 +76,13 @@ export const updateComment = aw(async (req: AuthRequest, res: Response) => {
 });
 
 export const getComments = aw(async (req: AuthRequest, res: Response) => {
-    const blog = req.query.blog as string;
-    nullChecker({ blog });
-    if (!isValidObjectId(blog))
-        return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
+    const slug = req.params.slug as string;
+    nullChecker({ slug });
+
+    const blog = await getBlogBySlug(res, slug);
 
     const matchQuery: Record<string, unknown> = {
-        blog: new Types.ObjectId(blog),
+        blog: blog._id,
         parent: undefined,
     };
 

@@ -17,6 +17,15 @@ export const getBlogById = async (
     return blog;
 };
 
+export const getBlogBySlug = async (
+    res: Response,
+    slug: string,
+): Promise<BlogDocument> => {
+    const blog = await Blog.findOne({ slug });
+    if (!blog) throw new ApiError(BLOG_MESSAGES.BLOG_NOT_FOUND);
+    return blog;
+};
+
 export const isSlugUniqueUtil = async (slug: string): Promise<boolean> => {
     const blog = await Blog.findOne({ slug });
     return blog === null;

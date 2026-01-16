@@ -23,7 +23,7 @@ protectedRouter
 protectedRouter.post("/reply", addReply);
 
 // public routes to view comments & replies
-router.get("/", allowBoth, getComments);
+router.get("/:slug", allowBoth, getComments);
 router.get("/reply", allowBoth, getReplyList);
 
 router.use(protectedRouter);
