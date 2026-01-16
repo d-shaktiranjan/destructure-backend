@@ -65,7 +65,7 @@ export const getBlogDetailsService = async (
     isAdmin: boolean,
 ) => {
     // collect slug from query
-    const slug = req.query.slug as string;
+    const slug = req.params.slug as string;
     nullChecker({ slug });
 
     const searchFilter: { slug: string; isPublic?: boolean } = {
