@@ -1,9 +1,7 @@
 import { Router } from "express";
 
 import {
-    addComment,
     addReply,
-    getComments,
     getReplyList,
     removeComment,
     updateComment,
@@ -12,19 +10,14 @@ import { allowBoth, isAuthenticated } from "../middlewares/auth.middleware";
 
 const router = Router();
 
-// protected routes to interact with comments & replies
-const protectedRouter = Router();
-protectedRouter.use(isAuthenticated);
-protectedRouter
-    .route("/")
-    .post(addComment)
-    .delete(removeComment)
-    .put(updateComment);
-protectedRouter.post("/reply", addReply);
+router
+    .route("/:_id")
+    .patch(isAuthenticated, updateComment)
+    .delete(isAuthenticated, removeComment);
 
-// public routes to view comments & replies
-router.get("/:slug", allowBoth, getComments);
-router.get("/reply", allowBoth, getReplyList);
+router
+    .route("/:_id/replies")
+    .post(isAuthenticated, addReply)
+    .get(allowBoth, getReplyList);
 
-router.use(protectedRouter);
 export default router;

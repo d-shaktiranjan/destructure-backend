@@ -42,7 +42,7 @@ app.set("trust proxy", true);
 app.use("/api/blogs", blogRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/admin", adminRouter);
-app.use("/api/comment", commentRouter);
+app.use("/api/comments", commentRouter);
 app.use("/api/reaction", reactRouter);
 app.use("/api/search", searchRouter);
 

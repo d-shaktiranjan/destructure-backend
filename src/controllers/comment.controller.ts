@@ -33,7 +33,7 @@ export const addComment = aw(async (req: AuthRequest, res: Response) => {
 });
 
 export const removeComment = aw(async (req: AuthRequest, res: Response) => {
-    const { _id } = req.query;
+    const { _id } = req.params;
     nullChecker({ _id });
 
     // find the comment on Db
@@ -52,7 +52,8 @@ export const removeComment = aw(async (req: AuthRequest, res: Response) => {
 });
 
 export const updateComment = aw(async (req: AuthRequest, res: Response) => {
-    const { _id, content } = req.body;
+    const { content } = req.body;
+    const _id = req.params._id;
     nullChecker({ _id, content });
 
     if (!isValidObjectId(_id))
@@ -90,7 +91,7 @@ export const getComments = aw(async (req: AuthRequest, res: Response) => {
 });
 
 export const getReplyList = aw(async (req: AuthRequest, res: Response) => {
-    const _id = req.query._id as string;
+    const _id = req.params._id;
     nullChecker({ _id });
     if (!isValidObjectId(_id))
         return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
@@ -103,7 +104,8 @@ export const getReplyList = aw(async (req: AuthRequest, res: Response) => {
 });
 
 export const addReply = aw(async (req: AuthRequest, res: Response) => {
-    const { _id, content } = req.body;
+    const { content } = req.body;
+    const _id = req.params._id;
     nullChecker({ _id, content });
     if (!isValidObjectId(_id))
         return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
