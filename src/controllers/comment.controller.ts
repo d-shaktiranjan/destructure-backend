@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { isValidObjectId, Types } from "mongoose";
 
 // lib, model & lib
@@ -10,15 +10,16 @@ import Comment from "../models/Comment.model";
 import { COMMENT_MESSAGES, GENERIC_MESSAGES } from "../config/messages";
 import { getCommentService } from "../services/comment.service";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
-import { getBlogById } from "../utils/blog.util";
+import { getBlogBySlug } from "../utils/blog.util";
 import nullChecker from "../utils/nullChecker.util";
 
 export const addComment = aw(async (req: AuthRequest, res: Response) => {
-    const { blog, content } = req.body;
-    nullChecker({ blog, content });
+    const { content } = req.body;
+    const slug = req.params.slug as string;
+    nullChecker({ content, slug });
 
     // fetch blog
-    const blogObject = await getBlogById(res, blog);
+    const blogObject = await getBlogBySlug(res, slug);
 
     // create a new object on DB
     const comment = new Comment({
@@ -32,7 +33,7 @@ export const addComment = aw(async (req: AuthRequest, res: Response) => {
 });
 
 export const removeComment = aw(async (req: AuthRequest, res: Response) => {
-    const { _id } = req.query;
+    const { _id } = req.params;
     nullChecker({ _id });
 
     // find the comment on Db
@@ -51,7 +52,8 @@ export const removeComment = aw(async (req: AuthRequest, res: Response) => {
 });
 
 export const updateComment = aw(async (req: AuthRequest, res: Response) => {
-    const { _id, content } = req.body;
+    const { content } = req.body;
+    const _id = req.params._id;
     nullChecker({ _id, content });
 
     if (!isValidObjectId(_id))
@@ -61,12 +63,6 @@ export const updateComment = aw(async (req: AuthRequest, res: Response) => {
     const comment = await Comment.findById(_id);
     if (!comment) return errorResponse(res, COMMENT_MESSAGES.NOT_FOUND);
 
-    // check for admin soft delete
-    if (comment.isDeleted)
-        return errorResponse(res, COMMENT_MESSAGES.UNABLE_TO_UPDATE, {
-            statusCode: 406,
-        });
-
     // check ownership
     if (String(comment.user) !== String(req.user?._id))
         return errorResponse(res, GENERIC_MESSAGES.NOT_ALLOWED, {
@@ -75,20 +71,19 @@ export const updateComment = aw(async (req: AuthRequest, res: Response) => {
 
     // update comment
     comment.content = content as string;
-    comment.isEdited = true;
     await comment.save();
 
     return successResponse(res, COMMENT_MESSAGES.UPDATED, { statusCode: 202 });
 });
 
 export const getComments = aw(async (req: AuthRequest, res: Response) => {
-    const blog = req.query.blog as string;
-    nullChecker({ blog });
-    if (!isValidObjectId(blog))
-        return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
+    const slug = req.params.slug as string;
+    nullChecker({ slug });
+
+    const blog = await getBlogBySlug(res, slug);
 
     const matchQuery: Record<string, unknown> = {
-        blog: new Types.ObjectId(blog),
+        blog: blog._id,
         parent: undefined,
     };
 
@@ -96,7 +91,7 @@ export const getComments = aw(async (req: AuthRequest, res: Response) => {
 });
 
 export const getReplyList = aw(async (req: AuthRequest, res: Response) => {
-    const _id = req.query._id as string;
+    const _id = req.params._id;
     nullChecker({ _id });
     if (!isValidObjectId(_id))
         return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
@@ -109,7 +104,8 @@ export const getReplyList = aw(async (req: AuthRequest, res: Response) => {
 });
 
 export const addReply = aw(async (req: AuthRequest, res: Response) => {
-    const { _id, content } = req.body;
+    const { content } = req.body;
+    const _id = req.params._id;
     nullChecker({ _id, content });
     if (!isValidObjectId(_id))
         return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
@@ -128,23 +124,4 @@ export const addReply = aw(async (req: AuthRequest, res: Response) => {
     await reply.save();
 
     return successResponse(res, COMMENT_MESSAGES.REPLY_ADDED);
-});
-
-export const softDelete = aw(async (req: Request, res: Response) => {
-    const { _id } = req.query;
-    nullChecker({ _id });
-
-    if (!isValidObjectId(_id))
-        return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
-
-    // fetch comment
-    const comment = await Comment.findById(_id);
-    if (!comment) return errorResponse(res, COMMENT_MESSAGES.NOT_FOUND);
-
-    // soft delete
-    comment.isDeleted = true;
-    comment.content = COMMENT_MESSAGES.SOFT_DELETE_VALUE;
-    await comment.save();
-
-    return successResponse(res, COMMENT_MESSAGES.SOFT_DELETE);
 });

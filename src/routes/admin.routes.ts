@@ -34,12 +34,12 @@ router
 
 // blog routes
 router
-    .route("/blog")
+    .route("/blogs")
     .post(zodValidator(blogCreateSchema), createBlog)
     .get(getBlogListAdmin);
 
 router
-    .route("/blog/:slug")
+    .route("/blogs/:slug")
     .put(zodValidator(blogUpdateSchema), updateBlog)
     .delete(deleteBlog);
 

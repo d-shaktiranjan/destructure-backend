@@ -4,12 +4,7 @@ import { AuthRequest } from "../libs/CustomInterface.lib";
 import Blog from "../models/Blog.model";
 
 import { BLOG_MESSAGES } from "../config/messages";
-import {
-    commentLookup,
-    reactionAddField,
-    reactionLookup,
-    userAggregateUtil,
-} from "../utils/aggregate.util";
+import { userAggregateUtil } from "../utils/aggregate.util";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
 import nullChecker from "../utils/nullChecker.util";
 
@@ -41,8 +36,6 @@ export const getBlogListService = async (
         { $match: filter },
         userAggregateUtil("author"),
         userAggregateUtil("coAuthor"),
-        commentLookup(),
-        reactionLookup("blog"),
         {
             $project: {
                 __v: 0,
@@ -59,8 +52,6 @@ export const getBlogListService = async (
                         else: null,
                     },
                 },
-                comments: { $size: "$comments" },
-                ...reactionAddField(req),
             },
         },
     ]).sort(sort);
@@ -74,7 +65,7 @@ export const getBlogDetailsService = async (
     isAdmin: boolean,
 ) => {
     // collect slug from query
-    const slug = req.query.slug as string;
+    const slug = req.params.slug as string;
     nullChecker({ slug });
 
     const searchFilter: { slug: string; isPublic?: boolean } = {
@@ -91,15 +82,6 @@ export const getBlogDetailsService = async (
         userAggregateUtil("author"),
         userAggregateUtil("coAuthor"),
         {
-            $lookup: {
-                from: "comments",
-                localField: "_id",
-                foreignField: "blog",
-                as: "comments",
-            },
-        },
-        reactionLookup("blog"),
-        {
             $project: {
                 __v: 0,
             },
@@ -114,8 +96,6 @@ export const getBlogDetailsService = async (
                         else: null,
                     },
                 },
-                comments: { $size: "$comments" },
-                ...reactionAddField(req),
             },
         },
     ]);

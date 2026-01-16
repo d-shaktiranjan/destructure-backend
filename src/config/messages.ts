@@ -48,6 +48,7 @@ export enum REACTION_MESSAGES {
     ADDED = "Reaction added",
     REMOVED = "Reaction removed",
     UPDATED = "Reaction updated",
+    LIST = "Reaction list fetched",
 }
 
 export enum COMMENT_MESSAGES {

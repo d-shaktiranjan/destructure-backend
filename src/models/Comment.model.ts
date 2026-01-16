@@ -1,5 +1,5 @@
-import { CommentDocument } from "../libs/Documents.lib";
 import { Schema, model } from "mongoose";
+import { CommentDocument } from "../libs/Documents.lib";
 
 const commentSchema = new Schema<CommentDocument>(
     {
@@ -17,12 +17,6 @@ const commentSchema = new Schema<CommentDocument>(
             type: String,
             minLength: 3,
             required: true,
-        },
-        isEdited: {
-            type: Boolean,
-        },
-        isDeleted: {
-            type: Boolean,
         },
         parent: {
             type: Schema.Types.ObjectId,
