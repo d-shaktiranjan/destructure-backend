@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { isValidObjectId, Types } from "mongoose";
 
 // lib, model & lib
@@ -61,12 +61,6 @@ export const updateComment = aw(async (req: AuthRequest, res: Response) => {
     const comment = await Comment.findById(_id);
     if (!comment) return errorResponse(res, COMMENT_MESSAGES.NOT_FOUND);
 
-    // check for admin soft delete
-    if (comment.isDeleted)
-        return errorResponse(res, COMMENT_MESSAGES.UNABLE_TO_UPDATE, {
-            statusCode: 406,
-        });
-
     // check ownership
     if (String(comment.user) !== String(req.user?._id))
         return errorResponse(res, GENERIC_MESSAGES.NOT_ALLOWED, {
@@ -127,23 +121,4 @@ export const addReply = aw(async (req: AuthRequest, res: Response) => {
     await reply.save();
 
     return successResponse(res, COMMENT_MESSAGES.REPLY_ADDED);
-});
-
-export const softDelete = aw(async (req: Request, res: Response) => {
-    const { _id } = req.query;
-    nullChecker({ _id });
-
-    if (!isValidObjectId(_id))
-        return errorResponse(res, GENERIC_MESSAGES.INVALID_ID);
-
-    // fetch comment
-    const comment = await Comment.findById(_id);
-    if (!comment) return errorResponse(res, COMMENT_MESSAGES.NOT_FOUND);
-
-    // soft delete
-    comment.isDeleted = true;
-    comment.content = COMMENT_MESSAGES.SOFT_DELETE_VALUE;
-    await comment.save();
-
-    return successResponse(res, COMMENT_MESSAGES.SOFT_DELETE);
 });

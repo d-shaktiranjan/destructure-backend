@@ -24,7 +24,6 @@ export interface CommentDocument extends Document {
     blog: Types.ObjectId;
     content: string;
     parent?: Types.ObjectId;
-    isDeleted?: boolean;
     createdAt: Date;
     updatedAt: Date;
 }

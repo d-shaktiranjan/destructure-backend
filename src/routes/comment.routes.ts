@@ -1,19 +1,14 @@
 import { Router } from "express";
 
 import {
-    allowBoth,
-    isAdmin,
-    isAuthenticated,
-} from "../middlewares/auth.middleware";
-import {
     addComment,
     addReply,
     getComments,
     getReplyList,
     removeComment,
-    softDelete,
     updateComment,
 } from "../controllers/comment.controller";
+import { allowBoth, isAuthenticated } from "../middlewares/auth.middleware";
 
 const router = Router();
 
@@ -26,8 +21,6 @@ protectedRouter
     .delete(removeComment)
     .put(updateComment);
 protectedRouter.post("/reply", addReply);
-
-protectedRouter.use(isAdmin).route("/soft").delete(softDelete);
 
 // public routes to view comments & replies
 router.get("/", allowBoth, getComments);
