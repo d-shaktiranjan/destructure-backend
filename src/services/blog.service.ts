@@ -4,12 +4,7 @@ import { AuthRequest } from "../libs/CustomInterface.lib";
 import Blog from "../models/Blog.model";
 
 import { BLOG_MESSAGES } from "../config/messages";
-import {
-    commentLookup,
-    reactionAddField,
-    reactionLookup,
-    userAggregateUtil,
-} from "../utils/aggregate.util";
+import { userAggregateUtil } from "../utils/aggregate.util";
 import { errorResponse, successResponse } from "../utils/apiResponse.util";
 import nullChecker from "../utils/nullChecker.util";
 
@@ -41,8 +36,6 @@ export const getBlogListService = async (
         { $match: filter },
         userAggregateUtil("author"),
         userAggregateUtil("coAuthor"),
-        commentLookup(),
-        reactionLookup("blog"),
         {
             $project: {
                 __v: 0,
@@ -60,7 +53,6 @@ export const getBlogListService = async (
                     },
                 },
                 comments: { $size: "$comments" },
-                ...reactionAddField(req),
             },
         },
     ]).sort(sort);
@@ -98,7 +90,6 @@ export const getBlogDetailsService = async (
                 as: "comments",
             },
         },
-        reactionLookup("blog"),
         {
             $project: {
                 __v: 0,
@@ -115,7 +106,6 @@ export const getBlogDetailsService = async (
                     },
                 },
                 comments: { $size: "$comments" },
-                ...reactionAddField(req),
             },
         },
     ]);

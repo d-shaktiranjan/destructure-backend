@@ -1,10 +1,11 @@
+import { Types } from "mongoose";
+
 import { REACTIONS } from "@/config/constants";
-import { AuthRequest } from "@/libs/CustomInterface.lib";
 import { ReactionDocument } from "@/libs/Documents.lib";
 
-export const getReactionsUtil = (
-    req: AuthRequest,
+export const formatReactionsUtil = (
     reactions: ReactionDocument[],
+    userId?: Types.ObjectId,
 ) => {
     const count = Object.values(REACTIONS).reduce(
         (acc, reaction) => {
@@ -14,19 +15,17 @@ export const getReactionsUtil = (
         {} as Record<REACTIONS, number>,
     );
 
-    let givenReaction: ReactionDocument | null = null;
+    let givenStatus: REACTIONS | null = null;
 
     for (const r of reactions) {
         count[r.reaction]++;
-        if (r.user.toString() === req.user?._id.toString()) {
-            givenReaction = r;
+        if (userId && r.user.toString() === userId.toString()) {
+            givenStatus = r.reaction;
         }
     }
 
-    const data = {
-        givenStatus: givenReaction?.reaction ?? null,
+    return {
+        givenStatus,
         count,
     };
-
-    return data;
 };

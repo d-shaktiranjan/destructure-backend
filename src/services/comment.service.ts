@@ -4,13 +4,10 @@ import { Response } from "express";
 import { COMMENT_MESSAGES } from "../config/messages";
 
 // model & lib imports
+import { formatReactionsUtil } from "@/utils/reaction.util";
 import { AuthRequest } from "../libs/CustomInterface.lib";
 import Comment from "../models/Comment.model";
-import {
-    reactionAddField,
-    reactionLookup,
-    userAggregateUtil,
-} from "../utils/aggregate.util";
+import { reactionLookup, userAggregateUtil } from "../utils/aggregate.util";
 import { successResponse } from "../utils/apiResponse.util";
 
 export const getCommentService = async (
@@ -19,7 +16,7 @@ export const getCommentService = async (
     matchQuery: Record<string, unknown>,
     responseMessage: string = COMMENT_MESSAGES.LIST_FETCHED,
 ) => {
-    const allComments = await Comment.aggregate([
+    const comments = await Comment.aggregate([
         { $match: matchQuery },
         userAggregateUtil("user"),
         reactionLookup("comment"),
@@ -29,7 +26,6 @@ export const getCommentService = async (
                 isCommentOwner: {
                     $eq: [{ $first: "$user._id" }, req.user?._id],
                 },
-                ...reactionAddField(req),
             },
         },
         {
@@ -41,5 +37,10 @@ export const getCommentService = async (
         },
     ]);
 
-    return successResponse(res, responseMessage, { data: allComments });
+    const data = comments.map((comment) => ({
+        ...comment,
+        reactions: formatReactionsUtil(comment.reactions, req.user?._id),
+    }));
+
+    return successResponse(res, responseMessage, { data });
 };
